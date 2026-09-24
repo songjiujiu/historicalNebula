@@ -12,6 +12,30 @@
 .action-card.action-highlight{background:#d5b77d12;box-shadow:inset 2px 0 var(--gold);padding-left:10px;border-radius:5px}
 .toast-undo{color:var(--gold);margin-left:14px;padding:4px 0;text-decoration:underline;text-underline-offset:3px}
 .source-link>span{flex:1;text-align:left;min-width:0}.source-link small{display:block;font-size:10px;color:#7487a4;margin-top:5px;line-height:1.5}.graph-notice .text-button{margin-left:10px;color:var(--gold)}
+/* Fullscreen keeps the 3D canvas, controls, inspector, and dialogs in one layer. */
+body.nebula-immersive{overflow:hidden}
+#app.fullscreen-active{width:100vw;height:100dvh;overflow:hidden;background:#090d16}
+#app.fullscreen-active:not(:fullscreen){position:fixed;inset:0;z-index:1000}
+#app.fullscreen-active .app-header,#app.fullscreen-active .app-footer,#app.fullscreen-active .sidebar,#app.fullscreen-active .explore-toolbar,#app.fullscreen-active .timeline,#app.fullscreen-active .mobile-filter-button{display:none!important}
+#app.fullscreen-active .workspace{display:block;position:relative;width:100%;height:100%;min-height:0}
+#app.fullscreen-active .exploration{width:100%;height:100%;overflow:hidden}
+#app.fullscreen-active .stage-heading{margin:22px 28px 0}
+#app.fullscreen-active .stage-heading h1{font-size:29px}
+#app.fullscreen-active .stage-actions{margin-top:0}
+#app.fullscreen-active .workspace.fullscreen-inspector-open .stage-actions{margin-right:355px}
+#app.fullscreen-active .stage-actions [data-action="save"],#app.fullscreen-active .stage-actions [data-action="share"]{display:none}
+#app.fullscreen-active .fullscreen-trigger{height:36px;padding:0 12px;border-color:#a9926b88;color:#ead4a9;background:#1d2939cc}
+#app.fullscreen-active .fullscreen-trigger span{display:inline}
+#app.fullscreen-active .scene-host{inset:92px 0 69px}
+#app.fullscreen-active .has-guide .scene-host{top:210px}
+#app.fullscreen-active .canvas-caption{bottom:71px}
+#app.fullscreen-active .canvas-bottom{bottom:23px;left:27px;right:27px}
+#app.fullscreen-active .workspace.fullscreen-inspector-open .canvas-bottom{right:370px}
+#app.fullscreen-active .graph-notice{top:103px}
+#app.fullscreen-active .guide-bar{top:95px}
+#app.fullscreen-active .inspector{display:flex;position:absolute;top:15px;right:15px;bottom:15px;left:auto;width:min(340px,calc(100vw - 30px));height:auto;z-index:20;visibility:hidden;pointer-events:none;transform:translateX(calc(100% + 30px));border:1px solid #43557288;border-radius:10px;box-shadow:-15px 10px 60px #0009;background:#121c2cf7}
+#app.fullscreen-active .workspace.fullscreen-inspector-open .inspector{visibility:visible;pointer-events:auto;transform:translateX(0)}
+@media(max-width:760px){#app.fullscreen-active .stage-heading{margin:17px 18px 0}#app.fullscreen-active .workspace.fullscreen-inspector-open .stage-actions{margin-right:0}#app.fullscreen-active .stage-heading h1{font-size:23px}#app.fullscreen-active .stage-heading h1 span{font-size:15px}#app.fullscreen-active .stage-heading p{max-width:210px}#app.fullscreen-active .fullscreen-trigger{width:auto;min-width:34px;height:32px;padding:0 8px}#app.fullscreen-active .fullscreen-trigger span{font-size:10px}#app.fullscreen-active .scene-host{inset:105px 0 78px}#app.fullscreen-active .has-guide .scene-host{top:219px}#app.fullscreen-active .canvas-bottom{left:16px;right:16px;bottom:21px}#app.fullscreen-active .workspace.fullscreen-inspector-open .canvas-bottom{right:16px}#app.fullscreen-active .canvas-caption{left:18px;bottom:78px}#app.fullscreen-active .guide-bar{top:101px}#app.fullscreen-active .inspector{top:auto;left:0;right:0;bottom:0;width:100%;height:min(74dvh,660px);border-radius:15px 15px 0 0;transform:translateY(110%)}#app.fullscreen-active .workspace.fullscreen-inspector-open .inspector{transform:translateY(0)}}
 @media(max-width:1100px){.inspector:not(.mobile-open){visibility:hidden}}
 @media(max-width:760px){.sidebar:not(.mobile-open){visibility:hidden}}
 @media(min-width:1101px){.workspace.inspector-collapsed{grid-template-columns:228px minmax(320px,1fr)}.workspace.inspector-collapsed .inspector{display:none}}

@@ -77,7 +77,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </aside>
     <main class="exploration" id="exploration">
       <div class="explore-toolbar"><div class="breadcrumb"><button class="icon-button" data-action="back" aria-label="返回上一视图">${icon('back')}</button><span>中国历史</span>${icon('chevron')}<span>汉末三国</span></div><div class="view-switch" role="group" aria-label="显示方式"><button data-action="view-3d">${icon('grid')}星云</button><button data-action="view-list">${icon('list')}列表</button></div></div>
-      <div class="stage-heading"><div><div class="eyebrow"><span class="status-dot"></span> 关系探索 · RELATIONSHIP EXPLORER</div><h1 id="center-title"></h1><p id="stage-description"></p></div><div class="stage-actions"><button class="subtle-button" data-action="save" aria-label="保存视图">${icon('bookmark')}<span>保存视图</span></button><button class="subtle-button" data-action="share" aria-label="分享">${icon('share')}<span>分享</span></button></div></div>
+      <div class="stage-heading"><div><div class="eyebrow"><span class="status-dot"></span> 关系探索 · RELATIONSHIP EXPLORER</div><h1 id="center-title"></h1><p id="stage-description"></p></div><div class="stage-actions"><button class="subtle-button fullscreen-trigger" data-action="fullscreen" aria-label="全屏展示星云" aria-pressed="false" title="全屏展示星云">${icon('expand')}<span>全屏</span></button><button class="subtle-button" data-action="save" aria-label="保存视图">${icon('bookmark')}<span>保存视图</span></button><button class="subtle-button" data-action="share" aria-label="分享">${icon('share')}<span>分享</span></button></div></div>
       <div id="guide-bar" class="guide-bar hidden"></div>
       <div id="scene-host" class="scene-host" aria-label="三维历史关系星云"></div>
       <div id="scene-loading" class="scene-loading"><span class="loading-orbit"></span><p>点亮历史星云…</p></div>
@@ -102,6 +102,50 @@ const entityTag = (entity: Entity) => entity.kind === 'person' ? '人物' : '事
 const periodLabel = () => state.fromYear === state.toYear ? `公元 ${state.fromYear} 年` : `公元 ${state.fromYear} — ${state.toYear} 年`;
 const timeLabel = (start: number | null, end: number | null) => start === null || end === null ? '时间待考' : start === end ? `公元 ${start} 年` : `公元 ${start}—${end} 年`;
 const getSpatial = () => { if (scene && !sceneFailed && state.viewMode === 'graph3d') state.spatial = scene.getSnapshot(); };
+const fullscreenRoot = () => $<HTMLElement>('#app');
+const inFullscreen = () => fullscreenRoot().classList.contains('fullscreen-active');
+function syncFullscreenButton() {
+  const button = document.querySelector<HTMLButtonElement>('[data-action="fullscreen"]')!;
+  const active = inFullscreen();
+  button.innerHTML = `${icon(active ? 'close' : 'expand')}<span>${active ? '退出全屏' : '全屏'}</span>`;
+  button.setAttribute('aria-label', active ? '退出全屏' : '全屏展示星云');
+  button.setAttribute('aria-pressed', String(active));
+  button.title = active ? '退出全屏' : '全屏展示星云';
+}
+function leaveFullscreenUi() {
+  fullscreenRoot().classList.remove('fullscreen-active');
+  document.body.classList.remove('nebula-immersive');
+  $('.workspace').classList.remove('fullscreen-inspector-open');
+  syncFullscreenButton();
+}
+async function exitFullscreen() {
+  if (document.fullscreenElement === fullscreenRoot()) {
+    try { await document.exitFullscreen(); } catch { /* The browser may have already exited. */ }
+  }
+  leaveFullscreenUi();
+}
+async function toggleFullscreen() {
+  if (inFullscreen()) { await exitFullscreen(); return; }
+  if (sceneFailed) retryScene();
+  else if (state.viewMode !== 'graph3d') navigate({ viewMode: 'graph3d' }, { replace: true });
+  $('#inspector').classList.remove('mobile-open');
+  $('.workspace').classList.remove('fullscreen-inspector-open');
+  const root = fullscreenRoot();
+  root.classList.add('fullscreen-active');
+  document.body.classList.add('nebula-immersive');
+  syncFullscreenButton();
+  if (root.requestFullscreen) {
+    try { await root.requestFullscreen(); }
+    catch { /* CSS viewport mode covers browsers without element fullscreen. */ }
+  }
+}
+document.addEventListener('fullscreenchange', () => {
+  if (document.fullscreenElement === fullscreenRoot()) {
+    fullscreenRoot().classList.add('fullscreen-active');
+    document.body.classList.add('nebula-immersive');
+    syncFullscreenButton();
+  } else if (inFullscreen()) leaveFullscreenUi();
+});
 
 function toast(message: string, undo?: () => void) {
   toastUndo = undo ?? null;
@@ -157,6 +201,7 @@ function restore(saved: ExploreState, keepGuide = false) {
 function syncDrafts() { draftYears = [state.fromYear, state.toYear]; draftCategories = [...state.categories]; draftUndated = state.showUndated; }
 function selectEntity(id: string) {
   $('.workspace').classList.remove('inspector-collapsed');
+  if (inFullscreen()) $('.workspace').classList.add('fullscreen-inspector-open');
   if (matchMedia('(max-width:1100px)').matches) $('#inspector').classList.add('mobile-open');
   if (state.selectedId === id && !state.relationId) return;
   navigate({ selectedId: id, relationId: null, sourceId: null });
@@ -164,6 +209,7 @@ function selectEntity(id: string) {
 function openRelation(id: string) {
   const relation = relationById(id); if (!relation) return;
   $('.workspace').classList.remove('inspector-collapsed');
+  if (inFullscreen()) $('.workspace').classList.add('fullscreen-inspector-open');
   navigate({ relationId: id, sourceId: null });
   if (matchMedia('(max-width:1100px)').matches) $('#inspector').classList.add('mobile-open');
 }
@@ -198,6 +244,7 @@ function render() {
   if (state.sourceId) renderSourceDialog(state.sourceId);
   else if (state.fullId) renderDetailDialog(state.fullId);
   else if (currentDialog === 'source' || currentDialog === 'detail') hideDialog();
+  if (state.viewMode !== 'graph3d' && inFullscreen()) void exitFullscreen();
   if (state.viewMode === 'graph3d') void ensureScene();
 }
 function renderYearLabel() {
@@ -343,7 +390,7 @@ async function share() {
 document.addEventListener('click', event => {
   const target = (event.target as Element).closest<HTMLElement>('button, a[data-action]'); if (!target || (target as HTMLButtonElement).disabled) return;
   if (target.dataset.select) { selectEntity(target.dataset.select); return; }
-  if (target.dataset.relation) { navigate({ fullId: null, sourceId: null, relationId: target.dataset.relation }); $('.workspace').classList.remove('inspector-collapsed'); $('#inspector').classList.add('mobile-open'); return; }
+  if (target.dataset.relation) { navigate({ fullId: null, sourceId: null, relationId: target.dataset.relation }); $('.workspace').classList.remove('inspector-collapsed'); if (inFullscreen()) $('.workspace').classList.add('fullscreen-inspector-open'); $('#inspector').classList.add('mobile-open'); return; }
   if (target.dataset.source) { navigate({ sourceId: target.dataset.source }); return; }
   if (target.dataset.full) { navigate({ fullId: target.dataset.full, sourceId: null }, { anchor: target.dataset.actionAnchor }); return; }
   if (target.dataset.center) { if (currentDialog) hideDialog(); navigate({ centerId: target.dataset.center, selectedId: target.dataset.center, relationId: null, fullId: null, sourceId: null, expandedIds: [] }, { resetLayout: true }); return; }
@@ -354,6 +401,7 @@ document.addEventListener('click', event => {
   if (target.dataset.restore) { const saved = records.saves.find(s => s.id === target.dataset.restore); if (saved) { hideDialog(); restore(saved.state); toast('已恢复保存的探索视图。'); } return; }
   if (target.dataset.deleteSave) { const removed = records.saves.find(s => s.id === target.dataset.deleteSave); if (removed && writeRecords({ ...records, saves: records.saves.filter(s => s.id !== removed.id) })) { openLibrary(); toast('已删除保存的视图。', () => { if (writeRecords({ ...records, saves: [removed, ...records.saves] })) { openLibrary(); toast('保存的视图已恢复。'); } }); } return; }
   switch (target.dataset.action) {
+    case 'fullscreen': void toggleFullscreen(); break;
     case 'undo-local': toastUndo?.(); break;
     case 'explore': if (currentDialog) hideDialog(); break;
     case 'search': openSearch(); break;
@@ -376,8 +424,8 @@ document.addEventListener('click', event => {
     case 'apply-filters': navigate({ categories: [...draftCategories], showUndated: draftUndated, expandedIds: [] }); $('#sidebar').classList.remove('mobile-open'); break;
     case 'clear-filters': navigate({ fromYear: 184, toYear: 280, categories: [...DEFAULT_STATE.categories], showUndated: false, expandedIds: [] }); break;
     case 'relation-time': { const r = relationById(state.relationId!); if (r) { const relatedCategories = [...new Set([...state.categories, r.category])]; if (r.start === null || r.end === null) navigate({ showUndated: true, categories: relatedCategories }); else navigate({ fromYear: r.start, toYear: r.end, categories: relatedCategories, showUndated: state.showUndated || !!r.uncertain, expandedIds: [] }); } break; }
-    case 'close-relation': navigate({ relationId: null }, { replace: true }); break;
-    case 'inspector-close': $('#inspector').classList.remove('mobile-open'); if (!matchMedia('(max-width:1100px)').matches) $('.workspace').classList.add('inspector-collapsed'); break;
+    case 'close-relation': navigate({ relationId: null }, { replace: true }); $('.workspace').classList.remove('fullscreen-inspector-open'); $('#inspector').classList.remove('mobile-open'); break;
+    case 'inspector-close': $('#inspector').classList.remove('mobile-open'); $('.workspace').classList.remove('fullscreen-inspector-open'); if (!matchMedia('(max-width:1100px)').matches && !inFullscreen()) $('.workspace').classList.add('inspector-collapsed'); break;
     case 'filters-open': $('#sidebar').classList.add('mobile-open'); break;
     case 'filters-close': $('#sidebar').classList.remove('mobile-open'); syncDrafts(); render(); break;
     case 'dialog-close': closeDialog(); break;
@@ -411,7 +459,10 @@ document.addEventListener('change', event => {
   if (target.id === 'motion-toggle') { motionEnabled = target.checked; scene?.setMotion(motionEnabled); saveDisplayPreferences(); }
   if (target.id === 'rotate-toggle') { rotateMode = target.checked; scene?.setRotateMode(rotateMode); saveDisplayPreferences(); }
 });
-document.addEventListener('keydown', event => { if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); openSearch(); } });
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && inFullscreen() && !$<HTMLDialogElement>('#dialog').open) { event.preventDefault(); void exitFullscreen(); }
+  if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); openSearch(); }
+});
 $<HTMLDialogElement>('#dialog').addEventListener('cancel', event => { event.preventDefault(); closeDialog(); });
 $<HTMLDialogElement>('#dialog').addEventListener('click', event => { if (event.target === $('#dialog')) { const rect = $('#dialog').getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) closeDialog(); } });
 window.addEventListener('popstate', event => {
