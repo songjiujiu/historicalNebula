@@ -133,7 +133,8 @@ describe('safe snapshots and public links', () => {
       spatial: { positions: { p3: [1, 2, 3] }, camera: { position: [0, 0, 10], target: [0, 0, 0] } },
     });
     const url = new URL(shareUrl(snapshot, 'https://user:secret@example.com/explore?search=private&progress=3#source'));
-    expect([...url.searchParams.keys()].sort()).toEqual(['categories', 'center', 'entity', 'from', 'relation', 'selected', 'to', 'undated', 'view']);
+    expect([...url.searchParams.keys()].sort()).toEqual(['categories', 'center', 'entity', 'from', 'relation', 'selected', 'to', 'topic', 'undated', 'view']);
+    expect(url.searchParams.get('topic')).toBe('three-kingdoms');
     expect(url.hash).toBe('');
     expect(url.username).toBe('');
     expect(url.password).toBe('');

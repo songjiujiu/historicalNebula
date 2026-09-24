@@ -1,5 +1,6 @@
 export type EntityKind = 'person' | 'event';
-export type Group = 'wu' | 'shu' | 'wei' | 'neutral';
+export type TopicId = 'three-kingdoms' | 'shiji';
+export type Group = 'wu' | 'shu' | 'wei' | 'chu' | 'han' | 'qin' | 'neutral';
 export type RelationCategory = 'military' | 'political' | 'family' | 'influence';
 export interface Action {
   id: string;
@@ -12,6 +13,7 @@ export interface Action {
 }
 export interface Entity {
   id: string;
+  topicId?: TopicId;
   name: string;
   aliases: string[];
   kind: EntityKind;
@@ -27,6 +29,7 @@ export interface Entity {
 }
 export interface Relation {
   id: string;
+  topicId?: TopicId;
   source: string;
   target: string;
   label: string;
@@ -40,13 +43,14 @@ export interface Relation {
 }
 export interface Source {
   id: string;
+  topicId?: TopicId;
   title: string;
   section: string;
   url: string;
   note: string;
 }
 export interface GuideStep { title: string; question: string; entityId: string; description: string }
-export interface Guide { id: string; title: string; subtitle: string; duration: string; steps: GuideStep[] }
+export interface Guide { id: string; topicId?: TopicId; title: string; subtitle: string; duration: string; steps: GuideStep[] }
 export type Vec3 = [number, number, number];
 export interface CameraSnapshot { position: Vec3; target: Vec3 }
 export interface SpatialSnapshot { positions: Record<string, Vec3>; camera: CameraSnapshot }

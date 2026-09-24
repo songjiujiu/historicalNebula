@@ -1,7 +1,9 @@
 import { entities, relations, sources } from '../domain/data';
-import type { Entity, GraphView, Relation, RelationCategory, SpatialSnapshot, Vec3 } from '../domain/types';
+import { DEFAULT_TOPIC, entityTopic, relationTopic, sourceTopic, topicById } from '../domain/topics';
+import type { Entity, GraphView, Relation, RelationCategory, SpatialSnapshot, TopicId, Vec3 } from '../domain/types';
 
 export interface ExploreState {
+  topicId: TopicId;
   centerId: string;
   selectedId: string | null;
   relationId: string | null;
@@ -17,14 +19,13 @@ export interface ExploreState {
 }
 
 const ALL_CATEGORIES: RelationCategory[] = ['military', 'political', 'family', 'influence'];
-const MIN_YEAR = 184;
-const MAX_YEAR = 280;
 const DEFAULT_NEIGHBORS = 12;
 const MAX_NODES = 50;
 
 export const DEFAULT_STATE: ExploreState = {
+  topicId: DEFAULT_TOPIC.id,
   centerId: 'chibi', selectedId: 'chibi', relationId: null,
-  fromYear: MIN_YEAR, toYear: MAX_YEAR,
+  fromYear: DEFAULT_TOPIC.minYear, toYear: DEFAULT_TOPIC.maxYear,
   categories: ['military', 'political', 'influence'],
   showUndated: false, viewMode: 'graph3d', expandedIds: [],
   fullId: null, sourceId: null,
@@ -40,6 +41,7 @@ export function relationById(id: string): Relation | undefined {
 
 /** Missing dates are never interpreted as an open-ended historical interval. */
 export function relationMatches(relation: Relation, state: ExploreState): boolean {
+  if (relationTopic(relation) !== state.topicId) return false;
   if (!state.categories.includes(relation.category)) return false;
   if (relation.start === null || relation.end === null) return state.showUndated;
   if (relation.uncertain && !state.showUndated) return false;
@@ -50,11 +52,13 @@ export function relationMatches(relation: Relation, state: ExploreState): boolea
 export function buildGraph(input: ExploreState): GraphView {
   const state = sanitizeState(input);
   const matching = relations.filter((relation) =>
-    relationMatches(relation, state) && entityById(relation.source) && entityById(relation.target));
+    relationMatches(relation, state) && entityById(relation.source) && entityById(relation.target) &&
+    entityTopic(entityById(relation.source)!) === state.topicId && entityTopic(entityById(relation.target)!) === state.topicId);
   const selectedRelation = state.relationId ? relationById(state.relationId) : undefined;
   const included = new Set<string>();
   const add = (id: string, limit = MAX_NODES) => {
-    if (included.size < limit && entityById(id)) included.add(id);
+    const entity = entityById(id);
+    if (included.size < limit && entity && entityTopic(entity) === state.topicId) included.add(id);
   };
   add(state.centerId);
   const priorityIds = [state.centerId, state.selectedId, selectedRelation?.source, selectedRelation?.target]
@@ -111,6 +115,10 @@ export function buildGraph(input: ExploreState): GraphView {
 const TRADITIONAL = '劉備孫權瑜諸葛趙雲張飛關羽曹操黃蓋魯肅呂蒙陸遜龐統漢獻帝董卓袁紹術馬超騰魏蜀吳戰爭赤壁官渡夷陵長坂黃巾討伐聯盟師親屬傳統風雲東吳孟德玄德仲謀孔明公瑾鳳雛臥龍銅雀臺華容道荊州營軍潼臧儁讓穎璋曄寧興歸烏襲奪議劃';
 const SIMPLIFIED  = '刘备孙权瑜诸葛赵云张飞关羽曹操黄盖鲁肃吕蒙陆逊庞统汉献帝董卓袁绍术马超腾魏蜀吴战争赤壁官渡夷陵长坂黄巾讨伐联盟师亲属传统风云东吴孟德玄德仲谋孔明公瑾凤雏卧龙铜雀台华容道荆州营军潼臧俊让颖璋晔宁兴归乌袭夺议划';
 const charMap = new Map(Array.from(TRADITIONAL).map((char, index) => [char, SIMPLIFIED[index]]));
+for (const [traditional, simplified] of [
+  ['項', '项'], ['漢', '汉'], ['韓', '韩'], ['陳', '陈'], ['勝', '胜'], ['廣', '广'],
+  ['蕭', '萧'], ['噲', '哙'], ['鴻', '鸿'], ['門', '门'], ['澤', '泽'], ['鄉', '乡'],
+] as const) charMap.set(traditional, simplified);
 const normalize = (value: string) => Array.from(value.normalize('NFKC').toLocaleLowerCase())
   .map((char) => charMap.get(char) ?? char).join('').replace(/\s+/g, '').trim();
 
@@ -137,14 +145,16 @@ function record(value: unknown): Record<string, unknown> {
     ? value as Record<string, unknown> : {};
 }
 
-function validEntityId(value: unknown): string | null {
-  return typeof value === 'string' && entityById(value) ? value : null;
+function validEntityId(value: unknown, topicId?: TopicId): string | null {
+  if (typeof value !== 'string') return null;
+  const entity = entityById(value);
+  return entity && (!topicId || entityTopic(entity) === topicId) ? value : null;
 }
 
-function year(value: unknown, fallback: number): number {
+function year(value: unknown, fallback: number, minYear: number, maxYear: number): number {
   const numeric = typeof value === 'number' ? value
-    : typeof value === 'string' && /^\d{1,4}$/.test(value) ? Number(value) : NaN;
-  return Number.isFinite(numeric) ? Math.min(MAX_YEAR, Math.max(MIN_YEAR, Math.round(numeric))) : fallback;
+    : typeof value === 'string' && /^-?\d{1,4}$/.test(value) ? Number(value) : NaN;
+  return Number.isFinite(numeric) ? Math.min(maxYear, Math.max(minYear, Math.round(numeric))) : fallback;
 }
 
 function vector(value: unknown): Vec3 | undefined {
@@ -153,7 +163,7 @@ function vector(value: unknown): Vec3 | undefined {
   return [value[0] as number, value[1] as number, value[2] as number];
 }
 
-function spatialSnapshot(value: unknown): SpatialSnapshot | undefined {
+function spatialSnapshot(value: unknown, topicId: TopicId): SpatialSnapshot | undefined {
   const input = record(value);
   const camera = record(input.camera);
   const position = vector(camera.position);
@@ -162,33 +172,37 @@ function spatialSnapshot(value: unknown): SpatialSnapshot | undefined {
   const positions: Record<string, Vec3> = {};
   for (const [id, coordinates] of Object.entries(record(input.positions)).slice(0, MAX_NODES)) {
     const point = vector(coordinates);
-    if (validEntityId(id) && point) positions[id] = point;
+    if (validEntityId(id, topicId) && point) positions[id] = point;
   }
   return { positions, camera: { position, target } };
 }
 
 export function sanitizeState(input: unknown): ExploreState {
   const value = record(input);
-  const centerId = validEntityId(value.centerId) ?? DEFAULT_STATE.centerId;
-  const firstYear = year(value.fromYear, DEFAULT_STATE.fromYear);
-  const lastYear = year(value.toYear, DEFAULT_STATE.toYear);
+  const inferredCenter = validEntityId(value.centerId);
+  const topicId = topicById(value.topicId)?.id ?? (inferredCenter ? entityTopic(entityById(inferredCenter)!) : DEFAULT_TOPIC.id);
+  const topic = topicById(topicId)!;
+  const centerId = validEntityId(value.centerId, topicId) ?? topic.centerId;
+  const firstYear = year(value.fromYear, topic.minYear, topic.minYear, topic.maxYear);
+  const lastYear = year(value.toYear, topic.maxYear, topic.minYear, topic.maxYear);
   const categoryInput = value.categories;
   const categories = Array.isArray(categoryInput)
     ? ALL_CATEGORIES.filter((category) => categoryInput.includes(category))
     : [...DEFAULT_STATE.categories];
   const expandedIds = Array.isArray(value.expandedIds)
-    ? [...new Set(value.expandedIds.filter((id): id is string => validEntityId(id) !== null))].slice(0, MAX_NODES)
+    ? [...new Set(value.expandedIds.filter((id): id is string => validEntityId(id, topicId) !== null))].slice(0, MAX_NODES)
     : [];
-  const spatial = spatialSnapshot(value.spatial);
+  const spatial = spatialSnapshot(value.spatial, topicId);
   return {
+    topicId,
     centerId,
-    selectedId: value.selectedId === undefined ? centerId : validEntityId(value.selectedId),
-    relationId: typeof value.relationId === 'string' && relationById(value.relationId) ? value.relationId : null,
+    selectedId: value.selectedId === undefined ? centerId : validEntityId(value.selectedId, topicId),
+    relationId: typeof value.relationId === 'string' && relationById(value.relationId) && relationTopic(relationById(value.relationId)!) === topicId ? value.relationId : null,
     fromYear: Math.min(firstYear, lastYear), toYear: Math.max(firstYear, lastYear),
     categories, showUndated: value.showUndated === true,
     viewMode: value.viewMode === 'list' ? 'list' : 'graph3d',
-    expandedIds, fullId: validEntityId(value.fullId),
-    sourceId: typeof value.sourceId === 'string' && sources.some((source) => source.id === value.sourceId)
+    expandedIds, fullId: validEntityId(value.fullId, topicId),
+    sourceId: typeof value.sourceId === 'string' && sources.some((source) => source.id === value.sourceId && sourceTopic(source) === topicId)
       ? value.sourceId : null,
     ...(spatial ? { spatial } : {}),
   };
@@ -201,6 +215,7 @@ export function shareUrl(input: ExploreState, baseUrl: string): string {
   url.hash = '';
   url.username = '';
   url.password = '';
+  url.searchParams.set('topic', state.topicId);
   url.searchParams.set('center', state.centerId);
   // An empty selection is explicit, so opening a shared closed panel keeps it closed.
   url.searchParams.set('selected', state.selectedId ?? '');
@@ -218,13 +233,18 @@ export function stateFromUrl(value: string): ExploreState | null {
   let url: URL;
   try { url = new URL(value); } catch { return null; }
   const params = url.searchParams;
+  const requestedTopic = params.get('topic');
+  if (requestedTopic && !topicById(requestedTopic)) return null;
   const fullId = params.has('entity') ? validEntityId(params.get('entity')) : null;
   // An invalid requested detail must not silently fall back to another object.
   if (params.has('entity') && !fullId) return null;
   // A standalone detail link starts an exploration centered on that same object.
   const centerId = params.has('center') ? validEntityId(params.get('center')) : fullId;
   if (!centerId) return null;
+  const topicId = requestedTopic ? topicById(requestedTopic)!.id : entityTopic(entityById(centerId)!);
+  if (!validEntityId(centerId, topicId) || (fullId && !validEntityId(fullId, topicId))) return null;
   return sanitizeState({
+    topicId,
     centerId,
     fullId,
     selectedId: params.has('selected') ? params.get('selected') : centerId,

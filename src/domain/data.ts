@@ -1,7 +1,8 @@
 import type { Action, Entity, Group, Guide, Relation, Source } from './types';
+import { shijiEntities, shijiGuides, shijiRelations, shijiSources } from './shiji-data';
 
 /** Local prototype material, not an editorially approved historical corpus. */
-export const CONTENT_VERSION = 'chibi-local-draft-2026-09-24';
+export const CONTENT_VERSION = 'topics-local-draft-2026-09-24';
 
 const source = (id: string, section: string, volume: string, note: string): Source => ({
   id, title: '《三国志》', section,
@@ -9,7 +10,7 @@ const source = (id: string, section: string, volume: string, note: string): Sour
   note: `${note} 本页为公开原文转录，示例摘要与纪年尚待正式审校；正文与裴注应分别阅读。`,
 });
 
-export const sources: Source[] = [
+const chibiSources: Source[] = [
   source('sgz-01', '卷一 · 武帝纪', '01', '用于曹操南征、赤壁退军及建安纪年。'),
   source('sgz-06', '卷六 · 刘表传', '06', '用于刘表、刘琦、刘琮与荆州形势。'),
   source('sgz-09', '卷九 · 曹仁传', '09', '用于南郡守军与曹仁。'),
@@ -112,7 +113,7 @@ const event = (id: string, name: string, aliases: string[], role: string, start:
   actions: Object.values(actions).flat().filter(item => item.eventId === id),
 });
 
-export const entities: Entity[] = [
+const chibiEntities: Entity[] = [
   event('chibi', '赤壁之战', ['赤壁', '乌林之战', '烏林之戰'], '联合、决策与作战', 208, 208,
     '公元 208 年，孙权、刘备联合抵御曹操。一次战役，连接起不同的选择。',
     '曹操取得荆州后继续南进，孙权派周瑜、程普等与刘备合力迎战。周瑜传详述黄盖所提火攻，武帝纪记载交战不利与疾疫。曹军撤退后，南郡争夺继续。兵力数字、战役地点与各方贡献须结合不同材料讨论。', ['sgz-01', 'sgz-32', 'sgz-54-zhou', 'sgz-55']),
@@ -143,7 +144,7 @@ const participation: Relation[] = people.flatMap(person => person.actions.map(it
   evidence: 'record' as const, start: item.year, end: item.year, context: item.description, sourceIds: item.sourceIds,
 })));
 
-export const relations: Relation[] = [
+const chibiRelations: Relation[] = [
   ...participation,
   { id: 'sun-liu-208', source: 'sun-quan', target: 'liu-bei', label: '联合迎敌', category: 'political', evidence: 'record', start: 208, end: 208, context: '208 年共同应对曹操南征。此日期表示本次有记载的行动，不将合作默认为全年或永久有效。', sourceIds: ['sgz-32', 'sgz-47'] },
   { id: 'sun-liu-215', source: 'sun-quan', target: 'liu-bei', label: '争议与议定', category: 'political', evidence: 'record', start: 215, end: 215, context: '围绕荆州郡县争执后重新议定分界。与 208 年的联军行动分别建边。', sourceIds: ['sgz-32', 'sgz-47'] },
@@ -166,7 +167,7 @@ export const relations: Relation[] = [
   { id: 'surrender-changban-context', source: 'jingzhou-surrender', target: 'changban', label: '南撤背景', category: 'influence', evidence: 'interpretation', start: 208, end: 208, context: '编辑解释：荆州权力交接是理解刘备南撤的背景之一；时间先后本身不证明唯一因果。', sourceIds: ['sgz-01', 'sgz-32'] },
 ];
 
-export const guides: Guide[] = [
+const chibiGuides: Guide[] = [
   { id: 'chibi-intro', title: '一场赤壁，六种选择', subtitle: '由战役进入人物的具体行动', duration: '约 4 分钟', steps: [
     { title: '先看全局', question: '一场战役，只有一位主角吗？', entityId: 'chibi', description: '从统军、外交、执行和退军等行动开始。选中节点先读摘要，展开关系可以保留当前中心。' },
     { title: '联合的决定', question: '孙权为什么需要作出选择？', entityId: 'sun-quan', description: '查看派军与联合的记录。孙权负责决策，不等于亲自在前线指挥每个行动。' },
@@ -189,3 +190,8 @@ export const guides: Guide[] = [
     { title: '219 年的新局面', question: '为什么要给每条关系保留日期？', entityId: 'jingzhou-campaign', description: '先按 208 年，再按 219 年应用筛选。同一人物仍可阅读完整经历，活动网络则随日期改变。' },
   ] },
 ];
+
+export const entities: Entity[] = [...chibiEntities, ...shijiEntities];
+export const relations: Relation[] = [...chibiRelations, ...shijiRelations];
+export const sources: Source[] = [...chibiSources, ...shijiSources];
+export const guides: Guide[] = [...chibiGuides, ...shijiGuides];

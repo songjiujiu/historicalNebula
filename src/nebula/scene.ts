@@ -6,7 +6,10 @@ import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import type { GraphView, Group, Relation, SceneController, SceneOptions, SpatialSnapshot, Vec3 } from '../domain/types';
 import { createLayout, hash, validVector } from './layout';
 
-const COLORS: Record<Group, string> = { wu: '#7de2ce', shu: '#dcb779', wei: '#92aefe', neutral: '#cfabed' };
+const COLORS: Record<Group, string> = {
+  wu: '#7de2ce', shu: '#dcb779', wei: '#92aefe',
+  chu: '#e8a46d', han: '#70c7dc', qin: '#a898d5', neutral: '#cfabed',
+};
 const TIERS = {
   low: { stars: 1500, clouds: 2, dpr: 1, pixels: 800000 },
   medium: { stars: 4000, clouds: 5, dpr: 1.25, pixels: 1500000 },
