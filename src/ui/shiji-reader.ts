@@ -5,6 +5,7 @@ import { shijiGraphReport } from '../domain/shiji-full-data';
 import { chapterGuides } from '../domain/chapter-guides';
 import { escapeHtml as esc } from './icons';
 import './shiji-reader.css';
+import { journeyEvent } from '../domain/history-journey';
 
 const simplify = Converter({ from: 'tw', to: 'cn' });
 const KEY = 'historical-nebula:shiji-reader:v1';
@@ -144,7 +145,9 @@ async function read(next: BookLocation, route = true) {
     $('.book-main').scrollTop = 0;
     if (next.block) {
       const block = $(`#book-${next.block}`); block?.classList.add('book-target');
-      const needle = simplify(query.trim());
+      const event = journeyEvent(new URL(window.location.href).searchParams.get('journey'));
+      const eventSource = event?.sources.find(source => source.book === 'shiji' && source.volume === next.volume && source.block === next.block);
+      const needle = simplify((eventSource?.cue ?? query).trim());
       const contentHost = block?.querySelector('.book-block-content');
       if (needle && contentHost) {
         const walker = document.createTreeWalker(contentHost, NodeFilter.SHOW_TEXT);

@@ -10,6 +10,8 @@ import { createStoryReader } from './ui/story-reader';
 import { stories } from './domain/stories';
 import { storyUrl } from './exploration/story';
 import { createReadingGuide } from './ui/reading-guide';
+import { createHistoryJourney } from './ui/history-journey';
+import { journeyUrl, journeySourceUrl } from './domain/history-journey';
 
 type SavedView = { id: string; title: string; date: string; state: ExploreState };
 interface LocalRecords { bookmarks: string[]; saves: SavedView[]; recent: ExploreState | null; progress: Record<string, number> }
@@ -27,16 +29,18 @@ try {
 } catch { /* A blocked or corrupt storage never prevents browsing. */ }
 
 let state: ExploreState = stateFromUrl(location.href) ?? { ...DEFAULT_STATE, categories: [...DEFAULT_STATE.categories], expandedIds: [] };
-function modeFromUrl(): 'guide' | 'story' | 'explore' | 'library' {
+function modeFromUrl(): 'journey' | 'guide' | 'story' | 'explore' | 'library' {
   const params = new URL(location.href).searchParams;
   if (params.has('library')) return 'library';
+  if (params.has('journey')) return 'journey';
   if (params.has('story')) return 'story';
   if (params.has('reading') || params.has('route')) return 'guide';
-  return stateFromUrl(location.href) ? 'explore' : 'guide';
+  return stateFromUrl(location.href) ? 'explore' : 'journey';
 }
 let appMode = modeFromUrl();
 let storyReader: ReturnType<typeof createStoryReader> | null = null;
 let readingGuide: ReturnType<typeof createReadingGuide> | null = null;
+let historyJourney: ReturnType<typeof createHistoryJourney> | null = null;
 let dynasticLibrary: ReturnType<typeof import('./ui/dynastic-library').createDynasticLibrary> | null = null;
 let dynasticLoading = false;
 async function ensureDynasticLibrary() {
@@ -45,7 +49,7 @@ async function ensureDynasticLibrary() {
   dynasticLoading = true;
   try {
     const { createDynasticLibrary } = await import('./ui/dynastic-library');
-    dynasticLibrary = createDynasticLibrary(document.querySelector<HTMLElement>('#dynastic-root')!, { onShiji: () => void openBook() });
+    dynasticLibrary = createDynasticLibrary(document.querySelector<HTMLElement>('#dynastic-root')!, { onShiji: () => void openBook(), onJourney: enterJourney });
     if (appMode === 'library') dynasticLibrary.showFromUrl();
   } catch { toast('二十四史目录加载失败，请刷新重试。'); }
   finally { dynasticLoading = false; }
@@ -100,10 +104,11 @@ const categories: Record<RelationCategory, { label: string; description: string;
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <header class="app-header">
     <a class="brand" href="/" aria-label="历史星云首页"><span class="brand-mark">${icon('star')}</span><span>历史星云<small>HISTORICAL NEBULA</small></span></a>
-    <nav class="main-nav" aria-label="主导航"><button class="nav-item" data-action="reading-guides">史记导读</button><button class="nav-item" data-action="stories">白话故事</button><button class="nav-item" data-action="explore">史记星图</button><button class="nav-item" data-action="shiji-book">史记原文</button><button class="nav-item" data-action="dynastic-library">二十四史</button></nav>
+    <nav class="main-nav" aria-label="主导航"><button class="nav-item" data-action="history-journey">读懂历史</button><button class="nav-item" data-action="reading-guides">史记导读</button><button class="nav-item" data-action="stories">楚汉故事</button><button class="nav-item" data-action="explore">史记星图</button><button class="nav-item" data-action="shiji-book">史记原文</button><button class="nav-item" data-action="dynastic-library">二十四史原文</button></nav>
     <button class="search-trigger" data-action="search" aria-label="搜索人物、事件、别名">${icon('search')}<span>搜索人物、事件、别名</span><kbd>Ctrl K</kbd></button>
     <button class="icon-button help-button" data-action="help" aria-label="探索说明">${icon('info')}</button>
   </header>
+  <div id="journey-root"></div>
   <div id="story-root"></div>
   <div id="reading-root"></div>
   <div id="dynastic-root"></div>
@@ -287,6 +292,7 @@ function openRelation(id: string) {
 }
 
 function render() {
+  $('#journey-root').classList.toggle('hidden', appMode !== 'journey');
   $('#story-root').classList.toggle('hidden', appMode !== 'story');
   $('#reading-root').classList.toggle('hidden', appMode !== 'guide');
   $('#dynastic-root').classList.toggle('hidden', appMode !== 'library');
@@ -295,8 +301,10 @@ function render() {
   document.querySelector('[data-action="reading-guides"]')?.classList.toggle('active', appMode === 'guide');
   document.querySelector('[data-action="explore"]')?.classList.toggle('active', appMode === 'explore');
   document.querySelector('[data-action="dynastic-library"]')?.classList.toggle('active', appMode === 'library');
-  $('.search-trigger').classList.toggle('hidden', appMode === 'library');
-  $('.help-button').classList.toggle('hidden', appMode === 'library');
+  document.querySelector('[data-action="history-journey"]')?.classList.toggle('active', appMode === 'journey');
+  $('.search-trigger').classList.toggle('hidden', appMode === 'library' || appMode === 'journey');
+  $('.help-button').classList.toggle('hidden', appMode === 'library' || appMode === 'journey');
+  if (appMode === 'journey') { scene?.setActive(false); storyReader?.setActive(false); return; }
   if (appMode === 'library') { scene?.setActive(false); storyReader?.setActive(false); void ensureDynasticLibrary(); return; }
   if (appMode === 'story') { scene?.setActive(false); storyReader?.setActive(!currentDialog && !parseBookLocation(location.hash) && !document.querySelector('.book-dialog[open]')); return; }
   if (appMode === 'guide') { scene?.setActive(false); storyReader?.setActive(false); return; }
@@ -497,6 +505,7 @@ document.addEventListener('click', event => {
   if (target.dataset.restore) { const saved = records.saves.find(s => s.id === target.dataset.restore); if (saved) { hideDialog(); restore(saved.state); toast('已恢复保存的探索视图。'); } return; }
   if (target.dataset.deleteSave) { const removed = records.saves.find(s => s.id === target.dataset.deleteSave); if (removed && writeRecords({ ...records, saves: records.saves.filter(s => s.id !== removed.id) })) { openLibrary(); toast('已删除保存的视图。', () => { if (writeRecords({ ...records, saves: [removed, ...records.saves] })) { openLibrary(); toast('保存的视图已恢复。'); } }); } return; }
   switch (target.dataset.action) {
+    case 'history-journey': enterJourney(); break;
     case 'dynastic-library': enterDynasticLibrary(); break;
     case 'shiji-book': void openBook(); break;
     case 'book-search': void openBook(undefined, document.querySelector<HTMLInputElement>('#search-input')?.value ?? ''); break;
@@ -563,12 +572,13 @@ document.addEventListener('change', event => {
 });
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape' && inFullscreen() && !$<HTMLDialogElement>('#dialog').open) { event.preventDefault(); void exitFullscreen(); }
-  if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); if (appMode === 'library') document.querySelector<HTMLInputElement>('#dynastic-root [data-library-search], #dynastic-root [data-library-filter]')?.focus(); else openSearch(); }
+  if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); if (appMode === 'library') document.querySelector<HTMLInputElement>('#dynastic-root [data-library-search], #dynastic-root [data-library-filter]')?.focus(); else if (appMode === 'journey') document.querySelector<HTMLInputElement>('[data-journey-search]')?.focus(); else openSearch(); }
 });
 $<HTMLDialogElement>('#dialog').addEventListener('cancel', event => { event.preventDefault(); closeDialog(); });
 $<HTMLDialogElement>('#dialog').addEventListener('click', event => { if (event.target === $('#dialog')) { const rect = $('#dialog').getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) closeDialog(); } });
 window.addEventListener('popstate', event => {
   appMode = modeFromUrl();
+  if (appMode === 'journey') { hideDialog(); historyJourney?.showFromUrl(); render(); return; }
   if (appMode === 'library') { hideDialog(); render(); return; }
   if (appMode === 'story') { hideDialog(); storyReader?.showFromUrl(); render(); return; }
   if (appMode === 'guide') { hideDialog(); readingGuide?.showFromUrl(); render(); return; }
@@ -618,6 +628,16 @@ function enterExploration(patch: Partial<ExploreState> = {}) {
   history.pushState(historyEntry(), '', shareUrl(state, location.href));
   render();
 }
+function enterJourney(eventId = '') {
+  if (currentDialog) hideDialog();
+  if (inFullscreen()) void exitFullscreen();
+  if (appMode === 'explore') captureCurrentEntry();
+  const scope = new URL(location.href).searchParams.get('scope') ?? 'quick';
+  appMode = 'journey';
+  history.pushState({ journey: true }, '', journeyUrl(eventId, '', location.href, scope));
+  historyJourney?.showFromUrl(); render();
+  window.scrollTo({ top: 0 });
+}
 function enterDynasticLibrary() {
   if (currentDialog) hideDialog();
   if (inFullscreen()) void exitFullscreen();
@@ -651,11 +671,21 @@ function enterGuides(volume?: number) {
   render();
 }
 storyReader = createStoryReader($('#story-root'), { onExplore: id => enterExploration({ centerId: id, selectedId: id }), onBook: (volume, block) => void openBook(volume, undefined, block) });
+historyJourney = createHistoryJourney($('#journey-root'), {
+  onLibrary: enterDynasticLibrary,
+  onSource: (event, source) => {
+    if (source.book === 'shiji') { void openBook(source.volume, source.cue, source.block); return; }
+    appMode = 'library';
+    history.pushState({ dynastic: true }, '', journeySourceUrl(event, source));
+    render();
+  },
+});
 readingGuide = createReadingGuide($('#reading-root'), { onStory: enterStories, onExplore: id => enterExploration({ centerId: id, selectedId: id }), onBook: (volume, block) => void openBook(volume, undefined, block) });
+if (appMode === 'journey') historyJourney.showFromUrl();
 if (appMode === 'story') storyReader.showFromUrl();
 if (appMode === 'guide') readingGuide.showFromUrl();
 render(); void ensureScene();
-if (new URL(location.href).search && !['story', 'reading', 'route', 'library'].some(key => new URL(location.href).searchParams.has(key)) && !stateFromUrl(location.href)) toast('分享对象不存在或链接已失效，已打开全书导读。');
+if (new URL(location.href).search && !['journey', 'story', 'reading', 'route', 'library'].some(key => new URL(location.href).searchParams.has(key)) && !stateFromUrl(location.href)) toast('分享对象不存在或链接已失效，已打开历史主线。');
 const initialBookLocation = parseBookLocation(location.hash);
 if (initialBookLocation) void openBook(initialBookLocation.volume, undefined, initialBookLocation.block);
 // Open a book link reached with browser Back/Forward before the reader module was loaded.

@@ -92,6 +92,12 @@
 .dynasty-reading-actions { display: flex; justify-content: space-between; margin: 24px 0 20px; }
 .dynasty-reading-actions button { padding: 7px 10px; border: 1px solid #41516a; border-radius: 5px; color: #c7d3e4; font-size: 11px; }
 .dynasty-reader .book-block { scroll-margin-top: 22px; }
+.dynasty-reader .book-target { border-left: 3px solid #d6ba81; background: #cdb77a0c; scroll-margin-top: 95px; }
+.dynasty-reader .journey-source-match { color: #111a25; background: #e3c585; padding: 3px 1px; scroll-margin-top: 90px; }
+.dynasty-event-return { position: sticky; top: 0; z-index: 3; display: flex; justify-content: space-between; gap: 14px; align-items: center; padding: 13px 16px; border: 1px solid #686044; border-radius: 7px; background: #262a27; margin-bottom: 23px; box-shadow: 0 8px 25px #080e1980; }
+.dynasty-event-return strong { display: block; font-size: 13px; color: #e6d3ac; margin-top: 5px; }
+.dynasty-event-return small { font-size: 10px; color: #a6b8c6; }
+.dynasty-event-return button { flex-shrink: 0; font-size: 11px; padding: 8px 12px; height: auto; }
 .dynasty-results .book-hit { width: 100%; }
 .dynasty-loading,.dynasty-error { padding: 50px 14px; color: #a4b4ca; font-size: 13px; }
 .dynasty-error button { margin-top: 15px; }

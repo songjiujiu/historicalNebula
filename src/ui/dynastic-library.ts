@@ -1,6 +1,7 @@
 import { Converter } from 'opencc-js';
 import { dynasticBooks, dynasticBook, dynasticChapter, dynasticUrl, loadDynasticChapter, loadDynasticSearch, parseDynasticLocation, type DynasticBook, type DynasticChapter, type DynasticBlock } from '../domain/dynastic-library';
 import './dynastic-library.css';
+import { sourceJourney } from '../domain/history-journey';
 
 const esc = (value: string) => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
 const simplify = Converter({ from: 'tw', to: 'cn' });
@@ -30,7 +31,7 @@ const route = [
 ];
 const sourceNote = '本站提供整理后的原文阅读与机器生成的卷目索引。少数历法表仍有缺录；导读并非逐句白话译文。原文转录与卷名可能有讹误，请按来源核对。';
 
-export function createDynasticLibrary(host: HTMLElement, callbacks: { onShiji: () => void }) {
+export function createDynasticLibrary(host: HTMLElement, callbacks: { onShiji: () => void; onJourney: (eventId?: string) => void }) {
   let currentBook: DynasticBook | null = null;
   let currentVolume: number | null = null;
   let catalogPage = 0;
@@ -85,6 +86,7 @@ export function createDynasticLibrary(host: HTMLElement, callbacks: { onShiji: (
     if (!chapter) { bookHome(book); return; }
     currentBook = book; currentVolume = volume;
     const token = ++request;
+    const journey = sourceJourney(location.href);
     shell('<div class="dynasty-loading">正在打开原文…</div>', side(book, volume));
     try {
       const content = await loadDynasticChapter(book, volume);
@@ -93,24 +95,40 @@ export function createDynasticLibrary(host: HTMLElement, callbacks: { onShiji: (
       const next = volume < book.volumes ? volume + 1 : undefined;
       const previous = volume > 1 ? volume - 1 : undefined;
       const opening = chapter.excerpt;
-      const blockHtml = (block: DynasticBlock) => block.kind === 'table' ? (simplified ? simplify(block.html) : block.html) : text(block.text).replaceAll('\n', '<br>');
+      const blockHtml = (item: DynasticBlock) => {
+        if (item.kind === 'table') return simplified ? simplify(item.html) : item.html;
+        const display = simplified ? simplify(item.text) : item.text;
+        const cue = journey?.source.block === item.id ? journey.source.cue : '';
+        const at = cue ? simplify(display).indexOf(cue) : -1;
+        // In traditional mode only mark when offsets still refer to the same characters.
+        const valid = at >= 0 && simplify(display.slice(at, at + cue.length)) === cue;
+        return (valid ? `${esc(display.slice(0, at))}<mark class="journey-source-match">${esc(display.slice(at, at + cue.length))}</mark>${esc(display.slice(at + cue.length))}` : esc(display)).replaceAll('\n', '<br>');
+      };
       host.querySelector('.dynasty-main')!.innerHTML = `
         <div class="dynasty-status" data-library-status role="status" aria-live="polite"></div>
         <article class="dynasty-reader">
+          ${journey ? `<div class="dynasty-event-return"><div><small>正在核对事件原文</small><strong>${esc(journey.event.title)}</strong></div><button data-library="return-event" class="secondary-button">← 返回这个事件</button></div>` : ''}
           <div class="dynasty-breadcrumb"><button data-library="book-home">《${esc(book.name)}》导读</button><span>›</span><span>卷 ${volume}</span></div>
           <div class="dynasty-reader-heading"><span class="book-kicker">${esc(book.era)} · ${esc(chapter.category)}</span><h2>${esc(chapter.title)}</h2><p>《${esc(book.name)}》卷 ${volume} · ${chapter.characters.toLocaleString()} 字符 · ${content.blocks.length} 段${content.blocks.some(block => block.kind === 'table') ? ' · 含原文表格' : ''}</p></div>
           <section class="dynasty-reading-note"><span class="book-kicker">读前提示</span><h3>这一卷从哪里读起？</h3><p>${readingMethod[chapter.category] ?? readingMethod['篇章']}</p><p><strong>开头原文：</strong>“${esc(opening)}${opening.length >= 95 ? '…' : ''}”</p>${chapter.incomplete ? '<p class="dynasty-incomplete">此卷底本注明表格省略，本站尚缺原表。请打开卷末来源页核对，不能把这里视为全卷全文。</p>' : ''}<small>下面是原文。提示只教你怎样读，不代替原文，也不是逐句译文。</small></section>
           <div class="dynasty-reading-actions"><button data-library="script" aria-pressed="${simplified}">${script} · 点击切换</button><button data-library="share">分享本卷</button></div>
-          <div class="book-text">${content.blocks.map(block => `<section class="book-block ${block.kind}" id="dynasty-${block.id}"><div class="book-block-tools"><a href="${esc(dynasticUrl({ book: book.id, volume, block: block.id }))}" data-library-block="${block.id}">${block.id}</a><button data-library="share-block" data-block="${block.id}">分享此段</button></div><div class="book-block-content">${blockHtml(block)}</div></section>`).join('')}</div>
+          <div class="book-text">${content.blocks.map(item => `<section class="book-block ${item.kind}${item.id === block ? ' book-target' : ''}" id="dynasty-${item.id}"${item.id === block ? ' tabindex="-1" aria-label="已定位到目标原文段落"' : ''}><div class="book-block-tools"><a href="${esc(dynasticUrl({ book: book.id, volume, block: item.id }))}" data-library-block="${item.id}">${item.id}</a><button data-library="share-block" data-block="${item.id}">分享此段</button></div><div class="book-block-content">${blockHtml(item)}</div></section>`).join('')}</div>
           <footer class="book-provenance"><a href="${esc(chapter.sourceUrl)}" target="_blank" rel="noopener noreferrer">核对本卷转录来源 ↗</a>${chapter.comparisonUrl ? ` · <a href="${esc(chapter.comparisonUrl)}" target="_blank" rel="noopener noreferrer">查看维基文库同卷 ↗</a>` : ''}<p>${esc(chapter.edition)}。段落编号由本站生成；原文简体显示只转换字形。${sourceNote}</p></footer>
           <div class="book-bottom-nav"><button class="secondary-button" data-history="${book.id}" data-volume="${previous ?? ''}" ${previous === undefined ? 'disabled' : ''}>← 上一卷</button><button class="secondary-button" data-library="book-home">本书导读</button><button class="primary-button" data-history="${book.id}" data-volume="${next ?? ''}" ${next === undefined ? 'disabled' : ''}>下一卷 →</button></div>
         </article>`;
       setStatus(`《${book.name}》卷 ${volume} · ${chapter.title}`);
       try { localStorage.setItem('historical-nebula:dynastic-recent', JSON.stringify({ book: book.id, volume })); } catch { /* Optional progress. */ }
-      if (block) queueMicrotask(() => host.querySelector(`#dynasty-${block}`)?.scrollIntoView({ block: 'center' }));
+      if (block) queueMicrotask(() => {
+        if (token !== request) return;
+        const target = host.querySelector<HTMLElement>(`#dynasty-${block}`);
+        const match = target?.querySelector<HTMLElement>('.journey-source-match');
+        (match ?? target)?.scrollIntoView({ block: match ? 'center' : 'start' });
+        target?.focus({ preventScroll: true });
+        setStatus(`已定位到《${book.name}》卷 ${volume} · ${block}${journey ? `：${journey.event.title}` : ''}`);
+      });
     } catch (error) {
       if (token !== request) return;
-      host.querySelector('.dynasty-main')!.innerHTML = `<div class="dynasty-error"><p>${esc(error instanceof Error ? error.message : '原文加载失败')}</p><button class="primary-button" data-history="${book.id}" data-volume="${volume}">重试</button></div>`;
+      host.querySelector('.dynasty-main')!.innerHTML = `<div class="dynasty-error"><p>${esc(error instanceof Error ? error.message : '原文加载失败')}</p><button class="primary-button" data-library="retry">重试</button></div>`;
     }
   }
 
@@ -168,6 +186,8 @@ export function createDynasticLibrary(host: HTMLElement, callbacks: { onShiji: (
     if (target.dataset.history) { const volume = target.dataset.volume !== undefined && target.dataset.volume !== '' ? Number(target.dataset.volume) : undefined; navigate({ book: target.dataset.history, volume, ...(target.dataset.block ? { block: target.dataset.block } : {}) }); return; }
     switch (target.dataset.library) {
       case 'home': navigate({ book: '' }); break;
+      case 'retry': showFromUrl(); break;
+      case 'return-event': { const entry = sourceJourney(location.href); if (entry) callbacks.onJourney(entry.event.id); break; }
       case 'shiji': callbacks.onShiji(); break;
       case 'book-home': if (currentBook) navigate({ book: currentBook.id }); break;
       case 'recent': try { const recent = JSON.parse(localStorage.getItem('historical-nebula:dynastic-recent') || 'null'); if (recent && dynasticBook(recent.book)) navigate(recent); else setStatus('还没有新增史书的阅读记录。'); } catch { setStatus('阅读记录暂不可用。'); } break;
@@ -176,7 +196,7 @@ export function createDynasticLibrary(host: HTMLElement, callbacks: { onShiji: (
       case 'search': if (currentBook) navigateSearch(host.querySelector<HTMLInputElement>('[data-library-search]')?.value ?? ''); break;
       case 'search-prev': if (currentBook && searchPage > 0) navigateSearch(currentQuery, searchPage - 1); break;
       case 'search-next': if (currentBook) navigateSearch(currentQuery, searchPage + 1); break;
-      case 'script': simplified = !simplified; try { localStorage.setItem('historical-nebula:dynastic-script', simplified ? 'simplified' : 'traditional'); } catch { /* Optional. */ } if (currentBook && currentVolume !== null) void read(currentBook, currentVolume); break;
+      case 'script': simplified = !simplified; try { localStorage.setItem('historical-nebula:dynastic-script', simplified ? 'simplified' : 'traditional'); } catch { /* Optional. */ } if (currentBook && currentVolume !== null) void read(currentBook, currentVolume, parseDynasticLocation(location.href)?.block); break;
       case 'share': if (currentBook && currentVolume !== null) void copy(dynasticUrl({ book: currentBook.id, volume: currentVolume })); break;
       case 'share-block': if (currentBook && currentVolume !== null && target.dataset.block) void copy(dynasticUrl({ book: currentBook.id, volume: currentVolume, block: target.dataset.block })); break;
     }
