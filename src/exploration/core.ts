@@ -25,10 +25,10 @@ const MAX_NODES = 50;
 
 export const DEFAULT_STATE: ExploreState = {
   topicId: DEFAULT_TOPIC.id,
-  centerId: 'chibi', selectedId: 'chibi', relationId: null,
+  centerId: DEFAULT_TOPIC.centerId, selectedId: DEFAULT_TOPIC.centerId, relationId: null,
   fromYear: DEFAULT_TOPIC.minYear, toYear: DEFAULT_TOPIC.maxYear,
-  categories: ['military', 'political', 'influence'],
-  showUndated: false, viewMode: 'graph3d', expandedIds: [],
+  categories: [...ALL_CATEGORIES],
+  showUndated: true, viewMode: 'graph3d', expandedIds: [],
   fullId: null, sourceId: null,
 };
 
@@ -187,12 +187,6 @@ export function sanitizeState(input: unknown): ExploreState {
   const topicId = topicById(value.topicId)?.id ?? (inferredCenter ? entityTopic(entityById(inferredCenter)!) : DEFAULT_TOPIC.id);
   const topic = topicById(topicId)!;
   const centerId = validEntityId(value.centerId, topicId) ?? topic.centerId;
-  const firstYear = year(value.fromYear, topic.minYear, topic.minYear, topic.maxYear);
-  const lastYear = year(value.toYear, topic.maxYear, topic.minYear, topic.maxYear);
-  const categoryInput = value.categories;
-  const categories = Array.isArray(categoryInput)
-    ? ALL_CATEGORIES.filter((category) => categoryInput.includes(category))
-    : [...DEFAULT_STATE.categories, ...(topicId === 'shiji' ? ['textual' as const] : [])];
   const expandedIds = Array.isArray(value.expandedIds)
     ? [...new Set(value.expandedIds.filter((id): id is string => validEntityId(id, topicId) !== null))].slice(0, MAX_NODES)
     : [];
@@ -202,8 +196,8 @@ export function sanitizeState(input: unknown): ExploreState {
     centerId,
     selectedId: value.selectedId === undefined ? centerId : validEntityId(value.selectedId, topicId),
     relationId: typeof value.relationId === 'string' && relationById(value.relationId) && relationTopic(relationById(value.relationId)!) === topicId ? value.relationId : null,
-    fromYear: Math.min(firstYear, lastYear), toYear: Math.max(firstYear, lastYear),
-    categories, showUndated: value.showUndated === true,
+    fromYear: topic.minYear, toYear: topic.maxYear,
+    categories: [...ALL_CATEGORIES], showUndated: true,
     viewMode: value.viewMode === 'list' ? 'list' : 'graph3d',
     expandedIds, fullId: validEntityId(value.fullId, topicId),
     sourceId: typeof value.sourceId === 'string' && sources.some((source) => source.id === value.sourceId && sourceTopic(source) === topicId)

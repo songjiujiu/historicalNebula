@@ -73,42 +73,31 @@ const categories: Record<RelationCategory, { label: string; description: string;
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <header class="app-header">
     <a class="brand" href="/" aria-label="历史星云首页"><span class="brand-mark">${icon('star')}</span><span>历史星云<small>HISTORICAL NEBULA</small></span></a>
-    <nav class="main-nav" aria-label="主导航"><button class="nav-item active" data-action="explore">探索星图</button><button class="nav-item" data-action="shiji-book">史记全书</button><button class="nav-item" data-action="guides">专题导览<span class="nav-dot"></span></button><button class="nav-item" data-action="library">我的探索</button></nav>
+    <nav class="main-nav" aria-label="主导航"><button class="nav-item active" data-action="explore">史记星图</button><button class="nav-item" data-action="shiji-book">史记全书</button></nav>
     <button class="search-trigger" data-action="search" aria-label="搜索人物、事件、别名">${icon('search')}<span>搜索人物、事件、别名</span><kbd>Ctrl K</kbd></button>
     <button class="icon-button help-button" data-action="help" aria-label="探索说明">${icon('info')}</button>
   </header>
   <div class="workspace">
-    <aside class="sidebar" id="sidebar" aria-label="探索筛选">
-      <div class="sidebar-heading"><span>探索范围</span><button class="icon-button mobile-only" data-action="filters-close" aria-label="关闭筛选">${icon('close')}</button><span class="tiny-label">SCOPE</span></div>
-      <div class="topic-card"><div class="topic-icon">${icon('grid')}</div><div><span class="eyebrow">当前专题</span><h2 id="topic-title"></h2><p id="topic-era"></p></div></div>
-      <div id="topic-switcher" class="topic-switcher" role="group" aria-label="选择历史专题"></div>
-      <button class="book-entry" data-action="shiji-book"><span>史记 · 全书阅读</span><small>130 卷原文 · 十表完整收录 →</small></button>
-      <p class="section-label">关系类型 <span>RELATIONS</span></p>
-      <div id="relation-filters" class="relation-filters"></div>
-      <div class="filter-divider"></div>
-      <p class="section-label">内容范围</p>
-      <label class="switch-row"><span>显示时间待考<small>单独标注可能相关的记录</small></span><input id="undated-toggle" type="checkbox" role="switch" /></label>
-      <button class="apply-filter" data-action="apply-filters">${icon('filter')}应用筛选<span id="filter-dirty"></span></button>
-      <button class="text-button reset-filter" data-action="clear-filters">重置所有筛选</button>
-      <div class="sidebar-bottom"><div class="guide-promo"><span class="eyebrow">不知道从哪开始？</span><h3 id="guide-promo-title"></h3><p id="guide-promo-description"></p><button data-action="start-first-guide">开始一段导览 ${icon('arrow')}</button><div class="promo-orbits"><i></i><i></i><i></i><b></b></div></div>
-      <div class="coverage"><span class="status-dot"></span>精选内容 · 持续探索<span id="coverage-count"></span></div></div>
+    <aside class="sidebar" id="sidebar" aria-label="史记全书">
+      <div class="sidebar-heading"><span>史记全书</span><span class="tiny-label">SHIJI</span></div>
+      <div class="topic-card"><div class="topic-icon">${icon('book')}</div><div><h2 id="topic-title"></h2><p id="topic-era"></p></div></div>
+      <button class="book-entry" data-action="shiji-book"><span>阅读《史记》全书</span><small>130 卷原文 · 十表完整收录 →</small></button>
+      <div class="coverage"><span class="status-dot"></span>全书星图<span id="coverage-count"></span></div>
     </aside>
     <main class="exploration" id="exploration">
-      <div class="explore-toolbar"><div class="breadcrumb"><button class="icon-button" data-action="back" aria-label="返回上一视图">${icon('back')}</button><span>中国历史</span>${icon('chevron')}<button class="breadcrumb-topic" data-action="topics" aria-label="切换历史专题"><span id="breadcrumb-topic-title"></span>${icon('chevron')}</button></div><div class="view-switch" role="group" aria-label="显示方式"><button data-action="view-3d">${icon('grid')}星云</button><button data-action="view-list">${icon('list')}列表</button></div></div>
-      <div class="stage-heading"><div><div class="eyebrow"><span class="status-dot"></span> 关系探索 · RELATIONSHIP EXPLORER</div><h1 id="center-title"></h1><p id="stage-description"></p></div><div class="stage-actions"><button class="subtle-button fullscreen-trigger" data-action="fullscreen" aria-label="全屏展示星云" aria-pressed="false" title="全屏展示星云">${icon('expand')}<span>全屏</span></button><button class="subtle-button" data-action="save" aria-label="保存视图">${icon('bookmark')}<span>保存视图</span></button><button class="subtle-button" data-action="share" aria-label="分享">${icon('share')}<span>分享</span></button></div></div>
+      <div class="explore-toolbar"><div class="breadcrumb"><button class="icon-button" data-action="back" aria-label="返回上一视图">${icon('back')}</button><span>史记全书</span></div><div class="view-switch" role="group" aria-label="显示方式"><button data-action="view-3d">${icon('grid')}星云</button><button data-action="view-list">${icon('list')}列表</button></div></div>
+      <div class="stage-heading"><div><div class="eyebrow"><span class="status-dot"></span> 史记全书 · 人物与事件</div><h1 id="center-title"></h1><p id="stage-description"></p></div><div class="stage-actions"><button class="subtle-button fullscreen-trigger" data-action="fullscreen" aria-label="全屏展示星云" aria-pressed="false" title="全屏展示星云">${icon('expand')}<span>全屏</span></button><button class="subtle-button" data-action="share" aria-label="分享">${icon('share')}<span>分享</span></button></div></div>
       <div id="guide-bar" class="guide-bar hidden"></div>
       <div id="scene-host" class="scene-host" aria-label="三维历史关系星云"></div>
       <div id="scene-loading" class="scene-loading"><span class="loading-orbit"></span><p>点亮历史星云…</p></div>
       <div id="graph-list" class="graph-list hidden" aria-label="关系对象列表"></div>
       <div id="graph-notice" class="graph-notice hidden"></div>
-      <button class="mobile-filter-button mobile-only" data-action="filters-open">${icon('filter')}筛选</button>
       <div class="canvas-caption"><span id="graph-stats"></span><span>空间距离仅用于布局</span></div>
       <div class="canvas-bottom"><div class="legend"><span><i class="legend-dot"></i>人物</span><span><i class="legend-diamond"></i>事件 / 篇章</span><span><i class="legend-line"></i>记载</span><span><i class="legend-line dashed"></i>解释 / 索引</span></div><div class="canvas-controls"><button class="icon-button" data-action="undo-expand" aria-label="撤销上次展开" title="撤销展开">${icon('back')}</button><span class="control-separator"></span><button class="icon-button" data-action="zoom-in" aria-label="放大">${icon('plus')}</button><button class="icon-button" data-action="zoom-out" aria-label="缩小">${icon('minus')}</button><button class="icon-button" data-action="fit" aria-label="居中全部节点" title="居中全部">${icon('target')}</button><button class="icon-button" data-action="camera-reset" aria-label="回正视角" title="回正视角">${icon('reset')}</button><button class="icon-button" data-action="settings" aria-label="画质与交互设置">${icon('settings')}</button></div></div>
-      <section class="timeline" aria-label="时间筛选"><div class="timeline-heading"><span>${icon('clock')}沿时间，理解变化</span><div><span id="year-display"></span><button data-action="apply-time" class="time-apply">应用时间 ${icon('arrow')}</button></div></div><div class="timeline-track"><div class="timeline-periods" id="timeline-periods"></div><div class="timeline-events" id="timeline-events"></div><div class="year-inputs"><label>起<input id="year-from" type="range" step="1" aria-label="起始年份" /></label><label>止<input id="year-to" type="range" step="1" aria-label="结束年份" /></label></div><div class="timeline-years" id="timeline-years"></div></div></section>
     </main>
     <aside id="inspector" class="inspector" aria-label="当前对象详情"></aside>
   </div>
-  <footer class="app-footer"><span>${icon('star')}每一个节点，都是理解历史的起点。</span><span>本地内容样本 · 待正式审校<button data-action="about-data">关于数据 ${icon('info')}</button></span></footer>
+  <footer class="app-footer"><span>${icon('star')}《史记》130 卷，沿原文探索人物与事件。</span><span>机器整理 · 待审校<button data-action="about-data">关于数据 ${icon('info')}</button></span></footer>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <dialog id="dialog" class="app-dialog" aria-label="探索面板"></dialog>
 `;
@@ -271,36 +260,20 @@ function render() {
   const center = entityById(state.centerId)!;
   $('#topic-title').textContent = topic.title;
   $('#topic-era').textContent = topic.eraLabel;
-  $('#breadcrumb-topic-title').textContent = topic.shortTitle;
-  $('#topic-switcher').innerHTML = topics.map(item => `<button class="topic-choice ${item.id === topic.id ? 'active' : ''}" data-topic="${esc(item.id)}" aria-pressed="${item.id === topic.id}"><span>${esc(item.shortTitle)}</span><small>${esc(item.sourceWork)} · ${esc(item.eraLabel)}</small></button>`).join('');
-  $('#guide-promo-title').textContent = topic.introTitle;
-  $('#guide-promo-description').textContent = topic.introDescription;
   $('#center-title').innerHTML = `${esc(center.name)} <span>的历史星云</span>`;
-  $('#stage-description').textContent = `${periodLabel()} · 从人物的行动，看见时代的关联`;
+  $('#stage-description').textContent = '130 卷原文 · 探索全书人物、事件与篇章';
   $('#graph-stats').textContent = `${graph.nodes.length} 个对象 · ${graph.relations.length} 条关联`;
   $('#coverage-count').textContent = `${currentEntities().filter(e => e.kind === 'person').length.toLocaleString()} 人物 / ${currentEntities().filter(e => e.kind === 'event').length.toLocaleString()} 事件${state.topicId === 'shiji' ? ' / 130 卷' : ''}`;
   document.querySelectorAll('[data-action="view-3d"]').forEach(e => e.classList.toggle('active', state.viewMode === 'graph3d'));
   document.querySelectorAll('[data-action="view-list"]').forEach(e => e.classList.toggle('active', state.viewMode === 'list'));
-  $('#relation-filters').innerHTML = Object.entries(categories).map(([key, cat]) => `<label class="filter-row"><input type="checkbox" value="${key}" ${draftCategories.includes(key as RelationCategory) ? 'checked' : ''}/><span class="filter-check">${icon('check')}</span><span class="filter-copy">${cat.label}<small>${cat.description}</small></span><i class="category-dot ${cat.color}"></i></label>`).join('');
-  $<HTMLInputElement>('#undated-toggle').checked = draftUndated;
-  for (const id of ['year-from', 'year-to']) {
-    const input = $<HTMLInputElement>(`#${id}`);
-    input.min = String(topic.minYear); input.max = String(topic.maxYear);
-  }
-  $<HTMLInputElement>('#year-from').value = String(draftYears[0]); $<HTMLInputElement>('#year-to').value = String(draftYears[1]);
-  $('#filter-dirty').textContent = '';
-  renderYearLabel();
-  $('#timeline-periods').innerHTML = topic.periods.map(period => `<span>${esc(period)}</span>`).join('');
-  $('#timeline-events').innerHTML = topic.ticks.map(tick => `<button class="timeline-tick ${tick.year >= state.fromYear && tick.year <= state.toYear ? 'in-range' : ''} ${tick.important ? 'important' : ''}" style="left:${(tick.year - topic.minYear) / (topic.maxYear - topic.minYear) * 100}%" data-year="${tick.year}" aria-label="查看${esc(formatYear(tick.year))}${tick.label ? ` · ${esc(tick.label)}` : ''}" title="${esc(formatYear(tick.year))}${tick.label ? ` · ${esc(tick.label)}` : ''}"></button>`).join('');
-  $('#timeline-years').innerHTML = [...new Set(Array.from({ length: 6 }, (_, index) => Math.round(topic.minYear + (topic.maxYear - topic.minYear) * index / 5)))].map(year => `<span title="${esc(formatYear(year))}">${year < 0 ? '前' : ''}${Math.abs(year)}</span>`).join('');
   $('#graph-list').classList.toggle('hidden', state.viewMode !== 'list');
   $('#scene-host').classList.toggle('hidden', state.viewMode === 'list');
   $('#scene-loading').classList.toggle('hidden', state.viewMode === 'list' || scene !== null || sceneFailed);
   scene?.setActive(state.viewMode === 'graph3d' && !currentDialog && !document.querySelector('.book-dialog[open]'));
   if (scene) scene.setGraph(graph, state.spatial);
   renderGraphList(graph.nodes, graph.contextIds);
-  renderInspector(); renderGuide();
-  const note = graph.relations.length === 0 ? '当前条件下暂无已收录关系。可调整时间或清除筛选，继续阅读对象内容。' : sceneFailed ? '3D 暂不可用，已为你保留同条件列表与详情。' : '';
+  renderInspector();
+  const note = graph.relations.length === 0 ? '当前对象暂无已收录关系，可切换到其他人物、事件或篇章。' : sceneFailed ? '3D 暂不可用，已为你保留同条件列表与详情。' : '';
   $('#graph-notice').innerHTML = `${esc(note)}${sceneFailed ? '<button class="text-button" data-action="retry-3d">重试 3D</button>' : ''}`; $('#graph-notice').classList.toggle('hidden', !note);
   for (const action of ['zoom-in', 'zoom-out', 'fit', 'camera-reset']) document.querySelector<HTMLButtonElement>(`[data-action="${action}"]`)!.disabled = state.viewMode === 'list' || sceneFailed;
   document.querySelector<HTMLButtonElement>('[data-action="undo-expand"]')!.disabled = !undoExpansions.length;
@@ -337,10 +310,10 @@ function renderInspector() {
     <div class="inspector-scroll"><div class="relation-hero"><span class="eyebrow">CONNECTION</span><h2>${esc(entityName(relation.source))}<span>${icon('link')}</span>${esc(entityName(relation.target))}</h2><span class="evidence-badge ${relation.evidence}">${relation.evidence === 'record' ? '史料记载' : relation.evidence === 'index' ? '原文索引 · 非历史互动' : '历史解释'}</span><h3>${esc(relation.label)}</h3><p>${relation.category === 'textual' ? '篇章关联 · 不对应持续历史互动' : timeLabel(relation.start, relation.end)}</p></div>
     ${!relationMatches(relation, state) ? '<div class="context-warning">此关系不符合当前筛选，仅供参考。</div>' : ''}
     <section class="inspector-section"><h3>关系发生在怎样的情境中</h3><p>${relation.imported ? '<span class="sample-badge">机器整理 · 待审校</span>' : ''}${esc(relation.context)}</p></section><section class="inspector-section"><h3>记载与依据</h3>${sourceButtons(relation.sourceIds)}</section><div class="reading-note">关系只在有依据的时间与情境内成立，不外推为永久关系。</div></div>
-    <div class="inspector-footer"><button class="primary-button" data-action="relation-time">查看关系适用时段 ${icon('clock')}</button><button class="secondary-button" data-full="${esc(relation.target)}">查看 ${esc(entityName(relation.target))}</button></div>
+    <div class="inspector-footer"><button class="secondary-button" data-full="${esc(relation.target)}">查看 ${esc(entityName(relation.target))}</button></div>
   ` : `
     <div class="inspector-top"><span>${icon('target')}当前选中</span><button class="icon-button" data-action="inspector-close" aria-label="收起详情">${icon('close')}</button></div>
-    <div class="inspector-scroll"><div class="entity-hero"><div class="hero-illustration ${selected.group} ${selected.kind}"><span class="hero-orbit orbit-one"></span><span class="hero-orbit orbit-two"></span><span class="hero-symbol">${selected.kind === 'person' ? esc(selected.name[0]) : icon('star')}</span><span class="hero-speck speck-one"></span><span class="hero-speck speck-two"></span><span class="hero-illustration-caption">${entityTag(selected)}档案 / ${selected.id.toUpperCase()}</span></div><div class="entity-title-row"><h2>${esc(selected.name)}</h2><button class="icon-button ${records.bookmarks.includes(selected.id) ? 'bookmarked' : ''}" data-bookmark="${esc(selected.id)}" aria-label="${records.bookmarks.includes(selected.id) ? '取消收藏' : '收藏'}${esc(selected.name)}">${icon('bookmark')}</button></div><div class="entity-meta"><span>${esc(selected.role)}</span><i></i><span>${esc(selected.period)}</span></div><p class="entity-summary">${esc(selected.summary)}</p><div class="content-badges"><span class="evidence-badge record">史料线索</span><span class="sample-badge">${selected.imported ? '机器整理 · 待审校' : '编辑样本 · 待审校'}</span></div></div>
+    <div class="inspector-scroll"><div class="entity-hero"><div class="hero-illustration ${selected.group} ${selected.kind}"><span class="hero-orbit orbit-one"></span><span class="hero-orbit orbit-two"></span><span class="hero-symbol">${selected.kind === 'person' ? esc(selected.name[0]) : icon('star')}</span><span class="hero-speck speck-one"></span><span class="hero-speck speck-two"></span><span class="hero-illustration-caption">${entityTag(selected)}档案 / ${selected.id.toUpperCase()}</span></div><div class="entity-title-row"><h2>${esc(selected.name)}</h2></div><div class="entity-meta"><span>${esc(selected.role)}</span><i></i><span>${esc(selected.period)}</span></div><p class="entity-summary">${esc(selected.summary)}</p><div class="content-badges"><span class="evidence-badge record">史料线索</span><span class="sample-badge">${selected.imported ? '机器整理 · 待审校' : '编辑样本 · 待审校'}</span></div></div>
     ${!valid ? '<div class="context-warning">当前对象不在所选活动期，保留供阅读。</div>' : ''}
     <section class="inspector-section"><div class="section-heading"><h3>${selected.kind === 'person' ? '关键行动' : selected.kind === 'chapter' ? '篇章原文' : '事件中的行动'}</h3><button class="text-button" data-full="${esc(selected.id)}">全部 ${icon('chevron')}</button></div>${actionCards(selected, 2)}</section>
     <section class="inspector-section"><div class="section-heading"><h3>关联人物与事件</h3><span class="small-number">${currentRelations().filter(r => r.source === selected.id || r.target === selected.id).length}</span></div>${relationRows(selected.id, 3)}</section>
@@ -378,11 +351,11 @@ function closeDialog() {
 }
 function renderSourceDialog(id: string) {
   const source = currentSources().find(s => s.id === id); if (!source) return;
-  showDialog('source', `<div class="source-content"><span class="eyebrow">回到材料本身</span><h2>${esc(source.title)}</h2><p class="source-section">${esc(source.section)}</p><div class="source-note">${esc(source.note)}</div><div class="reading-note">本地样本用于验证阅读与交互。正式发布前，仍需核对底本、卷次、段落及具体主张。</div>${chapterBySource(id) ? `<button class="primary-button" data-book-volume="${chapterBySource(id)!.volume}">站内阅读全文 · ${esc(chapterBySource(id)!.title)}</button>` : ''}<a class="primary-button external-source" href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">打开原文 ${icon('arrow')}</a><p class="fine-print">外部来源将在新标签页打开，当前探索位置会保留。</p></div>`, '来源与依据');
+  showDialog('source', `<div class="source-content"><span class="eyebrow">回到材料本身</span><h2>${esc(source.title)}</h2><p class="source-section">${esc(source.section)}</p><div class="source-note">${esc(source.note)}</div><div class="reading-note">原文转录与机器整理关系仍需结合底本核对。</div>${chapterBySource(id) ? `<button class="primary-button" data-book-volume="${chapterBySource(id)!.volume}">站内阅读全文 · ${esc(chapterBySource(id)!.title)}</button>` : ''}<a class="primary-button external-source" href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">打开原文 ${icon('arrow')}</a><p class="fine-print">外部来源将在新标签页打开，当前探索位置会保留。</p></div>`, '来源与依据');
 }
 function renderDetailDialog(id: string) {
   const entity = entityById(id); if (!entity) return;
-  showDialog('detail', `<article class="full-content"><div class="detail-eyebrow">${entityTag(entity)}档案 <span>来自${esc(currentTopic().shortTitle)}专题 · ${periodLabel()}</span></div><h2>${esc(entity.name)}</h2><div class="entity-meta"><span>${esc(entity.role)}</span><i></i><span>${esc(entity.period)}</span></div><p class="detail-lead">${esc(entity.summary)}</p><p>${esc(entity.description)}</p>${entity.imported ? `<p class="reading-note">机器整理，待审校。结构化数据：<a href="https://github.com/baojie/shiji-kb" target="_blank" rel="noopener noreferrer">鲍捷及贡献者 · 史记知识库</a>，<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0（非商业）</a>。</p>` : ''}<div class="detail-actions">${entityTopic(entity) === 'shiji' ? `<button class="primary-button" data-book-volume="${Number(entity.sourceIds[0].slice(3))}" data-book-block="${entity.readingBlock ?? ''}">阅读全文${entity.readingBlock ? ' · 定位摘录' : ''}</button>` : ''}<button class="primary-button" data-center="${esc(entity.id)}">${icon('grid')}在星云中查看</button><button class="secondary-button" data-bookmark="${esc(entity.id)}">${icon('bookmark')}${records.bookmarks.includes(entity.id) ? '已收藏' : '收藏对象'}</button></div><h3>${entity.kind === 'person' ? '关键行动与事件' : entity.kind === 'chapter' ? '篇章原文' : '参与者与行动'}</h3>${actionCards(entity)}<h3>人物与事件的关联</h3>${relationRows(entity.id, 12)}<h3>资料与出处</h3>${sourceButtons(entity.sourceIds)}<div class="reading-note">完整内容不受星云时间筛选裁切。关联只说明已收录线索，不代表穷尽所有历史关系。</div></article>`, `${entity.name} · 完整内容`);
+  showDialog('detail', `<article class="full-content"><div class="detail-eyebrow">${entityTag(entity)}档案 <span>来自${esc(currentTopic().shortTitle)}专题 · ${periodLabel()}</span></div><h2>${esc(entity.name)}</h2><div class="entity-meta"><span>${esc(entity.role)}</span><i></i><span>${esc(entity.period)}</span></div><p class="detail-lead">${esc(entity.summary)}</p><p>${esc(entity.description)}</p>${entity.imported ? `<p class="reading-note">机器整理，待审校。结构化数据：<a href="https://github.com/baojie/shiji-kb" target="_blank" rel="noopener noreferrer">鲍捷及贡献者 · 史记知识库</a>，<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0（非商业）</a>。</p>` : ''}<div class="detail-actions">${entityTopic(entity) === 'shiji' ? `<button class="primary-button" data-book-volume="${Number(entity.sourceIds[0].slice(3))}" data-book-block="${entity.readingBlock ?? ''}">阅读全文${entity.readingBlock ? ' · 定位摘录' : ''}</button>` : ''}<button class="primary-button" data-center="${esc(entity.id)}">${icon('grid')}在星云中查看</button></div><h3>${entity.kind === 'person' ? '关键行动与事件' : entity.kind === 'chapter' ? '篇章原文' : '参与者与行动'}</h3>${actionCards(entity)}<h3>人物与事件的关联</h3>${relationRows(entity.id, 12)}<h3>资料与出处</h3>${sourceButtons(entity.sourceIds)}<div class="reading-note">关联只说明已收录线索，不代表穷尽所有历史关系。</div></article>`, `${entity.name} · 完整内容`);
   if (actionAnchor) {
     const card = [...$('#dialog').querySelectorAll<HTMLElement>('[data-record]')].find(e => e.dataset.record === actionAnchor);
     card?.classList.add('action-highlight');
@@ -390,7 +363,7 @@ function renderDetailDialog(id: string) {
   }
 }
 function openSearch(query = '') {
-  showDialog('search', `<div class="search-dialog-input">${icon('search')}<input id="search-input" type="search" placeholder="试试：孔子、秦始皇、项羽、货殖列传…" autocomplete="off" aria-label="搜索全部已收录内容"/><kbd>ESC</kbd></div><div class="search-scope">搜索全书人物、事件和篇章，不受当前时间筛选限制 <button class="text-button" data-action="book-search">检索《史记》130 卷全文 →</button></div><div id="search-results"></div>`, '寻找一个历史的入口');
+  showDialog('search', `<div class="search-dialog-input">${icon('search')}<input id="search-input" type="search" placeholder="试试：孔子、秦始皇、项羽、货殖列传…" autocomplete="off" aria-label="搜索全部已收录内容"/><kbd>ESC</kbd></div><div class="search-scope">搜索全书人物、事件和篇章 <button class="text-button" data-action="book-search">检索《史记》130 卷全文 →</button></div><div id="search-results"></div>`, '寻找一个历史的入口');
   $<HTMLInputElement>('#search-input').value = query;
   renderSearchResults(query); $<HTMLInputElement>('#search-input').focus();
 }

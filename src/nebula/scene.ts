@@ -242,6 +242,8 @@ export function createNebulaScene(container: HTMLElement, options: SceneOptions)
   let graph: GraphView = { nodes: [], relations: [], contextIds: [], centerId: '', selectedId: null, relationId: null };
   let positions: Record<string, Vec3> = {};
   const labels = new Map<string, HTMLButtonElement>();
+  const labelSlots = new Map<string, number>();
+  const labelSizes = new Map<string, { width: number; height: number }>();
   let projectedNodes: ProjectedNode[] = [];
   let edges: Edge[] = [];
   const personIds: string[] = [], eventIds: string[] = [];
@@ -287,36 +289,42 @@ export function createNebulaScene(container: HTMLElement, options: SceneOptions)
       point.fromArray(position).project(camera);
       const label = labels.get(node.id)!;
       if (point.z < -1 || point.z > 1 || Math.abs(point.x) > 1.14 || Math.abs(point.y) > 1.14) {
-        label.style.display = 'none';
+        label.style.visibility = 'hidden';
         continue;
       }
       projectedNodes.push({ id: node.id, x: (point.x + 1) * width / 2, y: (1 - point.y) * height / 2, z: point.z, radius: node.id === graph.centerId ? 16 : 11 });
     }
     const highlightedRelation = graph.relations.find(relation => relation.id === graph.relationId);
-    const priority = (id: string) => id === graph.selectedId ? 1000 : id === graph.centerId ? 900 : id === hoverId ? 800 : id === highlightedRelation?.source || id === highlightedRelation?.target ? 700 : 0;
-    const sorted = [...projectedNodes].sort((a, b) => priority(b.id) - priority(a.id) || a.z - b.z);
+    // Hover must not reorder labels: the resulting movement can make the pointer
+    // leave and re-enter the label on alternating frames.
+    const priority = (id: string) => id === graph.selectedId ? 1000 : id === graph.centerId ? 900 : id === highlightedRelation?.source || id === highlightedRelation?.target ? 700 : 0;
+    const sorted = [...projectedNodes].sort((a, b) => priority(b.id) - priority(a.id) || a.z - b.z || a.id.localeCompare(b.id));
     const occupied: Array<{ left: number; top: number; right: number; bottom: number }> = [];
     let count = 0;
     const budget = width < 650 ? 12 : 24;
     for (const node of sorted) {
       const label = labels.get(node.id)!;
-      label.style.display = 'flex';
-      const labelWidth = label.offsetWidth || 70;
-      const labelHeight = label.offsetHeight || 40;
+      const { width: labelWidth, height: labelHeight } = labelSizes.get(node.id) ?? { width: 70, height: 40 };
       const hiddenByNode = sorted.some(other => other.id !== node.id && other.z < node.z && Math.hypot(other.x - node.x, other.y - node.y) < 9);
-      if ((count >= budget || hiddenByNode) && priority(node.id) === 0) { label.style.display = 'none'; continue; }
+      if ((count >= budget || hiddenByNode) && priority(node.id) === 0) { label.style.visibility = 'hidden'; continue; }
       const below = node.id === graph.centerId ? 17 : 9;
       const candidates = [[-labelWidth / 2, below], [-labelWidth / 2, -labelHeight - 12], [12, -labelHeight / 2], [-labelWidth - 12, -labelHeight / 2]];
       let placement: { left: number; top: number; right: number; bottom: number } | undefined;
-      for (const [dx, dy] of candidates) {
+      let slot = -1;
+      const previousSlot = labelSlots.get(node.id);
+      const candidateOrder = previousSlot === undefined ? [0, 1, 2, 3] : [previousSlot, ...[0, 1, 2, 3].filter(index => index !== previousSlot)];
+      for (const index of candidateOrder) {
+        const [dx, dy] = candidates[index];
         const candidate = { left: node.x + dx, top: node.y + dy, right: node.x + dx + labelWidth, bottom: node.y + dy + labelHeight };
         if (candidate.left < 6 || candidate.right > width - 6 || candidate.top < 5 || candidate.bottom > height - 5) continue;
-        if (!occupied.some(other => candidate.left < other.right + 5 && candidate.right + 5 > other.left && candidate.top < other.bottom + 2 && candidate.bottom + 2 > other.top)) { placement = candidate; break; }
+        if (!occupied.some(other => candidate.left < other.right + 5 && candidate.right + 5 > other.left && candidate.top < other.bottom + 2 && candidate.bottom + 2 > other.top)) { placement = candidate; slot = index; break; }
       }
-      if (!placement) { label.style.display = 'none'; continue; }
+      if (!placement) { label.style.visibility = 'hidden'; continue; }
       occupied.push(placement);
+      labelSlots.set(node.id, slot);
       label.style.transform = `translate3d(${Math.round(placement.left)}px,${Math.round(placement.top)}px,0)`;
       label.style.zIndex = `${Math.round(1000 - node.z * 500 + priority(node.id))}`;
+      label.style.visibility = 'visible';
       count++;
     }
   }
@@ -384,6 +392,8 @@ export function createNebulaScene(container: HTMLElement, options: SceneOptions)
   function resize() {
     width = Math.max(1, container.clientWidth);
     height = Math.max(1, container.clientHeight);
+    labelSizes.clear();
+    for (const [id, label] of labels) labelSizes.set(id, { width: label.offsetWidth || 70, height: label.offsetHeight || 40 });
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     lineMaterials.forEach(material => material.resolution.set(width, height));
@@ -393,7 +403,7 @@ export function createNebulaScene(container: HTMLElement, options: SceneOptions)
   function updateNodes() {
     personIds.length = eventIds.length = 0;
     const visible = new Set(graph.nodes.map(node => node.id));
-    for (const [id, label] of labels) if (!visible.has(id)) { label.remove(); labels.delete(id); }
+    for (const [id, label] of labels) if (!visible.has(id)) { label.remove(); labels.delete(id); labelSlots.delete(id); labelSizes.delete(id); }
     graph.nodes.forEach((node, index) => {
       if (index >= 50 || !positions[node.id]) return;
       const isCenter = node.id === graph.centerId;
@@ -437,6 +447,8 @@ export function createNebulaScene(container: HTMLElement, options: SceneOptions)
       label.setAttribute('aria-label', `${node.name}，${node.kind === 'event' ? '事件' : node.kind === 'chapter' ? '篇章' : '人物'}，查看详情`);
       label.setAttribute('aria-pressed', String(selected));
     });
+    // Read dimensions once after all label content and styles have changed.
+    for (const [id, label] of labels) labelSizes.set(id, { width: label.offsetWidth || 70, height: label.offsetHeight || 40 });
     people.count = personIds.length;
     events.count = eventIds.length;
     glows.count = Math.min(graph.nodes.length, 50);

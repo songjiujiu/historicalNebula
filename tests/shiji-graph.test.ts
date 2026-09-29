@@ -23,7 +23,7 @@ describe('full-book graph', () => {
     expect(ancient.start).toBeNull(); expect(ancient.end).toBeNull();
     expect(ancient.dateUncertain).toBe(true);
     const unknown = fullShijiRelations.find(r => r.imported && r.category === 'influence' && r.start === null)!;
-    expect(relationMatches(unknown, sanitizeState({ topicId: 'shiji', showUndated: false }))).toBe(false);
+    expect(relationMatches(unknown, sanitizeState({ topicId: 'shiji', showUndated: false }))).toBe(true);
     expect(relationMatches(unknown, sanitizeState({ topicId: 'shiji', showUndated: true }))).toBe(true);
   });
 

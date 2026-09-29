@@ -78,3 +78,10 @@ body.nebula-immersive{overflow:hidden}
 @media(max-width:760px){.breadcrumb-topic{font-size:9px;max-width:105px}.topic-dialog-grid{grid-template-columns:1fr;padding:0 20px 22px}.topic-dialog-choice{min-height:150px}.topic-dialog-choice strong{font-size:19px}}
 /* Full-book entry remains accessible in the mobile scope drawer. */
 .book-entry{display:flex;flex-direction:column;gap:6px;width:100%;text-align:left;padding:12px;margin:10px 0 18px;border:1px solid #655638;border-radius:7px;background:#aa8b3710;color:#d8c395;font-size:12px}.book-entry small{color:#9d9178;font-size:10px}.book-entry:hover{background:#aa8b3725}
+/* The single-work edition keeps the graph and reader in the full available height. */
+.scene-host{top:136px;bottom:76px}
+.graph-list{top:142px;bottom:82px}
+.canvas-bottom{bottom:18px}
+.canvas-caption{bottom:62px}
+.sidebar .coverage{margin-top:22px}
+@media(max-width:760px){.scene-host{top:136px;bottom:84px}.graph-list{top:142px;bottom:90px}.canvas-bottom{bottom:17px}.canvas-caption{bottom:59px}}
