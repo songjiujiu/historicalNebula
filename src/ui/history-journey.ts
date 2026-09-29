@@ -45,6 +45,17 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
     const emptyEra = eraId && !items.length && !needle && scope !== 'all';
     host.querySelector('.journey-results')!.innerHTML = items.length ? journeyEras.filter(era => items.some(event => event.era === era.id)).map(era => `<section class="journey-era-section"><header><span class="journey-overline">${esc(era.years)}</span><h2>${esc(era.title)}<small>${esc(era.question)}</small></h2><p>${esc(era.gist)}</p></header>${eraMap(era)}<div class="journey-event-list">${items.filter(event => event.era === era.id).map(eventButton).join('')}</div></section>`).join('') : `<div class="journey-empty"><h2>${emptyEra ? '这个时代还有更多故事' : '没有找到匹配的事件'}</h2><p>${emptyEra ? '快速主线只选少数转折，展开全部节点即可阅读这个时代。' : '试试简体人名、事件名，或清空筛选查看完整路线。'}</p><button class="secondary-button" data-journey-action="reset">查看全部关键节点 →</button></div>`;
   }
+  function refreshFilters() {
+    // Keep the controls mounted so filtering preserves focus and the mobile tab scroll position.
+    host.querySelectorAll<HTMLElement>('[data-journey-era]').forEach(button => {
+      button.setAttribute('aria-current', button.dataset.journeyEra === eraId ? 'page' : 'false');
+    });
+    host.querySelectorAll<HTMLElement>('[data-journey-scope]').forEach(button => {
+      button.setAttribute('aria-pressed', String(button.dataset.journeyScope === scope));
+    });
+    host.querySelector<HTMLInputElement>('[data-journey-search]')!.value = query;
+    renderResults();
+  }
   function detail(event: JourneyEvent) {
     selected = event; recent = event.id; persist();
     const era = journeyEra(event.era)!;
@@ -56,17 +67,22 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
       <div class="journey-complete"><button class="secondary-button" data-journey-action="complete" aria-pressed="${activeRead}">${activeRead ? '已读懂 ✓ · 点击取消' : '我读懂了，记下进度 ✓'}</button><span role="status" data-journey-progress>${read.size} / ${journeyEvents.length} 个节点已读懂</span></div><nav class="journey-neighbors" aria-label="前后事件">${prev ? `<button data-journey-event="${prev.id}"><small>← 回看前一件事 · ${esc(prev.year)}</small><strong>${esc(prev.title)}</strong><span>${esc(prev.summary)}</span></button>` : '<div class="journey-route-edge">你已来到这条路线的起点。</div>'}${next ? `<button class="journey-next" data-journey-event="${next.id}"><small>接着看 · ${esc(next.year)} →</small><strong>${esc(next.title)}</strong><span>${esc(next.summary)}</span></button>` : '<div class="journey-route-edge"><strong>已到这条路线的终点</strong><p>可以回到主线补读其他事件，或打开史书深入阅读。</p><button data-journey-action="home">返回主线 →</button></div>'}</nav><p class="journey-footnote">相邻卡片按阅读顺序衔接，可能跨越数十年；前后排列不代表唯一或直接的因果关系。</p></article></div></main>`;
   }
   function navigate(eventId = '', nextEra = '', nextScope = scope) {
+    const filtering = !eventId && !selected && !!host.querySelector('.journey-results');
     eraId = nextEra; scope = nextScope; query = '';
     if (eventId && !quickJourneyIds.includes(eventId)) scope = 'all';
     history.pushState({ journey: true }, '', journeyUrl(eventId, eraId, location.href, scope));
-    showFromUrl(); host.scrollIntoView({ block: 'start' });
+    showFromUrl();
+    if (filtering) return;
+    host.scrollIntoView({ block: 'start' });
     const heading = host.querySelector<HTMLElement>('h1'); heading?.setAttribute('tabindex', '-1'); heading?.focus({ preventScroll: true });
   }
   function showFromUrl() {
     const params = new URL(location.href).searchParams;
     eraId = journeyEra(params.get('era'))?.id ?? ''; scope = params.get('scope') === 'all' ? 'all' : 'quick'; query = '';
     const event = journeyEvent(params.get('journey'));
-    if (event) detail(event); else home();
+    if (event) detail(event);
+    else if (!selected && host.querySelector('.journey-results')) refreshFilters();
+    else home();
   }
   host.addEventListener('click', ev => {
     const target = (ev.target as Element).closest<HTMLElement>('button,a'); if (!target) return;

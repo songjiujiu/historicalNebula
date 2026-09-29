@@ -55,3 +55,29 @@ it('restores direct links and offers a useful fallback for invalid events', () =
   click('[data-journey-action="home"]');
   expect(location.search).toContain('scope=all');
 });
+it('switches eras and reading scope in place, keeping the selected control focused instead of jumping to the hero', () => {
+  const { reader } = setup();
+  const search = document.querySelector<HTMLInputElement>('[data-journey-search]')!;
+  const rail = document.querySelector<HTMLElement>('.journey-rail nav')!;
+  rail.scrollLeft = 160;
+  const era = document.querySelector<HTMLButtonElement>('[data-journey-era="threejin"]')!;
+  era.focus(); era.click();
+  expect(document.activeElement).toBe(era);
+  expect(document.querySelector('[data-journey-search]')).toBe(search);
+  expect(document.querySelector('.journey-rail nav')).toBe(rail);
+  expect(rail.scrollLeft).toBe(160);
+  expect(era.getAttribute('aria-current')).toBe('page');
+  expect(document.querySelector('[data-journey-scope="all"]')!.getAttribute('aria-pressed')).toBe('true');
+  expect(location.search).toContain('era=threejin');
+  expect(document.querySelectorAll('.journey-event-card')).toHaveLength(4);
+  click('[data-journey-scope="quick"]');
+  expect(document.querySelectorAll('.journey-event-card')).toHaveLength(3);
+  expect(HTMLElement.prototype.scrollIntoView).not.toHaveBeenCalled();
+  // Popstate restores the filters without replacing the mounted sidebar either.
+  history.replaceState(null, '', '/?journey=&era=northsouth&scope=all'); reader.showFromUrl();
+  expect(document.querySelector('.journey-rail nav')).toBe(rail);
+  expect(document.querySelector('[data-journey-era="northsouth"]')!.getAttribute('aria-current')).toBe('page');
+  click('[data-journey-event="liu-song"]');
+  expect(HTMLElement.prototype.scrollIntoView).toHaveBeenCalledOnce();
+  expect(document.activeElement).toBe(document.querySelector('h1'));
+});
