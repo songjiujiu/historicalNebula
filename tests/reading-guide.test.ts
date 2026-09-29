@@ -10,7 +10,7 @@ const click = (selector: string) => { const button = document.querySelector<HTML
 const text = (selector: string) => document.querySelector(selector)?.textContent ?? '';
 const setup = () => {
   const host = document.createElement('div'); document.body.append(host);
-  const handlers = { onStory: vi.fn(), onExplore: vi.fn(), onBook: vi.fn() };
+  const handlers = { onBook: vi.fn() };
   const reader = createReadingGuide(host, handlers); reader.showFromUrl();
   return { reader, ...handlers };
 };
@@ -25,10 +25,11 @@ afterEach(() => vi.restoreAllMocks());
 
 describe('full-book guided reading interaction', () => {
   it('filters all 130 guides by route, category and search, and pages the full directory', () => {
-    const { onStory } = setup();
+    setup();
     expect(document.querySelectorAll('.reading-route-cards button')).toHaveLength(8);
     expect(document.querySelectorAll('[data-reading-volume]')).toHaveLength(8);
-    click('[data-reading-action="stories"]'); expect(onStory).toHaveBeenCalledOnce();
+    expect(document.querySelector('.reading-start')).toBeNull();
+    expect(document.querySelector('[data-reading-action="stories"]')).toBeNull();
     click('[data-reading-route="complete"]');
     expect(text('.reading-results-caption')).toContain('130 卷');
     expect(document.querySelectorAll('[data-reading-volume]')).toHaveLength(24);
@@ -46,7 +47,7 @@ describe('full-book guided reading interaction', () => {
   });
 
   it('moves through guides, preserves progress and opens exact original paragraphs', async () => {
-    const { reader, onBook, onExplore } = setup();
+    const { reader, onBook } = setup();
     click('[data-reading-volume="48"]');
     expect(text('h1')).toBe('陈涉世家');
     click('[data-reading-action="next"]');
@@ -54,7 +55,7 @@ describe('full-book guided reading interaction', () => {
     expect(reader.readingUrl).toContain('reading=48&section=1');
     click('[data-reading-action="source"]');
     expect(onBook).toHaveBeenLastCalledWith(48, chapterGuide(48)!.sections[1].block);
-    click('[data-reading-action="explore"]'); expect(onExplore).toHaveBeenCalledWith('shiji-chapter-048');
+    expect(document.querySelector('[data-reading-action="explore"]')).toBeNull();
     click('[data-reading-action="whole"]'); expect(onBook).toHaveBeenLastCalledWith(48);
     click('[data-reading-action="next"]');
     expect(text('.story-outcome')).toContain(chapterGuide(48)!.takeaway);

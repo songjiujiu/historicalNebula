@@ -3,14 +3,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { URL as NodeURL } from 'node:url';
 import { shijiChapters } from '../src/domain/shiji-book';
-vi.mock('../src/domain/data', () => ({ entities: Array.from({ length: 15 }, (_, i) => ({ id: `person-${i}`, kind: 'person', name: `人物${i}`, sourceIds: ['sj-007'] })) }));
-vi.mock('../src/domain/shiji-full-data', () => ({ shijiGraphReport: { people: 5297, events: 3197 } }));
 
 const chapter = (n: number) => JSON.parse(readFileSync(new NodeURL(`../public/data/shiji/${String(n).padStart(3, '0')}.json`, import.meta.url), 'utf8'));
 const click = (selector: string) => { const button = document.querySelector<HTMLButtonElement>(selector)!; expect(button).toBeTruthy(); button.click(); };
 const content = () => document.querySelector('#book-content')!.textContent!;
 const loadReader = async () => (await import('../src/ui/shiji-reader')).openShijiReader;
-const options = () => ({ onEntity: vi.fn(), onClose: vi.fn() });
+const options = () => ({ onClose: vi.fn() });
 beforeEach(() => {
   vi.resetModules(); document.body.replaceChildren(); localStorage.clear();
   // Happy DOM emits hashchange for pushState; browsers do not. Routing is exercised in browser QA.
@@ -35,7 +33,7 @@ describe('full-book reader interaction', () => {
     });
     vi.stubGlobal('fetch', fetcher);
     const onClose = vi.fn();
-    const options = { onEntity: vi.fn(), onClose };
+    const options = { onClose };
     openShijiReader({ ...options, volume: 1 });
     openShijiReader({ ...options, volume: 2, block: 'p2' });
     await vi.waitFor(() => expect(content(), document.querySelector('.book-status')?.textContent ?? '').toContain(shijiChapters[1].title));
@@ -91,22 +89,14 @@ describe('full-book reader interaction', () => {
     expect(JSON.parse(localStorage.getItem('historical-nebula:shiji-reader:v1')!).simplified).toBe(true);
   });
 
-  it('keeps chapter indexes collapsed, expands more entries, and retains the entity callback', async () => {
+  it('retains chapter reading without the retired graph indexes and actions', async () => {
     const openShijiReader = await loadReader();
     const handlers = options();
     openShijiReader({ ...handlers, volume: 7 });
-    await vi.waitFor(() => expect(document.querySelector('.book-related-disclosure')).toBeTruthy());
-    const disclosure = document.querySelector<HTMLDetailsElement>('.book-related-disclosure')!;
-    expect(disclosure.open).toBe(false);
-    expect(disclosure.textContent).toContain('不等于这些人物彼此认识');
-    disclosure.open = true;
-    click('[data-book="more-related"]');
-    await vi.waitFor(() => expect(document.querySelector('[data-reader-entity="person-14"]')).toBeTruthy());
-    expect(document.querySelector<HTMLDetailsElement>('.book-related-disclosure')?.open).toBe(true);
-    click('[data-reader-entity="person-14"]');
-    expect(handlers.onEntity).toHaveBeenCalledWith('person-14');
-    expect(handlers.onClose).toHaveBeenCalled();
-    expect(document.querySelector<HTMLDialogElement>('.book-dialog')?.open).toBe(false);
+    await vi.waitFor(() => expect(document.querySelector('.book-article > h2')?.textContent).toBe('项羽本纪'));
+    expect(document.querySelector('.book-related-disclosure')).toBeNull();
+    expect(document.querySelector('[data-reader-entity]')).toBeNull();
+    expect(document.querySelector('.book-text')?.textContent).toContain('项籍');
   });
 
   it('opens a full guide from a late volume and closes the original reader', async () => {
