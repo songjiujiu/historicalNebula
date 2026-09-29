@@ -33,3 +33,17 @@ it('does not attach an unrelated event to a different paragraph', async () => {
   expect(host.querySelector('.dynasty-event-return')).toBeNull();
   expect(host.querySelector('mark')).toBeNull();
 });
+it('returns to the same book-guide event after checking and switching the original text script', async () => {
+  history.replaceState(null, '', '/?library=mingshi&volume=24&guide=ming-falls#p6');
+  const host = document.createElement('div'); document.body.append(host);
+  const onGuide = vi.fn();
+  createDynasticLibrary(host, { onJourney: vi.fn(), onShiji: vi.fn(), onGuide }).showFromUrl();
+  await vi.waitFor(() => expect(host.querySelector('mark')?.textContent).toBe('帝崩于万岁山'));
+  host.querySelector<HTMLButtonElement>('[data-library="script"]')!.click();
+  await vi.waitFor(() => expect(host.querySelector('mark')?.textContent).toBe('帝崩於萬歲山'));
+  host.querySelector<HTMLButtonElement>('[data-library="return-guide"]')!.click();
+  expect(onGuide).toHaveBeenCalledWith('mingshi', 'ming-falls');
+  host.querySelector<HTMLAnchorElement>('[data-library-block="p1"]')!.click();
+  await vi.waitFor(() => expect(host.querySelector('#dynasty-p1.book-target')).toBeTruthy());
+  expect(host.querySelector('[data-library="return-guide"]')).toBeNull();
+});

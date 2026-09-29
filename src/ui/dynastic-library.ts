@@ -2,6 +2,7 @@ import { Converter } from 'opencc-js';
 import { dynasticBooks, dynasticBook, dynasticChapter, dynasticUrl, loadDynasticChapter, loadDynasticSearch, parseDynasticLocation, type DynasticBook, type DynasticChapter, type DynasticBlock } from '../domain/dynastic-library';
 import './dynastic-library.css';
 import { sourceJourney } from '../domain/history-journey';
+import { sourceHistoryGuide } from '../domain/history-guides';
 
 const esc = (value: string) => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
 const simplify = Converter({ from: 'tw', to: 'cn' });
@@ -31,7 +32,7 @@ const route = [
 ];
 const sourceNote = '本站提供整理后的原文阅读与机器生成的卷目索引。少数历法表仍有缺录；导读并非逐句白话译文。原文转录与卷名可能有讹误，请按来源核对。';
 
-export function createDynasticLibrary(host: HTMLElement, callbacks: { onShiji: () => void; onJourney: (eventId?: string) => void }) {
+export function createDynasticLibrary(host: HTMLElement, callbacks: { onShiji: () => void; onJourney: (eventId?: string) => void; onGuide?: (book?: string, step?: string) => void }) {
   let currentBook: DynasticBook | null = null;
   let currentVolume: number | null = null;
   let catalogPage = 0;
@@ -56,6 +57,7 @@ export function createDynasticLibrary(host: HTMLElement, callbacks: { onShiji: (
     const path = route.map((step, i) => `<li><span>${i + 1}</span><div><strong>${step.title}</strong><p>${step.prompt}</p><div>${step.ids.map(id => `<button data-history="${id}">《${dynasticBook(id)!.name}》</button>`).join('')}</div></div></li>`).join('');
     shell(`<section class="dynasty-welcome"><div><span class="book-kicker">给第一次读史的人</span><h2>先找一条线，再展开一部书</h2><p>这些史书跨越多个朝代，也有同一时期的不同写法。你可以跟着下面五段路线阅读；每本书都有一句入门导读，正文仍保留原文。</p><button class="primary-button" data-history="hanshu">从《汉书》开始 →</button></div><div class="dynasty-welcome-stats"><b>23</b><span>新增史书</span><b>3,083</b><span>新增原文卷次</span></div></section><section class="dynasty-route"><h2>推荐阅读路线</h2><ol>${path}</ol></section><div class="dynasty-catalog-heading"><h2>按朝代找史书</h2><label>筛选书名或朝代<input data-library-filter type="search" placeholder="如：唐、宋史、辽" autocomplete="off"></label></div><div data-library-books>${cards}</div><p class="dynasty-disclaimer">${sourceNote}</p>`);
     setStatus('从史记接着读，共 23 部新增史书。');
+    if (callbacks.onGuide) host.querySelector('.dynasty-welcome>div')?.insertAdjacentHTML('beforeend', '<button class="secondary-button dynasty-guide-entry" data-library="guide">先看二十四史导读 →</button>');
   }
 
   function side(book: DynasticBook, volume?: number) {
@@ -63,7 +65,7 @@ export function createDynasticLibrary(host: HTMLElement, callbacks: { onShiji: (
     catalogPage = volume !== undefined ? Math.floor((Math.max(1, volume) - 1) / pageSize) : catalogPage;
     const start = catalogPage * pageSize;
     const chapters = book.chapters.filter(chapter => chapter.volume > 0);
-    return `<div class="dynasty-side-head"><button data-library="home">← 全书目录</button><h2>《${esc(book.name)}》</h2><p>${esc(book.era)} · ${book.volumes} 卷</p></div><label class="dynasty-search-label">在本书原文中搜索<div class="dynasty-search"><input data-library-search type="search" maxlength="100" value="${esc(searchTerm)}" placeholder="人物、地名或事件"><button data-library="search">检索</button></div></label><div class="dynasty-side-actions"><button data-library="book-home">本书导读</button><button data-library="recent">继续阅读</button></div><div class="dynasty-catalog-pages"><button data-library="catalog-prev" ${catalogPage === 0 ? 'disabled' : ''}>上一组</button><span>${start + 1}–${Math.min(start + pageSize, chapters.length)} / ${chapters.length}</span><button data-library="catalog-next" ${(catalogPage + 1) * pageSize >= chapters.length ? 'disabled' : ''}>下一组</button></div><div class="dynasty-volume-list">${chapters.slice(start, start + pageSize).map(chapter => chapterButton(book, chapter, chapter.volume === volume)).join('')}</div>${book.chapters.some(chapter => chapter.volume === 0) ? `<button class="dynasty-preface" data-history="${book.id}" data-volume="0">另读本书序言 →</button>` : ''}`;
+    return `<div class="dynasty-side-head"><button data-library="home">← 全书目录</button><h2>《${esc(book.name)}》</h2><p>${esc(book.era)} · ${book.volumes} 卷</p></div><label class="dynasty-search-label">在本书原文中搜索<div class="dynasty-search"><input data-library-search type="search" maxlength="100" value="${esc(searchTerm)}" placeholder="人物、地名或事件"><button data-library="search">检索</button></div></label><div class="dynasty-side-actions"><button data-library="book-home">本书概览</button><button data-library="recent">继续阅读</button></div><div class="dynasty-catalog-pages"><button data-library="catalog-prev" ${catalogPage === 0 ? 'disabled' : ''}>上一组</button><span>${start + 1}–${Math.min(start + pageSize, chapters.length)} / ${chapters.length}</span><button data-library="catalog-next" ${(catalogPage + 1) * pageSize >= chapters.length ? 'disabled' : ''}>下一组</button></div><div class="dynasty-volume-list">${chapters.slice(start, start + pageSize).map(chapter => chapterButton(book, chapter, chapter.volume === volume)).join('')}</div>${book.chapters.some(chapter => chapter.volume === 0) ? `<button class="dynasty-preface" data-history="${book.id}" data-volume="0">另读本书序言 →</button>` : ''}`;
   }
 
   function bookHome(book: DynasticBook) {
@@ -73,6 +75,7 @@ export function createDynasticLibrary(host: HTMLElement, callbacks: { onShiji: (
     const categoryCounts = ['本纪', '表', '志', '世家', '列传', '载记', '篇章'].map(name => ({ name, count: book.chapters.filter(chapter => chapter.volume > 0 && chapter.category === name).length })).filter(item => item.count);
     shell(`<article class="dynasty-book-intro"><span class="book-kicker">先读懂这本书</span><h2>《${esc(book.name)}》讲什么？</h2><p class="dynasty-lead">${esc(book.intro)}</p><div class="dynasty-question"><strong>从哪里开始？</strong><p>先读第一卷，认出时代和主角。遇到不懂的称谓，可以先跳过，读完一段后再回看卷名和上下文。</p><button class="primary-button" data-history="${book.id}" data-volume="1">读第一卷 · ${esc(first.title)} →</button></div><h3>这本书怎样安排？</h3><p>共 ${book.volumes} 卷。左侧目录按每 40 卷分组；也可以搜索这本书的原文，点击结果直接回到所在段落。</p><div class="dynasty-genre-grid">${categoryCounts.map(item => `<div><strong>${item.name} · ${item.count} 卷</strong><span>${readingMethod[item.name]}</span></div>`).join('')}</div><div class="dynasty-intro-list">${book.chapters.filter(chapter => chapter.volume > 0).slice(0, 8).map(chapter => chapterButton(book, chapter)).join('')}</div><h3>与哪些书对照？</h3><div class="dynasty-neighbors">${neighborBooks(book).map(other => `<button data-history="${other.id}">《${esc(other.name)}》<span>${esc(other.era)}</span></button>`).join('')}</div><p class="dynasty-disclaimer">${sourceNote}</p></article>`, side(book));
     setStatus(`《${book.name}》 · ${book.volumes} 卷 · ${book.characters.toLocaleString()} 字符`);
+    if (callbacks.onGuide) host.querySelector('.dynasty-book-intro>h2')?.insertAdjacentHTML('afterend', '<section class="dynasty-guide-intro"><strong>先看白话导读，再回到原文</strong><p>时代背景 → 关键人物 → 事件经过与影响 → 读完记住什么。每个选读事件都能定位到对应原文。</p><button class="primary-button" data-library="guide">阅读本书完整入门导读 →</button></section>');
   }
 
   function neighborBooks(book: DynasticBook) {
@@ -87,6 +90,7 @@ export function createDynasticLibrary(host: HTMLElement, callbacks: { onShiji: (
     currentBook = book; currentVolume = volume;
     const token = ++request;
     const journey = sourceJourney(location.href);
+    const guide = sourceHistoryGuide(location.href);
     shell('<div class="dynasty-loading">正在打开原文…</div>', side(book, volume));
     try {
       const content = await loadDynasticChapter(book, volume);
@@ -98,7 +102,8 @@ export function createDynasticLibrary(host: HTMLElement, callbacks: { onShiji: (
       const blockHtml = (item: DynasticBlock) => {
         if (item.kind === 'table') return simplified ? simplify(item.html) : item.html;
         const display = simplified ? simplify(item.text) : item.text;
-        const cue = journey?.source.block === item.id ? journey.source.cue : '';
+        const origin = guide ?? journey;
+        const cue = origin?.source.block === item.id ? origin.source.cue : '';
         const at = cue ? simplify(display).indexOf(cue) : -1;
         // In traditional mode only mark when offsets still refer to the same characters.
         const valid = at >= 0 && simplify(display.slice(at, at + cue.length)) === cue;
@@ -108,13 +113,14 @@ export function createDynasticLibrary(host: HTMLElement, callbacks: { onShiji: (
         <div class="dynasty-status" data-library-status role="status" aria-live="polite"></div>
         <article class="dynasty-reader">
           ${journey ? `<div class="dynasty-event-return"><div><small>正在核对事件原文</small><strong>${esc(journey.event.title)}</strong></div><button data-library="return-event" class="secondary-button">← 返回这个事件</button></div>` : ''}
-          <div class="dynasty-breadcrumb"><button data-library="book-home">《${esc(book.name)}》导读</button><span>›</span><span>卷 ${volume}</span></div>
+          ${guide && callbacks.onGuide ? `<div class="dynasty-event-return"><div><small>正在核对《${esc(book.name)}》导读原文</small><strong>${esc(guide.event.title)}</strong></div><button data-library="return-guide" class="secondary-button">← 返回这一节导读</button></div>` : ''}
+          <div class="dynasty-breadcrumb"><button data-library="book-home">《${esc(book.name)}》概览</button><span>›</span><span>卷 ${volume}</span></div>
           <div class="dynasty-reader-heading"><span class="book-kicker">${esc(book.era)} · ${esc(chapter.category)}</span><h2>${esc(chapter.title)}</h2><p>《${esc(book.name)}》卷 ${volume} · ${chapter.characters.toLocaleString()} 字符 · ${content.blocks.length} 段${content.blocks.some(block => block.kind === 'table') ? ' · 含原文表格' : ''}</p></div>
           <section class="dynasty-reading-note"><span class="book-kicker">读前提示</span><h3>这一卷从哪里读起？</h3><p>${readingMethod[chapter.category] ?? readingMethod['篇章']}</p><p><strong>开头原文：</strong>“${esc(opening)}${opening.length >= 95 ? '…' : ''}”</p>${chapter.incomplete ? '<p class="dynasty-incomplete">此卷底本注明表格省略，本站尚缺原表。请打开卷末来源页核对，不能把这里视为全卷全文。</p>' : ''}<small>下面是原文。提示只教你怎样读，不代替原文，也不是逐句译文。</small></section>
-          <div class="dynasty-reading-actions"><button data-library="script" aria-pressed="${simplified}">${script} · 点击切换</button><button data-library="share">分享本卷</button></div>
+          <div class="dynasty-reading-actions">${callbacks.onGuide ? '<button data-library="guide">阅读本书入门导读 →</button>' : ''}<button data-library="script" aria-pressed="${simplified}">${script} · 点击切换</button><button data-library="share">分享本卷</button></div>
           <div class="book-text">${content.blocks.map(item => `<section class="book-block ${item.kind}${item.id === block ? ' book-target' : ''}" id="dynasty-${item.id}"${item.id === block ? ' tabindex="-1" aria-label="已定位到目标原文段落"' : ''}><div class="book-block-tools"><a href="${esc(dynasticUrl({ book: book.id, volume, block: item.id }))}" data-library-block="${item.id}">${item.id}</a><button data-library="share-block" data-block="${item.id}">分享此段</button></div><div class="book-block-content">${blockHtml(item)}</div></section>`).join('')}</div>
           <footer class="book-provenance"><a href="${esc(chapter.sourceUrl)}" target="_blank" rel="noopener noreferrer">核对本卷转录来源 ↗</a>${chapter.comparisonUrl ? ` · <a href="${esc(chapter.comparisonUrl)}" target="_blank" rel="noopener noreferrer">查看维基文库同卷 ↗</a>` : ''}<p>${esc(chapter.edition)}。段落编号由本站生成；原文简体显示只转换字形。${sourceNote}</p></footer>
-          <div class="book-bottom-nav"><button class="secondary-button" data-history="${book.id}" data-volume="${previous ?? ''}" ${previous === undefined ? 'disabled' : ''}>← 上一卷</button><button class="secondary-button" data-library="book-home">本书导读</button><button class="primary-button" data-history="${book.id}" data-volume="${next ?? ''}" ${next === undefined ? 'disabled' : ''}>下一卷 →</button></div>
+          <div class="book-bottom-nav"><button class="secondary-button" data-history="${book.id}" data-volume="${previous ?? ''}" ${previous === undefined ? 'disabled' : ''}>← 上一卷</button><button class="secondary-button" data-library="book-home">本书概览</button><button class="primary-button" data-history="${book.id}" data-volume="${next ?? ''}" ${next === undefined ? 'disabled' : ''}>下一卷 →</button></div>
         </article>`;
       setStatus(`《${book.name}》卷 ${volume} · ${chapter.title}`);
       try { localStorage.setItem('historical-nebula:dynastic-recent', JSON.stringify({ book: book.id, volume })); } catch { /* Optional progress. */ }
@@ -150,7 +156,7 @@ export function createDynasticLibrary(host: HTMLElement, callbacks: { onShiji: (
         total++;
       }
       const highlight = (value: string) => value.split(needle).map(esc).join(`<mark>${esc(needle)}</mark>`);
-      host.querySelector('.dynasty-main')!.innerHTML = `<div class="dynasty-status" data-library-status role="status" aria-live="polite"></div><section class="dynasty-results"><button class="text-button" data-library="book-home">← 《${esc(book.name)}》导读</button><h2>“${esc(term)}”的原文结果</h2><p>在《${esc(book.name)}》找到 ${total.toLocaleString()} 个匹配段落。点击查看原文上下文。</p>${hits.map(hit => `<button class="book-hit" data-history="${book.id}" data-volume="${hit.volume}" data-block="${hit.block}"><strong>卷 ${hit.volume} · ${esc(dynasticChapter(book, hit.volume)?.title ?? '')} <small>${hit.block}</small></strong><span>${highlight(hit.snippet)}</span></button>`).join('') || '<p class="book-empty">没有找到。可试较短的名字或不同称谓。</p>'}<div class="book-bottom-nav"><button class="secondary-button" data-library="search-prev" ${page === 0 ? 'disabled' : ''}>上一页</button><span>第 ${page + 1} / ${Math.max(1, Math.ceil(total / 30))} 页</span><button class="secondary-button" data-library="search-next" ${(page + 1) * 30 >= total ? 'disabled' : ''}>下一页</button></div></section>`;
+      host.querySelector('.dynasty-main')!.innerHTML = `<div class="dynasty-status" data-library-status role="status" aria-live="polite"></div><section class="dynasty-results"><button class="text-button" data-library="book-home">← 《${esc(book.name)}》概览</button><h2>“${esc(term)}”的原文结果</h2><p>在《${esc(book.name)}》找到 ${total.toLocaleString()} 个匹配段落。点击查看原文上下文。</p>${hits.map(hit => `<button class="book-hit" data-history="${book.id}" data-volume="${hit.volume}" data-block="${hit.block}"><strong>卷 ${hit.volume} · ${esc(dynasticChapter(book, hit.volume)?.title ?? '')} <small>${hit.block}</small></strong><span>${highlight(hit.snippet)}</span></button>`).join('') || '<p class="book-empty">没有找到。可试较短的名字或不同称谓。</p>'}<div class="book-bottom-nav"><button class="secondary-button" data-library="search-prev" ${page === 0 ? 'disabled' : ''}>上一页</button><span>第 ${page + 1} / ${Math.max(1, Math.ceil(total / 30))} 页</span><button class="secondary-button" data-library="search-next" ${(page + 1) * 30 >= total ? 'disabled' : ''}>下一页</button></div></section>`;
       setStatus(`《${book.name}》全文检索 · ${total.toLocaleString()} 个匹配段落`);
     } catch (error) {
       if (token !== request) return;
@@ -182,12 +188,14 @@ export function createDynasticLibrary(host: HTMLElement, callbacks: { onShiji: (
   host.addEventListener('click', event => {
     const target = (event.target as Element).closest<HTMLElement>('button, a[data-library-block]');
     if (!target) return;
-    if (target.dataset.libraryBlock && currentBook && currentVolume !== null) { event.preventDefault(); history.replaceState(history.state, '', dynasticUrl({ book: currentBook.id, volume: currentVolume, block: target.dataset.libraryBlock })); return; }
+    if (target.dataset.libraryBlock && currentBook && currentVolume !== null) { event.preventDefault(); history.replaceState(history.state, '', dynasticUrl({ book: currentBook.id, volume: currentVolume, block: target.dataset.libraryBlock })); showFromUrl(); return; }
     if (target.dataset.history) { const volume = target.dataset.volume !== undefined && target.dataset.volume !== '' ? Number(target.dataset.volume) : undefined; navigate({ book: target.dataset.history, volume, ...(target.dataset.block ? { block: target.dataset.block } : {}) }); return; }
     switch (target.dataset.library) {
       case 'home': navigate({ book: '' }); break;
       case 'retry': showFromUrl(); break;
       case 'return-event': { const entry = sourceJourney(location.href); if (entry) callbacks.onJourney(entry.event.id); break; }
+      case 'return-guide': { const entry = sourceHistoryGuide(location.href); if (entry) callbacks.onGuide?.(entry.book, entry.event.id); break; }
+      case 'guide': callbacks.onGuide?.(currentBook?.id); break;
       case 'shiji': callbacks.onShiji(); break;
       case 'book-home': if (currentBook) navigate({ book: currentBook.id }); break;
       case 'recent': try { const recent = JSON.parse(localStorage.getItem('historical-nebula:dynastic-recent') || 'null'); if (recent && dynasticBook(recent.book)) navigate(recent); else setStatus('还没有新增史书的阅读记录。'); } catch { setStatus('阅读记录暂不可用。'); } break;
@@ -218,5 +226,5 @@ export function createDynasticLibrary(host: HTMLElement, callbacks: { onShiji: (
     catch { setStatus(`请复制链接：${value}`); }
   }
 
-  return { showFromUrl };
+  return { showFromUrl, hide() { request++; } };
 }

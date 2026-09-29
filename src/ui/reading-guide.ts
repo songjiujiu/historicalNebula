@@ -7,7 +7,7 @@ import './reading-guide.css';
 
 const simplify = Converter({ from: 'tw', to: 'cn' });
 const KEY = 'historical-nebula:full-book-guides:v1';
-interface GuideOptions { onBook: (volume?: number, block?: string) => void }
+interface GuideOptions { onBook: (volume?: number, block?: string) => void; onHistories?: () => void }
 
 export function createReadingGuide(host: HTMLElement, options: GuideOptions) {
   let state = guideLocation(location.href);
@@ -42,6 +42,7 @@ export function createReadingGuide(host: HTMLElement, options: GuideOptions) {
   function catalog() {
     host.innerHTML = `<div class="reading-home"><header class="reading-home-hero"><div><span class="story-kicker">《史记》全书 · 从导读进入原文</span><h1 tabindex="-1">先读懂，再往下读。</h1><p>130 卷，按同一种清楚的顺序展开：<br><strong>当时的局面 → 人物与主题 → 分段阅读 → 读完记住什么</strong></p><span class="reading-scope">每卷都有专属导读；正文完整保留，随时对照。</span></div>${recent ? `<button class="text-button reading-resume" data-reading-action="resume">继续上次：${esc(chapterByVolume(recent.volume!)!.title)} →</button>` : ''}</header><section class="reading-routes"><div class="reading-section-title"><h2>选一条适合你的阅读路线</h2><span>可以随时换路线，不需要按卷背下来</span></div><div class="reading-route-cards">${readingRoutes.map(item => `<button data-reading-route="${item.id}" aria-pressed="${item.id === state.route}"><span>${item.volumes.length} 卷${item.id === 'first-stories' ? ' · 推荐入门' : ''}</span><strong>${esc(item.title)}</strong><p>${esc(item.description)}</p></button>`).join('')}</div></section><section class="reading-directory"><div class="reading-section-title"><h2>找到这一卷，从问题开始读</h2><button class="text-button" data-reading-route="complete">查看全部 130 卷 →</button></div><label class="reading-search">${icon('search')}<input id="reading-query" type="search" placeholder="搜索篇名、人物或想了解的问题" value="${esc(query)}" maxlength="100" aria-label="搜索全书导读"></label><div class="reading-category-tabs" role="group" aria-label="按体例查看导读"><button data-reading-category="" aria-pressed="${!category}">当前路线</button>${bookCategories.map(item => `<button data-reading-category="${item}" aria-pressed="${category === item}">${item}</button>`).join('')}</div><p class="reading-category-explanation">${esc(category ? categoryExplanations[category] : route().description)}</p><div id="reading-catalog-results"></div></section><p class="reading-home-foot">这里是帮助理解的入门导读，原文仍保留在“史记原文”中。上古传说、作者评论和后人补记，会在相应卷中提示。</p></div>`;
     renderResults();
+    if (options.onHistories) $('.reading-home-hero').insertAdjacentHTML('beforeend', '<button class="text-button reading-resume" data-reading-action="histories">继续认识其他史书：二十四史导读 →</button>');
   }
   function renderResults() {
     const needle = simplify(query.trim()).toLowerCase();
@@ -99,6 +100,7 @@ export function createReadingGuide(host: HTMLElement, options: GuideOptions) {
     const index = state.volume ? volumes().indexOf(state.volume) : -1;
     switch (button.dataset.readingAction) {
       case 'catalog': navigate({ ...state, volume: null, section: 0 }); break;
+      case 'histories': options.onHistories?.(); break;
       case 'resume': if (recent) navigate(recent); break;
       case 'more': limit += 24; renderResults(); break;
       case 'source': if (current) options.onBook(current.volume, current.sections[state.section].block); break;

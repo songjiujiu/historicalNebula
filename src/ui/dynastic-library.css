@@ -104,3 +104,10 @@
 #dynastic-root button:focus-visible,#dynastic-root a:focus-visible { outline: 2px solid #c5a96c; outline-offset: 2px; }
 @media(max-width:1100px) { .dynasty-route ol { grid-template-columns: repeat(2,minmax(0,1fr)); } .dynasty-book-grid { grid-template-columns: repeat(3,minmax(0,1fr)); } }
 @media(max-width:760px) { .dynasty-shell { padding: 22px 15px 50px; } .dynasty-top { display: block; } .dynasty-top h1 { font-size: 24px; } .dynasty-top-actions { margin-top: 15px; } .dynasty-welcome { padding: 20px; } .dynasty-welcome h2 { font-size: 22px; } .dynasty-welcome-stats { display: none; } .dynasty-route ol { grid-template-columns: 1fr; } .dynasty-book-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } .dynasty-book-card { padding: 13px; min-height: 182px; } .dynasty-book-card strong { font-size: 16px; } .dynasty-catalog-heading { align-items: stretch; display: block; } .dynasty-catalog-heading input { width: 100%; } .dynasty-layout:has(.dynasty-side) { grid-template-columns: minmax(0,1fr); } .dynasty-side { position: static; height: auto; min-height: 0; } .dynasty-volume-list { display: flex; overflow-x: auto; max-height: 55px; } .dynasty-volume { flex: 0 0 auto; width: auto; max-width: 165px; } .dynasty-volume small { display: none; } .dynasty-book-intro h2,.dynasty-results h2 { font-size: 25px; } .dynasty-reader-heading h2 { font-size: 28px; } .dynasty-reading-note { padding: 17px; } .dynasty-intro-list,.dynasty-genre-grid { grid-template-columns: 1fr; } }
+/* Book guides are a separate reading path; keep the original catalog available. */
+.dynasty-guide-entry{padding:0 16px;margin-top:12px;margin-left:10px}
+.dynasty-guide-intro{margin:22px 0;padding:22px;border:1px solid #b9a26d66;border-radius:9px;background:#b9a26d0c}
+.dynasty-guide-intro strong{color:#dfc596;font-size:17px;font-weight:500}
+.dynasty-guide-intro p{color:#a9bbd4;font-size:14px;line-height:1.95;margin:10px 0 16px}
+.dynasty-guide-intro .primary-button{padding:0 18px}
+@media(max-width:760px){.dynasty-guide-entry{margin-left:0}.dynasty-guide-intro{padding:18px}.dynasty-guide-intro .primary-button{width:100%}}
