@@ -3,7 +3,7 @@ import { icon } from './ui/icons';
 import { parseBookLocation } from './domain/shiji-book';
 import { createReadingGuide } from './ui/reading-guide';
 import { createHistoryJourney } from './ui/history-journey';
-import { journeyUrl, journeySourceUrl } from './domain/history-journey';
+import { journeyUrl, journeySourceUrl, journeyEvents } from './domain/history-journey';
 import { historyGuideUrl, historyGuideSourceUrl } from './domain/history-guides';
 
 type ReadingMode = 'journey' | 'guide' | 'histories' | 'library';
@@ -141,7 +141,7 @@ function enterDynasticLibrary(book = '', volume?: number) {
 }
 function aboutData() {
   const dialog = $<HTMLDialogElement>('#dialog'); dialogPreviousFocus = document.activeElement as HTMLElement;
-  dialog.innerHTML = `<div class="dialog-header"><span>关于内容与来源</span><button class="icon-button" data-action="dialog-close" aria-label="关闭">${icon('close')}</button></div><div class="source-content"><h2>沿着事件，回到史书</h2><p>历史主线选取 40 个关键事件，用白话说明背景、经过和影响，53 条出处可定位到二十四史的原文。它是入门选读，不是全部史实或逐句翻译。</p><p>《史记》130 卷提供独立入门导读、分段阅读、完整原文与年表。转录来自 <a href="https://zh.wikisource.org/wiki/史記" target="_blank" rel="noopener noreferrer">维基文库及贡献者</a>，来源与许可说明保留在阅读器内。</p><p>另接入《汉书》至《明史》23 部、3,083 卷的转录、卷目与本书检索。新增二十四史导读按时代背景、关键人物、事件经过与影响、阅读重点展开，讲解可往返定位原文；这是书级入门与事件选读，并非新增各卷的逐卷讲解。主要来源是 <a href="https://osf.io/tp729/" target="_blank" rel="noopener noreferrer">Zinin 与 Xu 的二十四史语料</a>；部分短卷与宗室世系表参考维基文库、gujilab 和 hunterhug。至少 12 卷历法表格缺录，阅读页已标示。</p><p>简繁切换只转换字形。转录、卷名与导读仍需结合校勘本核对；卷次覆盖不等于逐字完整。</p><div class="detail-actions"><button class="primary-button" data-action="dynastic-library">二十四史目录</button><button class="secondary-button" data-action="shiji-book">史记原文</button></div></div>`;
+  dialog.innerHTML = `<div class="dialog-header"><span>关于内容与来源</span><button class="icon-button" data-action="dialog-close" aria-label="关闭">${icon('close')}</button></div><div class="source-content"><h2>沿着事件，回到史书</h2><p>历史主线从上古延伸至当代，选取 ${journeyEvents.length} 个关键事件，用白话说明背景、经过和影响。其中 ${journeyEvents.reduce((count, event) => count + event.sources.length, 0)} 条出处可定位到二十四史的原文；清朝到当代另附博物馆、档案、大学与机构资料链接，最新事件选至2024年。这是入门选读，不是全部史实或逐句翻译，也不表示已收录清代与现代史资料全文。</p><p>《史记》130 卷提供独立入门导读、分段阅读、完整原文与年表。转录来自 <a href="https://zh.wikisource.org/wiki/史記" target="_blank" rel="noopener noreferrer">维基文库及贡献者</a>，来源与许可说明保留在阅读器内。</p><p>另接入《汉书》至《明史》23 部、3,083 卷的转录、卷目与本书检索。新增二十四史导读按时代背景、关键人物、事件经过与影响、阅读重点展开，讲解可往返定位原文；这是书级入门与事件选读，并非新增各卷的逐卷讲解。主要来源是 <a href="https://osf.io/tp729/" target="_blank" rel="noopener noreferrer">Zinin 与 Xu 的二十四史语料</a>；部分短卷与宗室世系表参考维基文库、gujilab 和 hunterhug。至少 12 卷历法表格缺录，阅读页已标示。</p><p>简繁切换只转换字形。转录、卷名与导读仍需结合校勘本核对；卷次覆盖不等于逐字完整。</p><div class="detail-actions"><button class="primary-button" data-action="dynastic-library">二十四史目录</button><button class="secondary-button" data-action="shiji-book">史记原文</button></div></div>`;
   dialog.showModal();
 }
 const readingGuide = createReadingGuide($('#reading-root'), { onBook: (volume, block) => void openBook(volume, undefined, block), onHistories: () => enterHistoryGuides() });

@@ -15,8 +15,9 @@
 .journey-intro-card li small { display: block; font-size: 12px; margin-top: 5px; color: #9cacc0; }
 .journey-intro-card p { border-top: 1px solid #3b454d; padding-top: 17px; font-size: 12px; }
 .journey-layout { display: grid; grid-template-columns: 204px minmax(0,1fr); gap: 48px; padding-top: 38px; align-items: start; }
-.journey-rail { position: sticky; top: 24px; }
-.journey-rail nav { display: grid; gap: 2px; margin-top: 16px; }
+.journey-rail { position: sticky; top: 24px; max-height: calc(100dvh - 48px); display: flex; flex-direction: column; }
+.journey-rail nav { display: grid; gap: 2px; margin-top: 16px; overflow-y: auto; min-height: 0; scrollbar-width: thin; scrollbar-color: #5a665f transparent; }
+.journey-rail>span,.journey-rail-note { flex-shrink: 0; }
 .journey-rail nav button { display: flex; align-items: center; gap: 16px; text-align: left; border-radius: 6px; padding: 10px 12px; min-height: 56px; border: 1px solid transparent; }
 .journey-rail nav b { font: 13px/1.3 Georgia,serif; color: #76879d; }
 .journey-rail nav button>span { font-size: 13px; }
@@ -84,6 +85,9 @@
 .journey-source-card small { display: block; margin-top: 7px; color: #9bacc1; font-size: 11px; }
 .journey-source-card q { display: block; margin: 15px 0; color: #d4dfed; line-height: 1.9; font-size: 16px; font-family: SimSun,serif; }
 .journey-source-card b { font-weight: 500; font-size: 12px; color: #d2b47c; }
+.journey-reference-card p { font-size: 13px; margin: 15px 0; line-height: 1.9; overflow-wrap: anywhere; }
+.journey-reference-card mark { background: #2d3229; color: #dfd3ad; padding: 2px 4px; }
+.journey-reference-card b span { color: #94a8bd; margin-left: 8px; font-size: 11px; }
 .journey-complete { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin: 35px 0 24px; }
 .journey-complete>span { font-size: 12px; color: #8fa4bb; }
 .journey-complete [aria-pressed=true] { border-color: #698d7d; color: #abd6c0; }
@@ -104,7 +108,7 @@
   .journey-shell { padding: 27px 17px 45px; } .journey-hero { display: block; padding-bottom: 28px; } .journey-hero h1 { font-size: 38px; margin: 17px 0; }
   .journey-hero p { font-size: 14px; } .journey-intro-card { margin-top: 28px; padding: 20px; } .journey-intro-card ol { display: flex; gap: 18px; margin: 14px 0; }
   .journey-intro-card li { display: block; flex: 1; min-width: 0; padding: 3px 0; } .journey-intro-card li b { font-size: 17px; } .journey-intro-card li strong { font-size: 14px; margin-top: 10px; } .journey-intro-card li small { font-size: 11px; line-height: 1.8; }
-  .journey-intro-card p { font-size: 11px; } .journey-layout { display: block; padding-top: 25px; } .journey-rail { position: static; margin-bottom: 25px; }
+  .journey-intro-card p { font-size: 11px; } .journey-layout { display: block; padding-top: 25px; } .journey-rail { position: static; margin-bottom: 25px; max-height: none; display: block; }
   .journey-rail>span,.journey-rail-note { display: none; } .journey-rail nav { display: flex; overflow-x: auto; gap: 8px; margin-top: 0; padding: 4px 0 10px; }
   .journey-rail nav button { flex: 0 0 auto; border-color: #2b3a4c; gap: 8px; padding: 8px 11px; min-height: 40px; } .journey-rail nav small { display: none; }
   .journey-scope { width: 100%; } .journey-scope button { flex: 1; font-size: 11px; padding: 9px 7px; } .journey-search { gap: 10px; padding: 12px; }

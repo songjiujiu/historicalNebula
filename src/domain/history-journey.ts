@@ -1,9 +1,13 @@
-/** 入门主线是本站的综合导读；sources 指向本地底本，cue 为简体字形的原文摘句。 */
+import { modernJourneyEras, modernJourneyEvents, modernQuickJourneyIds } from './modern-history';
+/** 入门主线是本站的综合导读；sources 指向本地底本，references 指向外部参考资料。 */
 export interface JourneySource { book: string; volume: number; block: string; cue: string; label: string }
+export interface JourneyEra {
+  id: string; title: string; years: string; question: string; gist: string; lanes: string[]; note: string; books: string[];
+}
 export interface JourneyEvent {
   id: string; era: string; year: string; title: string; summary: string;
   before: string; happening: string; after: string; remember: string;
-  people: string[]; sources: JourneySource[]; caution?: string;
+  people: string[]; sources: JourneySource[]; references?: string[]; caution?: string;
 }
 export const historyBookNames: Record<string, string> = {
   shiji: '史记', hanshu: '汉书', houhanshu: '后汉书', sanguozhi: '三国志', jinshu: '晋书',
@@ -11,7 +15,7 @@ export const historyBookNames: Record<string, string> = {
   zhoushu: '周书', nanshi: '南史', beishi: '北史', suishu: '隋书', jiutangshu: '旧唐书', xintangshi: '新唐书',
   jiuwudaishi: '旧五代史', xinwudaishi: '新五代史', songshi: '宋史', liaoshi: '辽史', jinshi: '金史', yuanshi: '元史', mingshi: '明史',
 };
-export const journeyEras = [
+export const journeyEras: JourneyEra[] = [
   { id: 'early', title: '先秦', years: '上古 — 前221年', question: '许多邦国，怎样走向统一？', gist: '先了解夏商周，再看周王权威减弱、诸侯竞争，最后由秦统一六国。', lanes: ['夏 → 商 → 西周 → 东周（春秋、战国）'], note: '春秋、战国都是东周时期的称呼；当时有多个诸侯国。', books: ['shiji'] },
   { id: 'qinhan', title: '秦与西汉', years: '前221年 — 公元9年', question: '秦很快灭亡，汉怎样站稳？', gist: '秦完成统一却迅速崩溃，刘邦在楚汉战争中胜出。汉先恢复生产，再向外扩展。', lanes: ['秦 → 楚汉之争 → 西汉'], note: '《史记》写到汉武帝时期，《汉书》与它有重叠，并接着讲西汉后期及王莽。', books: ['shiji', 'hanshu'] },
   { id: 'laterhan', title: '新朝与东汉', years: '9 — 220年', question: '为什么汉朝分成前后两段？', gist: '王莽改汉为新，随后刘秀重建汉朝。东汉后期的动乱，让军队掌握在地方强人手里。', lanes: ['西汉 → 新朝 → 东汉 → 群雄割据'], note: '西汉、东汉都叫“汉”；都城分别主要在长安、洛阳，后人为区分而这样命名。', books: ['hanshu', 'houhanshu'] },
@@ -20,7 +24,8 @@ export const journeyEras = [
   { id: 'suitang', title: '隋与唐', years: '581 — 907年', question: '重新统一后，盛唐如何转折？', gist: '隋完成统一，唐在隋末战争中兴起。唐前期逐步强盛，安史之乱后中央对地方的控制改变。', lanes: ['隋（581年建立，589年灭陈）→ 唐'], note: '隋的建立早于南北朝结束。《旧唐书》《新唐书》写的是同一个唐朝，并非前后两个朝代。', books: ['suishu', 'jiutangshu', 'xintangshi'] },
   { id: 'fivedynasties', title: '五代到北宋', years: '907 — 1005年', question: '频繁换朝代的局面怎么结束？', gist: '唐亡后，中原五代快速更替，各地也有割据政权。宋取代后周，陆续结束大部分地区的割据。', lanes: ['中原：后梁 → 后唐 → 后晋 → 后汉 → 后周 → 北宋', '同时：十国等政权；北方还有契丹建立的辽'], note: '“五代十国”包含同时并存的政权，不是十五个朝代排着接班。', books: ['jiuwudaishi', 'xinwudaishi', 'songshi', 'liaoshi'] },
   { id: 'songyuan', title: '宋辽金与元', years: '960 — 1368年', question: '宋、辽、金是前后还是同时？', gist: '北宋与辽并立；金灭辽又灭北宋，南宋与金对峙。蒙古兴起后灭金，元最终灭南宋。', lanes: ['南方主线：北宋 → 南宋 → 元', '北方主线：辽 → 金 → 蒙古 / 元', '西北另有西夏（本路线只作背景提示）'], note: '宋、辽、金并非简单接续。1271年定国号“大元”，1279年崖山战役后南宋结束。', books: ['songshi', 'liaoshi', 'jinshi', 'yuanshi'] },
-  { id: 'ming', title: '明', years: '1368 — 1644年', question: '新王朝如何建立，又怎样失去北京？', gist: '朱元璋建立明朝，朱棣通过战争夺位。后来经历边防危机，到明末多重困局与战争交织。', lanes: ['明建立 → 靖难夺位 → 土木之变 → 北京失守'], note: '1644年是明朝北京政权结束，南明政权此后仍延续。清史不属于这24部史书的覆盖范围。', books: ['mingshi'] },
+  { id: 'ming', title: '明', years: '1368 — 1644年', question: '新王朝如何建立，又怎样失去北京？', gist: '朱元璋建立明朝，朱棣通过战争夺位。后来经历边防危机，到明末多重困局与战争交织。', lanes: ['明建立 → 靖难夺位 → 土木之变 → 北京失守 → 清入关'], note: '1644年是明朝北京政权结束，南明政权此后仍延续。接下来继续读清到当代；这部分参考其他史料，不属于二十四史原文。', books: ['mingshi'] },
+  ...modernJourneyEras,
 ];
 const s = (book: string, volume: number, block: string, cue: string, label: string): JourneySource => ({ book, volume, block, cue, label });
 const e = (id: string, era: string, year: string, title: string, summary: string, before: string, happening: string, after: string, remember: string, people: string[], sources: JourneySource[], caution?: string): JourneyEvent => ({ id, era, year, title, summary, before, happening, after, remember, people, sources, ...(caution ? { caution } : {}) });
@@ -263,14 +268,15 @@ export const journeyEvents: JourneyEvent[] = [
   e('ming-falls', 'ming', '公元1644年', '北京失守：明朝走到转折终点', '多重危机汇合，北京政权结束，战争仍未停止。',
     '明末面临财政困难、灾荒疫病、农民战争和后金—清的军事压力，中央与地方都难以有效应对。',
     '李自成军攻入北京，崇祯帝死于万岁山。随后清军入关、进入北京，新的战争与统治更替继续。',
-    '南方仍有南明政权抵抗，所以1644年不是所有明朝力量同时消失。我们的二十四史入门主线在这里收束。',
+    '南方仍有南明政权抵抗，所以1644年不是所有明朝力量同时消失。接着看清朝如何入关、建立统治，就能把明末与清初连起来。',
     '一个王朝的结束常有多个原因，也有过程；不能只归结为最后一个皇帝的性格。', ['崇祯帝朱由检：明朝北京政权末帝', '李自成：攻入北京的起义军领袖'],
     [s('mingshi', 24, 'p6', '帝崩于万岁山', '庄烈帝纪 · 北京失守')], '《明史》为清代编修，原文中的“我大清”等是编纂者的立场用语。'),
+  ...modernJourneyEvents,
 ];
 
 export const journeyEvent = (id: string | null | undefined) => journeyEvents.find(event => event.id === id);
 export const journeyEra = (id: string | null | undefined) => journeyEras.find(era => era.id === id);
-export const quickJourneyIds = ['east-zhou', 'qin-unifies', 'han-founded', 'eastern-han', 'red-cliffs', 'jin-unifies', 'eastern-jin', 'liu-song', 'sui-unifies', 'an-lushan', 'five-dynasties', 'jingkang', 'yuan-unifies', 'ming-founded', 'ming-falls'];
+export const quickJourneyIds = ['east-zhou', 'qin-unifies', 'han-founded', 'eastern-han', 'red-cliffs', 'jin-unifies', 'eastern-jin', 'liu-song', 'sui-unifies', 'an-lushan', 'five-dynasties', 'jingkang', 'yuan-unifies', 'ming-founded', 'ming-falls', ...modernQuickJourneyIds];
 export function journeyUrl(eventId = '', eraId = '', base = location.href, scope = 'quick'): string {
   const url = new URL(base); url.search = ''; url.hash = '';
   url.searchParams.set('journey', journeyEvent(eventId)?.id ?? '');
