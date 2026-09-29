@@ -67,6 +67,7 @@ export interface GraphView {
   relationId: string | null;
 }
 export interface SceneOptions {
+  centerLabel?: string;
   onSelect: (id: string) => void;
   onRelation: (id: string) => void;
   onCameraChange?: () => void;

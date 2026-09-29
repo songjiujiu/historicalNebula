@@ -6,6 +6,10 @@ import type { Entity, SceneController, RelationCategory, TopicId } from './domai
 import { icon, escapeHtml as esc } from './ui/icons';
 import { chapterBySource, parseBookLocation } from './domain/shiji-book';
 import { shijiGraphReport } from './domain/shiji-full-data';
+import { createStoryReader } from './ui/story-reader';
+import { stories } from './domain/stories';
+import { storyUrl } from './exploration/story';
+import { createReadingGuide } from './ui/reading-guide';
 
 type SavedView = { id: string; title: string; date: string; state: ExploreState };
 interface LocalRecords { bookmarks: string[]; saves: SavedView[]; recent: ExploreState | null; progress: Record<string, number> }
@@ -23,6 +27,15 @@ try {
 } catch { /* A blocked or corrupt storage never prevents browsing. */ }
 
 let state: ExploreState = stateFromUrl(location.href) ?? { ...DEFAULT_STATE, categories: [...DEFAULT_STATE.categories], expandedIds: [] };
+function modeFromUrl(): 'guide' | 'story' | 'explore' {
+  const params = new URL(location.href).searchParams;
+  if (params.has('story')) return 'story';
+  if (params.has('reading') || params.has('route')) return 'guide';
+  return stateFromUrl(location.href) ? 'explore' : 'guide';
+}
+let appMode = modeFromUrl();
+let storyReader: ReturnType<typeof createStoryReader> | null = null;
+let readingGuide: ReturnType<typeof createReadingGuide> | null = null;
 if (!new URL(location.href).searchParams.has('view') && matchMedia('(max-width: 760px)').matches) state.viewMode = 'list';
 let scene: SceneController | null = null;
 let sceneFailed = false;
@@ -56,9 +69,9 @@ async function openBook(volume?: number, query?: string, block?: string) {
   try {
     if (inFullscreen()) await exitFullscreen();
     const { openShijiReader } = await import('./ui/shiji-reader');
-    scene?.setActive(false);
-    openShijiReader({ volume, query, block, onEntity: centerOnEntity, onClose: () => scene?.setActive(!currentDialog && state.viewMode === 'graph3d') });
-  } catch { toast('全书阅读器加载失败，请重试。'); }
+    scene?.setActive(false); storyReader?.setActive(false);
+    openShijiReader({ volume, query, block, onEntity: centerOnEntity, onGuide: volume => enterGuides(volume), onClose: () => { scene?.setActive(appMode === 'explore' && !currentDialog && state.viewMode === 'graph3d'); storyReader?.setActive(appMode === 'story' && !currentDialog); } });
+  } catch { scene?.setActive(appMode === 'explore' && !currentDialog && state.viewMode === 'graph3d'); storyReader?.setActive(appMode === 'story' && !currentDialog); toast('全书阅读器加载失败，请重试。'); }
   finally { bookOpening = false; }
 }
 
@@ -73,10 +86,12 @@ const categories: Record<RelationCategory, { label: string; description: string;
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <header class="app-header">
     <a class="brand" href="/" aria-label="历史星云首页"><span class="brand-mark">${icon('star')}</span><span>历史星云<small>HISTORICAL NEBULA</small></span></a>
-    <nav class="main-nav" aria-label="主导航"><button class="nav-item active" data-action="explore">史记星图</button><button class="nav-item" data-action="shiji-book">史记全书</button></nav>
+    <nav class="main-nav" aria-label="主导航"><button class="nav-item" data-action="reading-guides">全书导读</button><button class="nav-item" data-action="stories">白话故事</button><button class="nav-item" data-action="explore">自由星图</button><button class="nav-item" data-action="shiji-book">史记原文</button></nav>
     <button class="search-trigger" data-action="search" aria-label="搜索人物、事件、别名">${icon('search')}<span>搜索人物、事件、别名</span><kbd>Ctrl K</kbd></button>
     <button class="icon-button help-button" data-action="help" aria-label="探索说明">${icon('info')}</button>
   </header>
+  <div id="story-root"></div>
+  <div id="reading-root"></div>
   <div class="workspace">
     <aside class="sidebar" id="sidebar" aria-label="史记全书">
       <div class="sidebar-heading"><span>史记全书</span><span class="tiny-label">SHIJI</span></div>
@@ -192,6 +207,7 @@ function captureCurrentEntry() {
   history.replaceState(historyEntry(overlay), '', shareUrl(state, location.href));
 }
 function navigate(patch: Partial<ExploreState>, options: { replace?: boolean; resetLayout?: boolean; keepUndo?: boolean; guide?: GuideSession | null; anchor?: string } = {}) {
+  if (appMode !== 'explore') { enterExploration(patch); return; }
   captureCurrentEntry();
   if (!options.keepUndo && ('topicId' in patch || 'centerId' in patch || 'fromYear' in patch || 'categories' in patch || 'showUndated' in patch)) undoExpansions = [];
   const next = sanitizeState({ ...state, ...patch });
@@ -228,6 +244,7 @@ function switchTopic(topicId: TopicId) {
 }
 function openEntity(id: string, anchor?: string) {
   const entity = entityById(id); if (!entity) return;
+  if (appMode !== 'explore') { enterExploration({ centerId: id, selectedId: id, fullId: id }); return; }
   const topicId = entityTopic(entity);
   if (topicId === state.topicId) navigate({ fullId: id, sourceId: null }, { anchor });
   else navigate({ ...topicState(topicId, id), fullId: id }, { resetLayout: true, guide: null, anchor });
@@ -255,6 +272,15 @@ function openRelation(id: string) {
 }
 
 function render() {
+  $('#story-root').classList.toggle('hidden', appMode !== 'story');
+  $('#reading-root').classList.toggle('hidden', appMode !== 'guide');
+  $('.workspace').classList.toggle('hidden', appMode !== 'explore');
+  document.querySelector('[data-action="stories"]')?.classList.toggle('active', appMode === 'story');
+  document.querySelector('[data-action="reading-guides"]')?.classList.toggle('active', appMode === 'guide');
+  document.querySelector('[data-action="explore"]')?.classList.toggle('active', appMode === 'explore');
+  if (appMode === 'story') { scene?.setActive(false); storyReader?.setActive(!currentDialog && !parseBookLocation(location.hash) && !document.querySelector('.book-dialog[open]')); return; }
+  if (appMode === 'guide') { scene?.setActive(false); storyReader?.setActive(false); return; }
+  storyReader?.setActive(false);
   const topic = currentTopic();
   const graph = buildGraph(state);
   const center = entityById(state.centerId)!;
@@ -269,7 +295,7 @@ function render() {
   $('#graph-list').classList.toggle('hidden', state.viewMode !== 'list');
   $('#scene-host').classList.toggle('hidden', state.viewMode === 'list');
   $('#scene-loading').classList.toggle('hidden', state.viewMode === 'list' || scene !== null || sceneFailed);
-  scene?.setActive(state.viewMode === 'graph3d' && !currentDialog && !document.querySelector('.book-dialog[open]'));
+  scene?.setActive(state.viewMode === 'graph3d' && !currentDialog && !parseBookLocation(location.hash) && !document.querySelector('.book-dialog[open]'));
   if (scene) scene.setGraph(graph, state.spatial);
   renderGraphList(graph.nodes, graph.contextIds);
   renderInspector();
@@ -307,7 +333,7 @@ function renderInspector() {
   const valid = selected.start === null || selected.end === null || (selected.start <= state.toYear && selected.end >= state.fromYear);
   $('#inspector').innerHTML = relation ? `
     <div class="inspector-top"><span>${icon('link')}关系详情</span><button class="icon-button" data-action="close-relation" aria-label="关闭关系详情">${icon('close')}</button></div>
-    <div class="inspector-scroll"><div class="relation-hero"><span class="eyebrow">CONNECTION</span><h2>${esc(entityName(relation.source))}<span>${icon('link')}</span>${esc(entityName(relation.target))}</h2><span class="evidence-badge ${relation.evidence}">${relation.evidence === 'record' ? '史料记载' : relation.evidence === 'index' ? '原文索引 · 非历史互动' : '历史解释'}</span><h3>${esc(relation.label)}</h3><p>${relation.category === 'textual' ? '篇章关联 · 不对应持续历史互动' : timeLabel(relation.start, relation.end)}</p></div>
+    <div class="inspector-scroll"><div class="relation-hero"><span class="eyebrow">CONNECTION</span><h2>${esc(entityName(relation.source))}<span>${icon('link')}</span>${esc(entityName(relation.target))}</h2><span class="evidence-badge ${relation.evidence}">${relation.evidence === 'record' ? '史料记载' : relation.evidence === 'index' ? '原文提及 · 查看出处' : '历史解释'}</span><h3>${esc(relation.label)}</h3><p>${relation.category === 'textual' ? '篇章关联 · 不对应持续历史互动' : timeLabel(relation.start, relation.end)}</p></div>
     ${!relationMatches(relation, state) ? '<div class="context-warning">此关系不符合当前筛选，仅供参考。</div>' : ''}
     <section class="inspector-section"><h3>关系发生在怎样的情境中</h3><p>${relation.imported ? '<span class="sample-badge">机器整理 · 待审校</span>' : ''}${esc(relation.context)}</p></section><section class="inspector-section"><h3>记载与依据</h3>${sourceButtons(relation.sourceIds)}</section><div class="reading-note">关系只在有依据的时间与情境内成立，不外推为永久关系。</div></div>
     <div class="inspector-footer"><button class="secondary-button" data-full="${esc(relation.target)}">查看 ${esc(entityName(relation.target))}</button></div>
@@ -318,7 +344,7 @@ function renderInspector() {
     <section class="inspector-section"><div class="section-heading"><h3>${selected.kind === 'person' ? '关键行动' : selected.kind === 'chapter' ? '篇章原文' : '事件中的行动'}</h3><button class="text-button" data-full="${esc(selected.id)}">全部 ${icon('chevron')}</button></div>${actionCards(selected, 2)}</section>
     <section class="inspector-section"><div class="section-heading"><h3>关联人物与事件</h3><span class="small-number">${currentRelations().filter(r => r.source === selected.id || r.target === selected.id).length}</span></div>${relationRows(selected.id, 3)}</section>
     <section class="inspector-section compact"><h3>溯源阅读</h3>${sourceButtons(selected.sourceIds.slice(0, 1))}</section></div>
-    <div class="inspector-footer"><button class="primary-button" data-action="expand">${icon('grid')}展开关联 ${icon('arrow')}</button><div class="footer-button-row"><button class="secondary-button" data-full="${esc(selected.id)}">${icon('book')}完整内容</button><button class="secondary-button" data-center="${esc(selected.id)}" ${selected.id === state.centerId ? 'disabled' : ''}>${icon('target')}以此为中心</button></div></div>
+    <div class="inspector-footer"><button class="primary-button" data-action="expand">${icon('grid')}看看更多关联 ${icon('arrow')}</button><div class="footer-button-row"><button class="secondary-button" data-full="${esc(selected.id)}">${icon('book')}完整内容</button><button class="secondary-button" data-center="${esc(selected.id)}" ${selected.id === state.centerId ? 'disabled' : ''}>${icon('target')}以此为中心</button></div></div>
   `;
 }
 function actionCards(entity: Entity, limit = 99) {
@@ -337,14 +363,16 @@ function showDialog(kind: string, html: string, label: string) {
   if (!already) dialog.showModal();
   dialog.scrollTop = previousScroll;
   scene?.setActive(false);
+  storyReader?.setActive(false);
 }
 function hideDialog() {
   currentDialog = null; $<HTMLDialogElement>('#dialog').close();
-  scene?.setActive(state.viewMode === 'graph3d');
+  scene?.setActive(appMode === 'explore' && state.viewMode === 'graph3d');
+  storyReader?.setActive(appMode === 'story');
   sourcePreviousFocus?.focus();
 }
 function closeDialog() {
-  if (state.sourceId || state.fullId) {
+  if (appMode === 'explore' && (state.sourceId || state.fullId)) {
     if (historyIndex > 0) history.back();
     else navigate({ sourceId: null, fullId: null }, { replace: true });
   } else hideDialog();
@@ -433,6 +461,7 @@ async function share() {
 
 document.addEventListener('click', event => {
   const target = (event.target as Element).closest<HTMLElement>('button, a[data-action]'); if (!target || (target as HTMLButtonElement).disabled) return;
+  if (target.closest('#story-root, #reading-root')) return;
   if (target.closest('.book-dialog')) return;
   if (target.dataset.bookVolume) { void openBook(Number(target.dataset.bookVolume), undefined, target.dataset.bookBlock || undefined); return; }
   if (target.dataset.topic && topicById(target.dataset.topic)) { switchTopic(target.dataset.topic as TopicId); return; }
@@ -452,7 +481,9 @@ document.addEventListener('click', event => {
     case 'book-search': void openBook(undefined, document.querySelector<HTMLInputElement>('#search-input')?.value ?? ''); break;
     case 'fullscreen': void toggleFullscreen(); break;
     case 'undo-local': toastUndo?.(); break;
-    case 'explore': if (currentDialog) hideDialog(); break;
+    case 'stories': enterStories(); break;
+    case 'reading-guides': enterGuides(); break;
+    case 'explore': if (currentDialog) hideDialog(); if (appMode !== 'explore') { const id = appMode === 'guide' ? readingGuide?.centerId ?? state.centerId : storyReader?.eventId ?? state.centerId; enterExploration({ centerId: id, selectedId: id }); } break;
     case 'search': openSearch(); break;
     case 'topics': openTopics(); break;
     case 'guides': openGuides(); break;
@@ -491,7 +522,7 @@ document.addEventListener('click', event => {
     case 'settings': showDialog('settings', `<div class="settings-content"><h2>让星云适合你的设备</h2><label>画质<select id="quality-select"><option value="low" ${currentQuality === 'low' ? 'selected' : ''}>轻量 · 少量粒子</option><option value="medium" ${currentQuality === 'medium' ? 'selected' : ''}>标准 · 推荐</option><option value="high" ${currentQuality === 'high' ? 'selected' : ''}>高 · 更多星点</option></select></label><label class="switch-row"><span>氛围流动<small>仅改变装饰，不移动人物节点</small></span><input id="motion-toggle" type="checkbox" ${motionEnabled ? 'checked' : ''} role="switch"/></label><label class="switch-row"><span>触屏旋转模式<small>关闭时单指平移，双指缩放</small></span><input id="rotate-toggle" type="checkbox" ${rotateMode ? 'checked' : ''} role="switch"/></label><button class="secondary-button" data-action="reset-graph">重置当前关系图</button><p class="fine-print">画质不会减少历史内容。系统“减少动态效果”优先于氛围开关。</p></div>`, '画质与交互'); break;
     case 'reset-graph': hideDialog(); navigate({ expandedIds: [], selectedId: state.centerId, relationId: null }, { resetLayout: true }); break;
     case 'select-share': $<HTMLInputElement>('.share-input').select(); break;
-    case 'help': showDialog('help', `<div class="source-content"><span class="eyebrow">EXPLORER’S GUIDE</span><h2>在关联中，读懂历史</h2><div class="help-steps"><p><b>01</b><span><strong>点击，看见行动</strong>选择人物或事件，右侧阅读摘要与来源。</span></p><p><b>02</b><span><strong>展开，发现关联</strong>“展开关联”添加邻接对象，“以此为中心”开启新视角。</span></p><p><b>03</b><span><strong>沿时间，理解变化</strong>调整底部范围后点击应用，关系只在适用时间出现。</span></p><p><b>04</b><span><strong>转动，探索空间</strong>鼠标左键旋转、右键平移、滚轮缩放；手机默认单指平移。</span></p></div><div class="reading-note">空间远近与节点大小不代表历史重要程度。列表提供同样的阅读入口。</div></div>`, '探索说明'); break;
+    case 'help': showDialog('help', `<div class="source-content"><span class="eyebrow">EXPLORER’S GUIDE</span><h2>在关联中，读懂历史</h2><div class="help-steps"><p><b>01</b><span><strong>点击，看见行动</strong>选择人物或事件，右侧阅读摘要与来源。</span></p><p><b>02</b><span><strong>顺着人物，查看行动</strong>自由探索中选择人物或事件，查看已经收录的行动与出处。</span></p><p><b>03</b><span><strong>先读懂一段故事</strong>从“白话读故事”进入，按背景、人物、经过和结果逐幕阅读。</span></p><p><b>04</b><span><strong>转动，探索空间</strong>鼠标左键旋转、右键平移、滚轮缩放；手机默认单指平移。</span></p></div><div class="reading-note">空间远近与节点大小不代表历史重要程度。列表提供同样的阅读入口。</div></div>`, '探索说明'); break;
     case 'about-data': showDialog('about-data', `<div class="source-content"><h2>从可追溯的材料出发</h2><p>当前${esc(currentTopic().title)}收录 ${currentEntities().length.toLocaleString()} 个实体与 ${currentRelations().length.toLocaleString()} 条关联，内容版本 ${esc(CONTENT_VERSION)}。</p>${state.topicId === 'shiji' ? `<p>130 卷全文与全书星图已接入。机器整理图谱有 ${shijiGraphReport.people.toLocaleString()} 个人物词条、${shijiGraphReport.events.toLocaleString()} 个事件。原文索引表示出处、提及或互见，不表示真实互动。</p><p>结构化数据：<a href="https://github.com/baojie/shiji-kb" target="_blank" rel="noopener noreferrer">鲍捷及贡献者 · 史记知识库</a>，<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0（非商业）</a>。自动整理的同名消歧、年代与因果解释仍待审校；时间轴以前的上古事件归入“时间待考”。</p><button class="primary-button" data-action="shiji-book">打开全书目录</button>` : '<p>保留赤壁编辑样本，逐条区分记载与解释。</p>'}<div class="reading-note">全书数据覆盖不代表已穷尽所有史实或完成人工审校。</div></div>`, '关于内容与来源'); break;
   }
 });
@@ -516,6 +547,9 @@ document.addEventListener('keydown', event => {
 $<HTMLDialogElement>('#dialog').addEventListener('cancel', event => { event.preventDefault(); closeDialog(); });
 $<HTMLDialogElement>('#dialog').addEventListener('click', event => { if (event.target === $('#dialog')) { const rect = $('#dialog').getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) closeDialog(); } });
 window.addEventListener('popstate', event => {
+  appMode = modeFromUrl();
+  if (appMode === 'story') { hideDialog(); storyReader?.showFromUrl(); render(); return; }
+  if (appMode === 'guide') { hideDialog(); readingGuide?.showFromUrl(); render(); return; }
   if (event.state?.nebula) { state = sanitizeState(event.state.nebula); historyIndex = event.state.index ?? 0; }
   else { state = stateFromUrl(location.href) ?? structuredClone(DEFAULT_STATE); historyIndex = 0; }
   guideSession = event.state?.guide ?? null;
@@ -536,7 +570,7 @@ function retryScene() {
   navigate({ viewMode: 'graph3d' }, { replace: true });
 }
 async function ensureScene() {
-  if (scene || sceneFailed || state.viewMode !== 'graph3d') return;
+  if (appMode !== 'explore' || scene || sceneFailed || state.viewMode !== 'graph3d') return;
   if (scenePromise) return scenePromise;
   scenePromise = (async () => {
     try {
@@ -554,12 +588,48 @@ async function ensureScene() {
 }
 window.addEventListener('pagehide', () => { getSpatial(); /* Explicit saves persist; avoid resurrecting cleared recent records here. */ });
 history.replaceState(historyEntry(), '', location.href);
+function enterExploration(patch: Partial<ExploreState> = {}) {
+  if (currentDialog) hideDialog();
+  appMode = 'explore';
+  state = sanitizeState({ ...state, expandedIds: [], fullId: null, sourceId: null, relationId: null, spatial: undefined, ...patch });
+  historyIndex++;
+  history.pushState(historyEntry(), '', shareUrl(state, location.href));
+  render();
+}
+function enterStories() {
+  if (currentDialog) hideDialog();
+  if (inFullscreen()) void exitFullscreen();
+  if (appMode !== 'story') {
+    if (appMode === 'explore') captureCurrentEntry();
+    appMode = 'story';
+    history.pushState({ story: true }, '', storyReader?.readingUrl ?? storyUrl(stories[0], 0, location.href));
+    storyReader?.showFromUrl();
+  }
+  render();
+}
+function enterGuides(volume?: number) {
+  if (currentDialog) hideDialog();
+  if (inFullscreen()) void exitFullscreen();
+  if (appMode === 'explore') captureCurrentEntry();
+  const changed = appMode !== 'guide';
+  appMode = 'guide';
+  if (volume) readingGuide?.openVolume(volume);
+  else if (changed) { history.pushState({ reading: true }, '', readingGuide?.readingUrl ?? '/'); readingGuide?.showFromUrl(); }
+  render();
+}
+storyReader = createStoryReader($('#story-root'), { onExplore: id => enterExploration({ centerId: id, selectedId: id }), onBook: (volume, block) => void openBook(volume, undefined, block) });
+readingGuide = createReadingGuide($('#reading-root'), { onStory: enterStories, onExplore: id => enterExploration({ centerId: id, selectedId: id }), onBook: (volume, block) => void openBook(volume, undefined, block) });
+if (appMode === 'story') storyReader.showFromUrl();
+if (appMode === 'guide') readingGuide.showFromUrl();
 render(); void ensureScene();
-if (new URL(location.href).search && !stateFromUrl(location.href)) toast('分享对象不存在或链接已失效，已打开默认专题。');
+if (new URL(location.href).search && !['story', 'reading', 'route'].some(key => new URL(location.href).searchParams.has(key)) && !stateFromUrl(location.href)) toast('分享对象不存在或链接已失效，已打开全书导读。');
 const initialBookLocation = parseBookLocation(location.hash);
 if (initialBookLocation) void openBook(initialBookLocation.volume, undefined, initialBookLocation.block);
 // Open a book link reached with browser Back/Forward before the reader module was loaded.
 window.addEventListener('hashchange', () => {
   const next = parseBookLocation(location.hash);
-  if (next && !document.querySelector('.book-dialog')) void openBook(next.volume, undefined, next.block);
+  if (next) {
+    scene?.setActive(false); storyReader?.setActive(false);
+    if (!document.querySelector('.book-dialog')) void openBook(next.volume, undefined, next.block);
+  }
 });

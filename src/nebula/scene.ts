@@ -440,7 +440,7 @@ export function createNebulaScene(container: HTMLElement, options: SceneOptions)
         labels.set(node.id, label);
         labelsLayer.append(label);
       }
-      label.querySelector('small')!.textContent = context ? '上下文' : isCenter ? '当前探索中心' : node.kind === 'event' ? '历史事件' : node.role.slice(0, 9);
+      label.querySelector('small')!.textContent = context ? '上下文' : isCenter ? options.centerLabel ?? '当前探索中心' : node.kind === 'event' ? '历史事件' : node.role.slice(0, 9);
       label.dataset.selected = String(selected);
       label.dataset.center = String(isCenter);
       label.dataset.context = String(context);

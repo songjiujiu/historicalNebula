@@ -13,6 +13,7 @@
 .book-categories { display: flex; flex-wrap: wrap; gap: 5px; margin: 14px 0; }
 .book-categories button { padding: 6px 8px; border: 1px solid #35405a; border-radius: 5px; color: #abb6cb; font-size: 11px; }
 .book-categories button.active { border-color: #9f8a52; color: #e2cf9f; background: #42382566; }
+.book-category-hint { margin: -5px 0 15px; color: #99a9c1; font-size: 11px; line-height: 1.7; }
 .book-library-actions { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 13px; font-size: 11px; color: #a9bad7; }
 #book-catalog { overflow-y: auto; min-height: 0; flex: 1; }
 .book-chapter { width: 100%; display: flex; gap: 9px; align-items: center; text-align: left; padding: 11px 8px; border-radius: 6px; }
@@ -35,6 +36,34 @@
 .book-featured button:hover { border-color: #af9865; }
 .book-featured small, .book-featured span { color: #9baac2; font-size: 11px; }
 .book-featured strong { color: #e0d3b5; font-family: serif; font-size: 18px; }
+.book-featured span { line-height: 1.8; }
+.book-featured b { margin-top: auto; color: #c7b481; font-size: 11px; font-weight: 400; }
+.book-reading-route { margin-top: 32px; }
+.book-reading-route h3, .book-format-guide h3 { font-size: 17px; color: #dfd8c7; }
+.book-reading-route > p { font-size: 13px; color: #a6b2c9; line-height: 1.9; }
+.book-reading-route .book-featured { margin-top: 18px; }
+.book-format-guide { margin-top: 36px; }
+.book-format-guide dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.book-format-guide dl > div { padding: 14px; border: 1px solid #313b50; border-radius: 8px; }
+.book-format-guide dt { color: #d7c596; font-size: 14px; }
+.book-format-guide dt small { margin-left: 12px; color: #8f9eb8; font-size: 11px; }
+.book-format-guide dd { margin: 7px 0 0; color: #a6b2c9; font-size: 12px; line-height: 1.8; }
+.book-intro { margin: 24px 0; padding: 24px; border: 1px solid #455066; border-radius: 10px; background: #1c2534; }
+.book-intro h3 { margin: 12px 0; color: #e4d7b7; font: 21px/1.6 'Noto Serif SC', 'Songti SC', serif; }
+.book-intro p { color: #bdc9dc; font-size: 14px; line-height: 1.95; }
+.book-intro p strong { color: #d5c493; }
+.book-intro .book-intro-note { padding-left: 13px; border-left: 2px solid #aa9663; color: #d8caa8; }
+.book-intro .book-intro-boundary { margin-bottom: 0; font-size: 11px; color: #98a9c3; }
+.book-format { border-top: 1px solid #39465c; margin-top: 17px; padding-top: 14px; }
+.book-format summary { cursor: pointer; color: #c6bd9e; font-size: 12px; line-height: 1.8; }
+.book-format p { font-size: 12px; }
+.book-related-disclosure { margin: 18px 0 30px; border-block: 1px solid #2f384d; padding: 15px 0; }
+.book-related-disclosure > summary { cursor: pointer; color: #adbdd5; font-size: 12px; line-height: 1.8; }
+.book-related-disclosure > summary span { color: #8494ac; margin-left: 8px; }
+.book-related-disclosure > p { font-size: 11px; line-height: 1.9; color: #95a4ba; }
+.book-related-disclosure .book-related { margin: 0; padding-bottom: 0; border: 0; }
+.book-next-reading { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin: 28px 0; padding: 20px; border: 1px solid #3d495d; border-radius: 8px; }
+.book-next-reading > span { color: #acbad1; font-size: 12px; }
 .book-provenance { border-top: 1px solid #333b4c; padding-top: 16px; margin-top: 28px; color: #8c9ab3; font-size: 11px; line-height: 1.9; }
 .book-provenance a { color: #c4b88e; text-decoration: underline; }
 .book-muted, .book-subtitle { color: #8c9ab3; font-size: 11px; line-height: 1.8; }
@@ -78,6 +107,7 @@
   .book-sidebar label, .book-edition { display: none; }
   .book-categories { margin: 8px 0; flex-wrap: nowrap; gap: 4px; }
   .book-categories button { padding: 6px; font-size: 10px; white-space: nowrap; }
+  .book-category-hint { margin: 0 0 8px; font-size: 10px; }
   .book-library-actions { margin-bottom: 6px; }
   #book-catalog { display: flex; overflow-x: auto; flex: auto; max-height: 43px; }
   .book-chapter { flex: 0 0 auto; width: auto; padding: 8px; }.book-chapter small { display: none; }
@@ -87,4 +117,6 @@
   .book-stats { gap: 30px; }.book-stats b { font-size: 28px; }.book-block-content { font-size: 17px; }
   .book-reading-tools { gap: 6px; }.book-reading-tools button { padding: 8px; font-size: 10px; }
   .book-block { padding-inline: 4px; }
+  .book-intro { padding: 18px; }.book-intro h3 { font-size: 19px; }
+  .book-format-guide dl { grid-template-columns: 1fr; }
 }
