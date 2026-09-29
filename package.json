@@ -9,7 +9,11 @@
     "preview": "vite preview --host 127.0.0.1",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "import:shiji": "node scripts/import-shiji.mjs && node scripts/import-shiji-graph.mjs"
+    "import:shiji": "node scripts/import-shiji.mjs && node scripts/import-shiji-graph.mjs",
+    "fetch:dynastic": "node scripts/fetch-dynastic-histories.mjs",
+    "fetch:dynastic:short": "node scripts/fetch-dynastic-short-volumes.mjs",
+    "import:dynastic": "node scripts/import-dynastic-histories.mjs",
+    "verify:dynastic": "node scripts/verify-dynastic-histories.mjs"
   },
   "dependencies": {
     "opencc-js": "^1.4.2",

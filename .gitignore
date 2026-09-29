@@ -6,3 +6,4 @@ coverage/
 .env
 .env.local
 artifacts/
+data/dynastic-histories/source/

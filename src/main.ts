@@ -27,8 +27,9 @@ try {
 } catch { /* A blocked or corrupt storage never prevents browsing. */ }
 
 let state: ExploreState = stateFromUrl(location.href) ?? { ...DEFAULT_STATE, categories: [...DEFAULT_STATE.categories], expandedIds: [] };
-function modeFromUrl(): 'guide' | 'story' | 'explore' {
+function modeFromUrl(): 'guide' | 'story' | 'explore' | 'library' {
   const params = new URL(location.href).searchParams;
+  if (params.has('library')) return 'library';
   if (params.has('story')) return 'story';
   if (params.has('reading') || params.has('route')) return 'guide';
   return stateFromUrl(location.href) ? 'explore' : 'guide';
@@ -36,6 +37,19 @@ function modeFromUrl(): 'guide' | 'story' | 'explore' {
 let appMode = modeFromUrl();
 let storyReader: ReturnType<typeof createStoryReader> | null = null;
 let readingGuide: ReturnType<typeof createReadingGuide> | null = null;
+let dynasticLibrary: ReturnType<typeof import('./ui/dynastic-library').createDynasticLibrary> | null = null;
+let dynasticLoading = false;
+async function ensureDynasticLibrary() {
+  if (dynasticLibrary) { dynasticLibrary.showFromUrl(); return; }
+  if (dynasticLoading) return;
+  dynasticLoading = true;
+  try {
+    const { createDynasticLibrary } = await import('./ui/dynastic-library');
+    dynasticLibrary = createDynasticLibrary(document.querySelector<HTMLElement>('#dynastic-root')!, { onShiji: () => void openBook() });
+    if (appMode === 'library') dynasticLibrary.showFromUrl();
+  } catch { toast('二十四史目录加载失败，请刷新重试。'); }
+  finally { dynasticLoading = false; }
+}
 if (!new URL(location.href).searchParams.has('view') && matchMedia('(max-width: 760px)').matches) state.viewMode = 'list';
 let scene: SceneController | null = null;
 let sceneFailed = false;
@@ -86,12 +100,13 @@ const categories: Record<RelationCategory, { label: string; description: string;
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <header class="app-header">
     <a class="brand" href="/" aria-label="历史星云首页"><span class="brand-mark">${icon('star')}</span><span>历史星云<small>HISTORICAL NEBULA</small></span></a>
-    <nav class="main-nav" aria-label="主导航"><button class="nav-item" data-action="reading-guides">全书导读</button><button class="nav-item" data-action="stories">白话故事</button><button class="nav-item" data-action="explore">自由星图</button><button class="nav-item" data-action="shiji-book">史记原文</button></nav>
+    <nav class="main-nav" aria-label="主导航"><button class="nav-item" data-action="reading-guides">史记导读</button><button class="nav-item" data-action="stories">白话故事</button><button class="nav-item" data-action="explore">史记星图</button><button class="nav-item" data-action="shiji-book">史记原文</button><button class="nav-item" data-action="dynastic-library">二十四史</button></nav>
     <button class="search-trigger" data-action="search" aria-label="搜索人物、事件、别名">${icon('search')}<span>搜索人物、事件、别名</span><kbd>Ctrl K</kbd></button>
     <button class="icon-button help-button" data-action="help" aria-label="探索说明">${icon('info')}</button>
   </header>
   <div id="story-root"></div>
   <div id="reading-root"></div>
+  <div id="dynastic-root"></div>
   <div class="workspace">
     <aside class="sidebar" id="sidebar" aria-label="史记全书">
       <div class="sidebar-heading"><span>史记全书</span><span class="tiny-label">SHIJI</span></div>
@@ -112,7 +127,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </main>
     <aside id="inspector" class="inspector" aria-label="当前对象详情"></aside>
   </div>
-  <footer class="app-footer"><span>${icon('star')}《史记》130 卷，沿原文探索人物与事件。</span><span>机器整理 · 待审校<button data-action="about-data">关于数据 ${icon('info')}</button></span></footer>
+  <footer class="app-footer"><span>${icon('star')}二十四史 3,213 卷可阅读卷次，少数历法表缺录。</span><span>机器整理 · 待审校<button data-action="about-data">关于数据 ${icon('info')}</button></span></footer>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <dialog id="dialog" class="app-dialog" aria-label="探索面板"></dialog>
 `;
@@ -274,10 +289,15 @@ function openRelation(id: string) {
 function render() {
   $('#story-root').classList.toggle('hidden', appMode !== 'story');
   $('#reading-root').classList.toggle('hidden', appMode !== 'guide');
+  $('#dynastic-root').classList.toggle('hidden', appMode !== 'library');
   $('.workspace').classList.toggle('hidden', appMode !== 'explore');
   document.querySelector('[data-action="stories"]')?.classList.toggle('active', appMode === 'story');
   document.querySelector('[data-action="reading-guides"]')?.classList.toggle('active', appMode === 'guide');
   document.querySelector('[data-action="explore"]')?.classList.toggle('active', appMode === 'explore');
+  document.querySelector('[data-action="dynastic-library"]')?.classList.toggle('active', appMode === 'library');
+  $('.search-trigger').classList.toggle('hidden', appMode === 'library');
+  $('.help-button').classList.toggle('hidden', appMode === 'library');
+  if (appMode === 'library') { scene?.setActive(false); storyReader?.setActive(false); void ensureDynasticLibrary(); return; }
   if (appMode === 'story') { scene?.setActive(false); storyReader?.setActive(!currentDialog && !parseBookLocation(location.hash) && !document.querySelector('.book-dialog[open]')); return; }
   if (appMode === 'guide') { scene?.setActive(false); storyReader?.setActive(false); return; }
   storyReader?.setActive(false);
@@ -477,6 +497,7 @@ document.addEventListener('click', event => {
   if (target.dataset.restore) { const saved = records.saves.find(s => s.id === target.dataset.restore); if (saved) { hideDialog(); restore(saved.state); toast('已恢复保存的探索视图。'); } return; }
   if (target.dataset.deleteSave) { const removed = records.saves.find(s => s.id === target.dataset.deleteSave); if (removed && writeRecords({ ...records, saves: records.saves.filter(s => s.id !== removed.id) })) { openLibrary(); toast('已删除保存的视图。', () => { if (writeRecords({ ...records, saves: [removed, ...records.saves] })) { openLibrary(); toast('保存的视图已恢复。'); } }); } return; }
   switch (target.dataset.action) {
+    case 'dynastic-library': enterDynasticLibrary(); break;
     case 'shiji-book': void openBook(); break;
     case 'book-search': void openBook(undefined, document.querySelector<HTMLInputElement>('#search-input')?.value ?? ''); break;
     case 'fullscreen': void toggleFullscreen(); break;
@@ -523,7 +544,7 @@ document.addEventListener('click', event => {
     case 'reset-graph': hideDialog(); navigate({ expandedIds: [], selectedId: state.centerId, relationId: null }, { resetLayout: true }); break;
     case 'select-share': $<HTMLInputElement>('.share-input').select(); break;
     case 'help': showDialog('help', `<div class="source-content"><span class="eyebrow">EXPLORER’S GUIDE</span><h2>在关联中，读懂历史</h2><div class="help-steps"><p><b>01</b><span><strong>点击，看见行动</strong>选择人物或事件，右侧阅读摘要与来源。</span></p><p><b>02</b><span><strong>顺着人物，查看行动</strong>自由探索中选择人物或事件，查看已经收录的行动与出处。</span></p><p><b>03</b><span><strong>先读懂一段故事</strong>从“白话读故事”进入，按背景、人物、经过和结果逐幕阅读。</span></p><p><b>04</b><span><strong>转动，探索空间</strong>鼠标左键旋转、右键平移、滚轮缩放；手机默认单指平移。</span></p></div><div class="reading-note">空间远近与节点大小不代表历史重要程度。列表提供同样的阅读入口。</div></div>`, '探索说明'); break;
-    case 'about-data': showDialog('about-data', `<div class="source-content"><h2>从可追溯的材料出发</h2><p>当前${esc(currentTopic().title)}收录 ${currentEntities().length.toLocaleString()} 个实体与 ${currentRelations().length.toLocaleString()} 条关联，内容版本 ${esc(CONTENT_VERSION)}。</p>${state.topicId === 'shiji' ? `<p>130 卷全文与全书星图已接入。机器整理图谱有 ${shijiGraphReport.people.toLocaleString()} 个人物词条、${shijiGraphReport.events.toLocaleString()} 个事件。原文索引表示出处、提及或互见，不表示真实互动。</p><p>结构化数据：<a href="https://github.com/baojie/shiji-kb" target="_blank" rel="noopener noreferrer">鲍捷及贡献者 · 史记知识库</a>，<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0（非商业）</a>。自动整理的同名消歧、年代与因果解释仍待审校；时间轴以前的上古事件归入“时间待考”。</p><button class="primary-button" data-action="shiji-book">打开全书目录</button>` : '<p>保留赤壁编辑样本，逐条区分记载与解释。</p>'}<div class="reading-note">全书数据覆盖不代表已穷尽所有史实或完成人工审校。</div></div>`, '关于内容与来源'); break;
+    case 'about-data': showDialog('about-data', `<div class="source-content"><h2>从可追溯的材料出发</h2><p>《史记》130 卷已有入门导读和人物事件星图：${shijiGraphReport.people.toLocaleString()} 个人物词条、${shijiGraphReport.events.toLocaleString()} 个事件。图谱的原文索引表示出处或提及，不表示人物真实互动。</p><p>另接入《汉书》至《明史》23 部、3,083 卷的转录、卷目、书级导读与本书检索。主要来源是 <a href="https://osf.io/tp729/" target="_blank" rel="noopener noreferrer">Zinin 与 Xu 的二十四史语料</a>；部分短卷与宗室世系表参考维基文库、gujilab 和 hunterhug。至少 12 卷历法表格缺录，阅读页已标示。</p><p>新增史书尚未制作经审校的全量人物事件关系星图。史记结构化数据来自 <a href="https://github.com/baojie/shiji-kb" target="_blank" rel="noopener noreferrer">鲍捷及贡献者的史记知识库</a>，采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-SA 4.0 非商业许可</a>。机器整理的卷名、年代与关系仍需审校。</p><div class="detail-actions"><button class="primary-button" data-action="dynastic-library">二十四史目录</button><button class="secondary-button" data-action="shiji-book">史记原文</button></div><div class="reading-note">卷次覆盖不等于逐字完整或穷尽全部史实。</div></div>`, '关于内容与来源'); break;
   }
 });
 
@@ -542,12 +563,13 @@ document.addEventListener('change', event => {
 });
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape' && inFullscreen() && !$<HTMLDialogElement>('#dialog').open) { event.preventDefault(); void exitFullscreen(); }
-  if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); openSearch(); }
+  if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); if (appMode === 'library') document.querySelector<HTMLInputElement>('#dynastic-root [data-library-search], #dynastic-root [data-library-filter]')?.focus(); else openSearch(); }
 });
 $<HTMLDialogElement>('#dialog').addEventListener('cancel', event => { event.preventDefault(); closeDialog(); });
 $<HTMLDialogElement>('#dialog').addEventListener('click', event => { if (event.target === $('#dialog')) { const rect = $('#dialog').getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) closeDialog(); } });
 window.addEventListener('popstate', event => {
   appMode = modeFromUrl();
+  if (appMode === 'library') { hideDialog(); render(); return; }
   if (appMode === 'story') { hideDialog(); storyReader?.showFromUrl(); render(); return; }
   if (appMode === 'guide') { hideDialog(); readingGuide?.showFromUrl(); render(); return; }
   if (event.state?.nebula) { state = sanitizeState(event.state.nebula); historyIndex = event.state.index ?? 0; }
@@ -596,6 +618,17 @@ function enterExploration(patch: Partial<ExploreState> = {}) {
   history.pushState(historyEntry(), '', shareUrl(state, location.href));
   render();
 }
+function enterDynasticLibrary() {
+  if (currentDialog) hideDialog();
+  if (inFullscreen()) void exitFullscreen();
+  if (appMode === 'explore') captureCurrentEntry();
+  if (appMode !== 'library') {
+    appMode = 'library';
+    const url = new URL(location.href); url.search = '?library='; url.hash = '';
+    history.pushState({ dynastic: true }, '', url);
+  }
+  render();
+}
 function enterStories() {
   if (currentDialog) hideDialog();
   if (inFullscreen()) void exitFullscreen();
@@ -622,7 +655,7 @@ readingGuide = createReadingGuide($('#reading-root'), { onStory: enterStories, o
 if (appMode === 'story') storyReader.showFromUrl();
 if (appMode === 'guide') readingGuide.showFromUrl();
 render(); void ensureScene();
-if (new URL(location.href).search && !['story', 'reading', 'route'].some(key => new URL(location.href).searchParams.has(key)) && !stateFromUrl(location.href)) toast('分享对象不存在或链接已失效，已打开全书导读。');
+if (new URL(location.href).search && !['story', 'reading', 'route', 'library'].some(key => new URL(location.href).searchParams.has(key)) && !stateFromUrl(location.href)) toast('分享对象不存在或链接已失效，已打开全书导读。');
 const initialBookLocation = parseBookLocation(location.hash);
 if (initialBookLocation) void openBook(initialBookLocation.volume, undefined, initialBookLocation.block);
 // Open a book link reached with browser Back/Forward before the reader module was loaded.

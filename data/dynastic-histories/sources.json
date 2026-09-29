@@ -1,0 +1,163 @@
+[
+  {
+    "id": "hanshu",
+    "file": "02_hanshu_full.txt",
+    "url": "https://osf.io/download/e65vn/",
+    "bytes": 2832419,
+    "sha256": "4fd2c97ce5c7e6a94c46741897fca72bb84a7e4748096c6d0ab60c392061fd44"
+  },
+  {
+    "id": "houhanshu",
+    "file": "03_houhanshu_full.txt",
+    "url": "https://osf.io/download/65ugj/",
+    "bytes": 2529364,
+    "sha256": "f4a174cd85dad3124813299c8c3216de4b27d33dbc12a71180eebf7c90e5e35f"
+  },
+  {
+    "id": "sanguozhi",
+    "file": "04_sanguozhi_full.txt",
+    "url": "https://osf.io/download/huc54/",
+    "bytes": 1400820,
+    "sha256": "ca6885accbadbe4da4e09428ad2410a8b6f1cebb88f833827b121f62b222ec07"
+  },
+  {
+    "id": "jinshu",
+    "file": "05_jinshu_full.txt",
+    "url": "https://osf.io/download/3bf7x/",
+    "bytes": 4198770,
+    "sha256": "c1ca877376a1b7643143ff1d259e5f0995f0edb9d9a1127c35588900b11493e9"
+  },
+  {
+    "id": "songshu",
+    "file": "06_songshu_full.txt",
+    "url": "https://osf.io/download/78qdc/",
+    "bytes": 2921491,
+    "sha256": "b4acf83becaa9e2f89eeb6a6a82df1d806466e1d384742d918fb68ea4652b024"
+  },
+  {
+    "id": "nanqi",
+    "file": "07_nanqi_full.txt",
+    "url": "https://osf.io/download/xu3be/",
+    "bytes": 1086662,
+    "sha256": "4b1c6d154e890d531b99e9934f383bb6d223b094760e3bbfd7d32feba6feea28"
+  },
+  {
+    "id": "liangshu",
+    "file": "08_liangshu_full.txt",
+    "url": "https://osf.io/download/cthze/",
+    "bytes": 1072615,
+    "sha256": "28a664b427b23805bb4e51e10f7bf7e2a9027d3c5f15430a83e2ebd3f4df48ff"
+  },
+  {
+    "id": "chenshu",
+    "file": "09_chenshu_full.txt",
+    "url": "https://osf.io/download/6kgdz/",
+    "bytes": 591012,
+    "sha256": "7baba2a4466c1a13b00b73c27d262b395dac34b9fd8998d40fe67847c041b293"
+  },
+  {
+    "id": "weishu",
+    "file": "10_weishu_full.txt",
+    "url": "https://osf.io/download/tmx4g/",
+    "bytes": 3516351,
+    "sha256": "1c3db4d52d193a4383aa9d1f09bf10f82d7cd493f93b4d3f4c521341a11efb29"
+  },
+  {
+    "id": "beiqishi",
+    "file": "11_beiqishi_full.txt",
+    "url": "https://osf.io/download/kyrxg/",
+    "bytes": 778272,
+    "sha256": "0ae6fbf85f50f8eaaf141adcc60ea9130d9c6c8a3818051757ad2fd16e38e404"
+  },
+  {
+    "id": "zhoushu",
+    "file": "12_zhoushu_full.txt",
+    "url": "https://osf.io/download/dzfqu/",
+    "bytes": 949181,
+    "sha256": "d515f44cb88dee89a3086ff4d53215464ce3b63fcda65dccb500c5971a6044c7"
+  },
+  {
+    "id": "suishu",
+    "file": "13_suishu_full.txt",
+    "url": "https://osf.io/download/3g5x4/",
+    "bytes": 2577208,
+    "sha256": "e7c2d37705d0fd561ae696fe38d83d7d5a135e8f899a6f08dec4573a34188fa7"
+  },
+  {
+    "id": "nanshi",
+    "file": "14_nanshi_full.txt",
+    "url": "https://osf.io/download/aqs3f/",
+    "bytes": 2457396,
+    "sha256": "776d3b4ce114e96c1eaa2aa746aa1627585a0091c224d9d3535ec98294963261"
+  },
+  {
+    "id": "beishi",
+    "file": "15_beishi_full.txt",
+    "url": "https://osf.io/download/u9cm5/",
+    "bytes": 4039865,
+    "sha256": "0919448ecaebb41d54abb49f4bdf8e738650ab0290bcb037ee850a912f58c09f"
+  },
+  {
+    "id": "jiutangshu",
+    "file": "16_jiutangshu_full.txt",
+    "url": "https://osf.io/download/24aey/",
+    "bytes": 7174822,
+    "sha256": "ce88fba40371249572217001e7a9f8d8418caf88f25628e6ae42abd58866f394"
+  },
+  {
+    "id": "xintangshi",
+    "file": "17_xintangshi_full.txt",
+    "url": "https://osf.io/download/ym96b/",
+    "bytes": 6583985,
+    "sha256": "b5f72ec675f329f96de358a542bb7b9575d8f86d124cad76c00bb57845a2105f"
+  },
+  {
+    "id": "jiuwudaishi",
+    "file": "18_jiuwudaishi_full.txt",
+    "url": "https://osf.io/download/e8txg/",
+    "bytes": 2165294,
+    "sha256": "991868eed3a1bdb42140581487e4a0bc7a3de182a2d526a0a451d818e7ab7cd0"
+  },
+  {
+    "id": "xinwudaishi",
+    "file": "19_xinwudaishi_full.txt",
+    "url": "https://osf.io/download/6my4b/",
+    "bytes": 1053109,
+    "sha256": "1703eae10aa809be8e69720299556250612484b9b6280e1e9f0d71cb7a6f95d9"
+  },
+  {
+    "id": "songshi",
+    "file": "20_songshi_full.txt",
+    "url": "https://osf.io/download/7xb6t/",
+    "bytes": 14606873,
+    "sha256": "f7ed352a69861b2029c99f8b5e257cfb54c407b87802ec74915c55b7a981fe15"
+  },
+  {
+    "id": "liaoshi",
+    "file": "21_liaoshi_full.txt",
+    "url": "https://osf.io/download/achpg/",
+    "bytes": 1096825,
+    "sha256": "74ee013b4cc8b243f5230f32d6542ce6ea9524511fd60ef3a963597264469901"
+  },
+  {
+    "id": "jinshi",
+    "file": "22_jinshi_full.txt",
+    "url": "https://osf.io/download/3z7gt/",
+    "bytes": 3403129,
+    "sha256": "9080ad975b8a2ad31954a7f1393f2eab4fae083acade99362e1343bcdf6bb24e"
+  },
+  {
+    "id": "yuanshi",
+    "file": "23_yuanshi_full.txt",
+    "url": "https://osf.io/download/98s3m/",
+    "bytes": 5754030,
+    "sha256": "5977251c6af890525efddb9fb660d6db7bfed1af0bc6d1967fbbcb104a2c93a1"
+  },
+  {
+    "id": "mingshi",
+    "file": "24_mingshi_full.txt",
+    "url": "https://osf.io/download/mga8w/",
+    "bytes": 10249672,
+    "sha256": "bf8631336ac8e3593aab1ca89c0561f4330a8019e602488f79d49b11099ffb2f"
+  }
+]

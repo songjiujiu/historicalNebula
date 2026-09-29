@@ -1,0 +1,100 @@
+@import './shiji-reader.css';
+
+#dynastic-root { min-height: calc(100dvh - var(--header) - 32px); background: #0e1420; }
+.dynasty-shell { max-width: 1540px; margin: auto; padding: 34px 34px 60px; }
+.dynasty-top { display: flex; justify-content: space-between; gap: 24px; align-items: end; padding: 0 0 26px; border-bottom: 1px solid #2a3444; }
+.dynasty-top h1 { margin: 9px 0 8px; color: #f0e5ce; font: 500 32px/1.5 'Noto Serif SC', SimSun, serif; }
+.dynasty-top p { margin: 0; color: #9faec3; font-size: 13px; line-height: 1.8; }
+.dynasty-top-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.dynasty-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+.dynasty-layout:has(.dynasty-side) { grid-template-columns: 264px minmax(0, 1fr); }
+.dynasty-main { min-width: 0; }
+.dynasty-status { min-height: 30px; padding-top: 9px; color: #8d9db3; font-size: 11px; }
+.dynasty-welcome { display: flex; justify-content: space-between; gap: 32px; margin: 12px 0 36px; padding: 30px; border: 1px solid #3a4658; border-radius: 12px; background: radial-gradient(ellipse at 80% 20%, #2b44504f, transparent 60%), linear-gradient(135deg,#1c2938,#121a27); }
+.dynasty-welcome h2 { font: 500 27px/1.5 'Noto Serif SC', SimSun, serif; color: #e9dcc2; margin: 10px 0; }
+.dynasty-welcome p { max-width: 700px; line-height: 1.95; color: #b5c1d1; font-size: 14px; }
+.dynasty-welcome .primary-button { margin-top: 12px; }
+.dynasty-welcome-stats { min-width: 145px; display: grid; align-content: center; gap: 2px; text-align: center; color: #9baabf; font-size: 11px; }
+.dynasty-welcome-stats b { color: #d2ba87; font: 30px/1.5 Georgia,serif; }
+.dynasty-route { margin-bottom: 44px; }
+.dynasty-route h2,.dynasty-catalog-heading h2 { font-size: 19px; font-weight: 500; color: #e2dfd7; margin-bottom: 17px; }
+.dynasty-route ol { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; list-style: none; margin: 0; padding: 0; }
+.dynasty-route li { display: flex; gap: 11px; padding: 18px 15px; border: 1px solid #304056; border-radius: 9px; background: #131e2b; min-width: 0; }
+.dynasty-route li>span { flex: 0 0 23px; display: grid; place-items: center; width: 23px; height: 23px; border-radius: 50%; background: #675e41; color: #f4e2b9; font: 13px Georgia,serif; }
+.dynasty-route strong { color: #e2cfaa; font-size: 13px; font-weight: 500; }
+.dynasty-route p { color: #9eaec3; font-size: 11px; line-height: 1.8; margin: 8px 0 12px; }
+.dynasty-route li div div { display: flex; flex-wrap: wrap; gap: 5px; }
+.dynasty-route li div div button { padding: 4px 6px; color: #b9c8e0; border: 1px solid #40516b; border-radius: 4px; font-size: 10px; }
+.dynasty-route li div div button:hover,.dynasty-neighbors button:hover { border-color: #c5ac75; color: #efddba; }
+.dynasty-catalog-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
+.dynasty-catalog-heading label { color: #9aaac0; font-size: 11px; }
+.dynasty-catalog-heading input { display: block; margin-top: 5px; padding: 9px 12px; color: #e5e8ef; background: #192331; border: 1px solid #3d4b60; border-radius: 6px; min-width: 220px; }
+.dynasty-era { margin: 0 0 34px; }
+.dynasty-era-heading { display: flex; gap: 14px; align-items: center; border-bottom: 1px solid #2b3849; margin-bottom: 14px; padding-bottom: 9px; }
+.dynasty-era-heading>span { color: #c2a875; font: 23px Georgia,serif; }
+.dynasty-era-heading h2 { color: #e2dccf; font-size: 17px; margin: 0; font-weight: 500; }
+.dynasty-era-heading p { color: #91a2b7; font-size: 11px; margin: 3px 0; }
+.dynasty-book-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 10px; }
+.dynasty-book-card { display: flex; flex-direction: column; min-height: 166px; padding: 18px; text-align: left; border: 1px solid #344155; border-radius: 8px; background: #15202e; }
+.dynasty-book-card:hover { border-color: #b59b6b; background: #1c2939; }
+.dynasty-book-card>span { color: #849ab7; font-size: 10px; }
+.dynasty-book-card strong { margin: 6px 0; color: #e6d7ba; font: 500 18px/1.4 'Noto Serif SC', SimSun, serif; }
+.dynasty-book-card p { color: #aab8ca; font-size: 11px; line-height: 1.8; margin: 0; }
+.dynasty-book-card small { color: #c5ae7f; margin-top: auto; padding-top: 10px; font-size: 10px; }
+.dynasty-disclaimer { margin: 30px 0; color: #8c9db4; font-size: 11px; line-height: 1.9; }
+.dynasty-side { position: sticky; top: 14px; align-self: start; display: flex; flex-direction: column; height: min(820px, calc(100dvh - var(--header) - 30px)); min-height: 500px; padding: 17px 12px; border: 1px solid #303c4e; border-radius: 10px; background: #111a27; }
+.dynasty-side-head { padding: 0 5px 12px; border-bottom: 1px solid #2c394c; }
+.dynasty-side-head button { color: #9bacc6; font-size: 11px; }
+.dynasty-side-head h2 { color: #e9d9b9; font: 500 21px 'Noto Serif SC',SimSun,serif; margin: 12px 0 5px; }
+.dynasty-side-head p { color: #8b9eb8; font-size: 11px; margin: 0; }
+.dynasty-search-label { display: block; padding: 14px 5px 8px; color: #a8b9cc; font-size: 11px; }
+.dynasty-search { display: flex; margin-top: 7px; border: 1px solid #40506a; border-radius: 5px; }
+.dynasty-search input { width: 100%; min-width: 0; border: 0; background: none; color: #e4e7ed; padding: 9px 7px; font-size: 12px; }
+.dynasty-search button { padding: 0 8px; color: #d9c392; font-size: 11px; }
+.dynasty-side-actions,.dynasty-catalog-pages { display: flex; justify-content: space-between; gap: 7px; padding: 10px 5px; font-size: 11px; color: #91a3ba; }
+.dynasty-side-actions button,.dynasty-catalog-pages button { color: #b8c9df; }
+.dynasty-catalog-pages { border-block: 1px solid #2e3b4c; }
+.dynasty-catalog-pages button:disabled { opacity: .35; }
+.dynasty-volume-list { overflow-y: auto; min-height: 0; }
+.dynasty-volume { display: flex; align-items: center; gap: 7px; width: 100%; min-width: 0; padding: 9px 7px; text-align: left; border-radius: 5px; }
+.dynasty-volume:hover,.dynasty-volume.active { background: #29354a; }
+.dynasty-volume span { color: #8e9fb7; font-size: 10px; white-space: nowrap; }
+.dynasty-volume strong { color: #ccd5e0; font-size: 11px; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dynasty-volume small { margin-left: auto; color: #7f8da3; font-size: 9px; white-space: nowrap; }
+.dynasty-preface { padding: 10px; color: #c7b28a; font-size: 11px; }
+.dynasty-book-intro,.dynasty-reader,.dynasty-results { max-width: 900px; margin: 8px auto 0; }
+.dynasty-book-intro h2,.dynasty-results h2 { color: #e7dac0; font: 500 30px/1.6 'Noto Serif SC',SimSun,serif; margin: 10px 0; }
+.dynasty-book-intro h3 { color: #dccca9; font-size: 16px; font-weight: 500; margin: 34px 0 7px; }
+.dynasty-book-intro p,.dynasty-results p { color: #aebed0; font-size: 13px; line-height: 1.95; }
+.dynasty-book-intro .dynasty-lead { font-size: 16px; color: #d1d7dd; }
+.dynasty-question { margin: 25px 0; padding: 22px; border: 1px solid #4b5360; border-radius: 9px; background: #1b2837; }
+.dynasty-question strong { color: #dfc99d; }
+.dynasty-question p { margin: 8px 0 17px; }
+.dynasty-genre-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; margin: 16px 0 23px; }
+.dynasty-genre-grid>div { border: 1px solid #34455a; border-radius: 7px; background: #152131; padding: 13px; }
+.dynasty-genre-grid strong { display: block; color: #d8c395; font-size: 12px; font-weight: 500; }
+.dynasty-genre-grid span { display: block; margin-top: 5px; color: #9caec5; font-size: 11px; line-height: 1.7; }
+.dynasty-intro-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 3px 8px; }
+.dynasty-neighbors { display: flex; gap: 8px; flex-wrap: wrap; }
+.dynasty-neighbors button { padding: 12px 16px; color: #d3c39e; border: 1px solid #46546a; border-radius: 7px; text-align: left; }
+.dynasty-neighbors span { display: block; color: #8fa1b8; font-size: 10px; margin-top: 4px; }
+.dynasty-breadcrumb { display: flex; gap: 10px; color: #889ab3; font-size: 11px; margin-bottom: 24px; }
+.dynasty-breadcrumb button { color: #c1b188; }
+.dynasty-reader-heading { border-bottom: 1px solid #344155; padding-bottom: 20px; }
+.dynasty-reader-heading h2 { color: #e8d9b9; font: 500 34px/1.5 'Noto Serif SC', SimSun, serif; margin: 9px 0; }
+.dynasty-reader-heading p { color: #90a0b5; font-size: 11px; }
+.dynasty-reading-note { margin: 25px 0; padding: 23px; background: #1b2838; border: 1px solid #45546b; border-radius: 9px; }
+.dynasty-reading-note h3 { color: #e6d4aa; font: 500 21px/1.6 'Noto Serif SC',SimSun,serif; margin: 9px 0; }
+.dynasty-reading-note p { color: #c0cbda; line-height: 1.95; font-size: 14px; }
+.dynasty-reading-note strong { color: #dfca9f; }
+.dynasty-reading-note .dynasty-incomplete { border-left: 3px solid #d5a969; padding-left: 12px; color: #f0ce9e; }
+.dynasty-reading-note small { color: #91a4bd; line-height: 1.8; }
+.dynasty-reading-actions { display: flex; justify-content: space-between; margin: 24px 0 20px; }
+.dynasty-reading-actions button { padding: 7px 10px; border: 1px solid #41516a; border-radius: 5px; color: #c7d3e4; font-size: 11px; }
+.dynasty-reader .book-block { scroll-margin-top: 22px; }
+.dynasty-results .book-hit { width: 100%; }
+.dynasty-loading,.dynasty-error { padding: 50px 14px; color: #a4b4ca; font-size: 13px; }
+.dynasty-error button { margin-top: 15px; }
+#dynastic-root button:focus-visible,#dynastic-root a:focus-visible { outline: 2px solid #c5a96c; outline-offset: 2px; }
+@media(max-width:1100px) { .dynasty-route ol { grid-template-columns: repeat(2,minmax(0,1fr)); } .dynasty-book-grid { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+@media(max-width:760px) { .dynasty-shell { padding: 22px 15px 50px; } .dynasty-top { display: block; } .dynasty-top h1 { font-size: 24px; } .dynasty-top-actions { margin-top: 15px; } .dynasty-welcome { padding: 20px; } .dynasty-welcome h2 { font-size: 22px; } .dynasty-welcome-stats { display: none; } .dynasty-route ol { grid-template-columns: 1fr; } .dynasty-book-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } .dynasty-book-card { padding: 13px; min-height: 182px; } .dynasty-book-card strong { font-size: 16px; } .dynasty-catalog-heading { align-items: stretch; display: block; } .dynasty-catalog-heading input { width: 100%; } .dynasty-layout:has(.dynasty-side) { grid-template-columns: minmax(0,1fr); } .dynasty-side { position: static; height: auto; min-height: 0; } .dynasty-volume-list { display: flex; overflow-x: auto; max-height: 55px; } .dynasty-volume { flex: 0 0 auto; width: auto; max-width: 165px; } .dynasty-volume small { display: none; } .dynasty-book-intro h2,.dynasty-results h2 { font-size: 25px; } .dynasty-reader-heading h2 { font-size: 28px; } .dynasty-reading-note { padding: 17px; } .dynasty-intro-list,.dynasty-genre-grid { grid-template-columns: 1fr; } }
