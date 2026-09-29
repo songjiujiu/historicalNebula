@@ -26,15 +26,15 @@ export const topics: Topic[] = [
     guideId: 'chibi-intro',
   },
   {
-    id: 'shiji', title: '史记 · 楚汉之际', shortTitle: '楚汉之际', eraLabel: '公元前 209—202 年',
-    sourceWork: '《史记》', minYear: -209, maxYear: -202, centerId: 'shiji-hongmen',
+    id: 'shiji', title: '史记 · 全书星图', shortTitle: '史记全书', eraLabel: '上古—西汉 · 130 卷',
+    sourceWork: '《史记》', minYear: -841, maxYear: -1, centerId: 'shiji-hongmen',
     ticks: [
-      { year: -209, label: '大泽乡' }, { year: -208 }, { year: -207, label: '巨鹿' },
-      { year: -206, label: '鸿门', important: true }, { year: -205, label: '彭城' },
-      { year: -204 }, { year: -203 }, { year: -202, label: '垓下' },
+      { year: -841, label: '共和' }, { year: -770, label: '东周' }, { year: -551, label: '孔子' },
+      { year: -403, label: '战国' }, { year: -221, label: '秦统一' },
+      { year: -206, label: '楚汉', important: true }, { year: -141, label: '汉武帝' }, { year: -29, label: '后续补记' },
     ],
-    periods: ['秦末起义', '巨鹿与入关', '鸿门之会', '楚汉相争', '垓下终局'],
-    introTitle: '从鸿门，走进楚汉', introDescription: '顺着《史记》的本纪与列传，观察选择如何改变局势。',
+    periods: ['西周', '春秋', '战国', '秦汉', '西汉'],
+    introTitle: '从鸿门，走进史记', introDescription: '130 卷原文与全书星图；上古和不确定纪年通过“时间待考”探索。',
     guideId: 'shiji-intro',
   },
 ];

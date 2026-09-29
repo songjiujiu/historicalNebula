@@ -76,3 +76,5 @@ body.nebula-immersive{overflow:hidden}
 .hero-illustration.han .hero-symbol{color:var(--han);text-shadow:0 0 25px #73c7bf66}
 .hero-illustration.qin .hero-symbol{color:var(--qin);text-shadow:0 0 25px #9b9fc166}
 @media(max-width:760px){.breadcrumb-topic{font-size:9px;max-width:105px}.topic-dialog-grid{grid-template-columns:1fr;padding:0 20px 22px}.topic-dialog-choice{min-height:150px}.topic-dialog-choice strong{font-size:19px}}
+/* Full-book entry remains accessible in the mobile scope drawer. */
+.book-entry{display:flex;flex-direction:column;gap:6px;width:100%;text-align:left;padding:12px;margin:10px 0 18px;border:1px solid #655638;border-radius:7px;background:#aa8b3710;color:#d8c395;font-size:12px}.book-entry small{color:#9d9178;font-size:10px}.book-entry:hover{background:#aa8b3725}

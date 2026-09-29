@@ -1,8 +1,10 @@
 import type { Action, Entity, Group, Guide, Relation, Source } from './types';
-import { shijiEntities, shijiGuides, shijiRelations, shijiSources } from './shiji-data';
+import { shijiGuides, shijiSources } from './shiji-data';
+import { fullShijiEntities, fullShijiRelations } from './shiji-full-data';
+import { shijiChapters } from './shiji-book';
 
 /** Local prototype material, not an editorially approved historical corpus. */
-export const CONTENT_VERSION = 'topics-local-draft-2026-09-24';
+export const CONTENT_VERSION = 'topics-shiji-full-draft-2026-09-29';
 
 const source = (id: string, section: string, volume: string, note: string): Source => ({
   id, title: '《三国志》', section,
@@ -191,7 +193,11 @@ const chibiGuides: Guide[] = [
   ] },
 ];
 
-export const entities: Entity[] = [...chibiEntities, ...shijiEntities];
-export const relations: Relation[] = [...chibiRelations, ...shijiRelations];
-export const sources: Source[] = [...chibiSources, ...shijiSources];
+export const entities: Entity[] = [...chibiEntities, ...fullShijiEntities];
+export const relations: Relation[] = [...chibiRelations, ...fullShijiRelations];
+export const sources: Source[] = [...chibiSources, ...shijiChapters.map(chapter => ({
+  id: chapter.sourceId, topicId: 'shiji' as const, title: '《史记》',
+  section: `卷 ${chapter.volume} · ${chapter.title}`, url: chapter.sourceUrl,
+  note: shijiSources.find(source => source.id === chapter.sourceId)?.note ?? '维基文库原文转录，已收录站内全文；包含编者小节和校勘记，可与原页互校。',
+}))];
 export const guides: Guide[] = [...chibiGuides, ...shijiGuides];

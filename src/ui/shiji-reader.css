@@ -1,0 +1,90 @@
+.book-dialog { width: min(1440px, 96vw); height: 94dvh; max-height: 94dvh; max-width: 96vw; padding: 0; border: 1px solid #394157; border-radius: 18px; background: #101521; color: #dce0ea; overflow: hidden; }
+.book-dialog::backdrop { background: #050811df; backdrop-filter: blur(8px); }
+.book-top { height: 92px; padding: 18px 28px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #2b3244; }
+.book-top h1 { margin: 4px 0 0; font-family: 'Noto Serif SC', 'Songti SC', serif; font-size: 26px; }
+.book-top h1 span { margin-left: 20px; color: #a3acc0; font: 13px system-ui; }
+.book-kicker { color: #b8a577; font-size: 10px; letter-spacing: .15em; }
+.book-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); height: calc(100% - 92px); }
+.book-sidebar { border-right: 1px solid #2b3244; padding: 22px 16px 10px; display: flex; flex-direction: column; min-height: 0; }
+.book-sidebar label { font-size: 12px; color: #aab4c8; margin-bottom: 10px; }
+.book-search { display: flex; background: #1c2333; border: 1px solid #39445b; border-radius: 7px; }
+.book-search input { width: 100%; min-width: 0; padding: 11px 8px; background: transparent; border: 0; color: #fff; font: inherit; font-size: 12px; }
+.book-search button { flex-shrink: 0; padding: 8px; color: #d0bf90; }
+.book-categories { display: flex; flex-wrap: wrap; gap: 5px; margin: 14px 0; }
+.book-categories button { padding: 6px 8px; border: 1px solid #35405a; border-radius: 5px; color: #abb6cb; font-size: 11px; }
+.book-categories button.active { border-color: #9f8a52; color: #e2cf9f; background: #42382566; }
+.book-library-actions { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 13px; font-size: 11px; color: #a9bad7; }
+#book-catalog { overflow-y: auto; min-height: 0; flex: 1; }
+.book-chapter { width: 100%; display: flex; gap: 9px; align-items: center; text-align: left; padding: 11px 8px; border-radius: 6px; }
+.book-chapter span { color: #707f9a; font-size: 10px; font-variant-numeric: tabular-nums; }
+.book-chapter strong { font-size: 12px; font-weight: 400; color: #c2cadd; flex: 1; }
+.book-chapter small { font-size: 9px; color: #8490a4; }
+.book-chapter:hover, .book-chapter.active { background: #263047; }
+.book-chapter.active strong { color: #edd8a7; }
+.book-edition { color: #7c8aa4; font-size: 10px; line-height: 1.8; margin-bottom: 0; }
+.book-main { overflow: auto; min-width: 0; padding: 18px 36px 40px; }
+.book-status { font-size: 11px; color: #8b9bb7; margin-bottom: 24px; min-height: 16px; }
+.book-overview { max-width: 870px; margin: 36px auto; }
+.book-main h2 { font: 30px/1.4 'Noto Serif SC', 'Songti SC', serif; color: #e5dfd1; margin: 12px 0; }
+.book-overview > p, .book-results > p { color: #a6b2c9; font-size: 13px; line-height: 1.9; }
+.book-stats { display: flex; gap: 52px; padding: 26px 0; border-bottom: 1px solid #2e374a; }
+.book-stats span { font-size: 11px; color: #8e9bb2; }
+.book-stats b { display: block; color: #d9c393; font: 36px/1.5 Georgia, serif; }
+.book-featured { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 28px 0; }
+.book-featured button { display: flex; flex-direction: column; align-items: start; gap: 16px; padding: 20px; border: 1px solid #333c50; border-radius: 8px; background: linear-gradient(140deg, #222a3b, #171c29); text-align: left; }
+.book-featured button:hover { border-color: #af9865; }
+.book-featured small, .book-featured span { color: #9baac2; font-size: 11px; }
+.book-featured strong { color: #e0d3b5; font-family: serif; font-size: 18px; }
+.book-provenance { border-top: 1px solid #333b4c; padding-top: 16px; margin-top: 28px; color: #8c9ab3; font-size: 11px; line-height: 1.9; }
+.book-provenance a { color: #c4b88e; text-decoration: underline; }
+.book-muted, .book-subtitle { color: #8c9ab3; font-size: 11px; line-height: 1.8; }
+.book-reading-tools, .book-bottom-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; justify-content: space-between; margin-bottom: 28px; }
+.book-reading-tools button, .book-bottom-nav button { font-size: 11px; }
+.book-related { display: flex; flex-wrap: wrap; gap: 8px; padding: 13px 0; border-block: 1px solid #2f384d; margin: 20px 0 28px; align-items: center; font-size: 11px; }
+.book-related span { color: #8f9bb2; }
+.book-related button { border: 1px solid #35405b; padding: 6px 9px; border-radius: 5px; color: #bdb5ed; }
+.book-block { position: relative; scroll-margin-top: 20px; margin: 0 0 18px; padding: 5px 10px 9px; border-left: 2px solid transparent; }
+.book-block-tools { display: flex; gap: 12px; margin-bottom: 5px; font: 10px/1.5 system-ui; color: #76859c; }
+.book-block-tools a { color: #8494ae; }
+.book-block-tools button[aria-pressed='true'] { color: #d6bd82; }
+.book-block-content { font: 17px/2.15 'Noto Serif SC', 'Songti SC', SimSun, serif; color: #cfd1d7; overflow-wrap: anywhere; }
+.book-block-content p { margin: 0; }
+.book-block-content a { color: #b4bedb; text-decoration: underline; text-decoration-color: #495574; text-underline-offset: 4px; }
+.book-block-content h2, .book-block-content h3, .book-block-content h4 { font-size: 22px; margin: 18px 0 8px; }
+.book-block.table .book-block-content { overflow-x: auto; }
+.book-block table { border-collapse: collapse; min-width: max(100%, 760px); font: 13px/1.9 system-ui; }
+.book-block th, .book-block td { padding: 10px; min-width: 90px; border: 1px solid #3c4559; vertical-align: top; }
+.book-block th { background: #242e42; color: #d9c9a5; }
+.book-block tr:nth-child(even) { background: #1b2231; }
+.book-target { background: #a8904520; border-left-color: #d5b66c; }
+.book-block mark { background: #86702e88; color: #ffe19b; }
+.book-hit { display: flex; flex-direction: column; gap: 10px; width: 100%; text-align: left; padding: 20px 4px; border-bottom: 1px solid #30394e; }
+.book-hit strong { color: #d4c69f; font-size: 14px; }
+.book-hit strong small { color: #8191a9; margin-left: 8px; font-size: 10px; }
+.book-hit span { color: #abb8cf; line-height: 1.9; font-size: 13px; }
+.book-hit mark { background: #86702e66; color: #f6d77d; }
+.book-results .book-bottom-nav { margin-top: 25px; }
+.book-saved { display: flex; gap: 10px; align-items: center; }
+.book-empty, .book-loading { padding: 40px 10px; color: #9aabc6; line-height: 2; }
+.book-loading button { margin-left: 16px; }
+.book-dialog button:focus-visible, .book-dialog a:focus-visible { outline: 2px solid #c1a869; outline-offset: 3px; }
+@media(max-width: 760px) {
+  .book-dialog { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh; border-radius: 0; border: 0; }
+  .book-top { height: 74px; padding: 14px 16px; }
+  .book-top .book-kicker { display: none; }
+  .book-top h1 { font-size: 22px; }.book-top h1 span { font-size: 10px; margin-left: 10px; }
+  .book-layout { display: flex; flex-direction: column; height: calc(100% - 74px); }
+  .book-sidebar { padding: 10px 16px; border-right: 0; border-bottom: 1px solid #2b3244; flex-shrink: 0; }
+  .book-sidebar label, .book-edition { display: none; }
+  .book-categories { margin: 8px 0; flex-wrap: nowrap; gap: 4px; }
+  .book-categories button { padding: 6px; font-size: 10px; white-space: nowrap; }
+  .book-library-actions { margin-bottom: 6px; }
+  #book-catalog { display: flex; overflow-x: auto; flex: auto; max-height: 43px; }
+  .book-chapter { flex: 0 0 auto; width: auto; padding: 8px; }.book-chapter small { display: none; }
+  .book-main { padding: 14px 16px 30px; flex: 1; min-height: 0; }
+  .book-main h2 { font-size: 25px; }.book-overview { margin: 15px 0; }
+  .book-featured { grid-template-columns: repeat(2, 1fr); }.book-featured button { padding: 14px; }.book-featured strong { font-size: 16px; }
+  .book-stats { gap: 30px; }.book-stats b { font-size: 28px; }.book-block-content { font-size: 17px; }
+  .book-reading-tools { gap: 6px; }.book-reading-tools button { padding: 8px; font-size: 10px; }
+  .book-block { padding-inline: 4px; }
+}

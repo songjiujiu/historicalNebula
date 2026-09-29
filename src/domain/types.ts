@@ -1,7 +1,7 @@
-export type EntityKind = 'person' | 'event';
+export type EntityKind = 'person' | 'event' | 'chapter';
 export type TopicId = 'three-kingdoms' | 'shiji';
 export type Group = 'wu' | 'shu' | 'wei' | 'chu' | 'han' | 'qin' | 'neutral';
-export type RelationCategory = 'military' | 'political' | 'family' | 'influence';
+export type RelationCategory = 'military' | 'political' | 'family' | 'influence' | 'textual';
 export interface Action {
   id: string;
   title: string;
@@ -20,12 +20,15 @@ export interface Entity {
   group: Group;
   role: string;
   period: string;
-  start: number;
-  end: number;
+  start: number | null;
+  end: number | null;
   summary: string;
   description: string;
   actions: Action[];
   sourceIds: string[];
+  imported?: boolean;
+  dateUncertain?: boolean;
+  readingBlock?: string;
 }
 export interface Relation {
   id: string;
@@ -34,12 +37,13 @@ export interface Relation {
   target: string;
   label: string;
   category: RelationCategory;
-  evidence: 'record' | 'interpretation';
+  evidence: 'record' | 'interpretation' | 'index';
   start: number | null;
   end: number | null;
   uncertain?: boolean;
   context: string;
   sourceIds: string[];
+  imported?: boolean;
 }
 export interface Source {
   id: string;

@@ -34,8 +34,10 @@ describe('historical sample integrity', () => {
         const event = entityById.get(action.eventId);
         expect(event?.kind).toBe('event');
         expect(event?.actions.find(item => item.id === action.id)).toBe(action);
-        expect(action.year).toBeGreaterThanOrEqual(event!.start);
-        expect(action.year).toBeLessThanOrEqual(event!.end);
+        expect(event!.start).not.toBeNull();
+        expect(event!.end).not.toBeNull();
+        expect(action.year).toBeGreaterThanOrEqual(event!.start!);
+        expect(action.year).toBeLessThanOrEqual(event!.end!);
         expect(action.sourceIds.length).toBeGreaterThan(0);
         for (const id of action.sourceIds) expect(sourceIds.has(id)).toBe(true);
       }

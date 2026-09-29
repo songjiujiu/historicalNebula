@@ -434,7 +434,7 @@ export function createNebulaScene(container: HTMLElement, options: SceneOptions)
       label.dataset.selected = String(selected);
       label.dataset.center = String(isCenter);
       label.dataset.context = String(context);
-      label.setAttribute('aria-label', `${node.name}，${node.kind === 'event' ? '事件' : '人物'}，查看详情`);
+      label.setAttribute('aria-label', `${node.name}，${node.kind === 'event' ? '事件' : node.kind === 'chapter' ? '篇章' : '人物'}，查看详情`);
       label.setAttribute('aria-pressed', String(selected));
     });
     people.count = personIds.length;
@@ -471,7 +471,7 @@ export function createNebulaScene(container: HTMLElement, options: SceneOptions)
       const points = curve.getPoints(20);
       edges.push({ relation, points });
       const bright = relation.id === graph.relationId || Boolean(graph.selectedId && (relation.source === graph.selectedId || relation.target === graph.selectedId));
-      const dashed = relation.evidence === 'interpretation' || Boolean(relation.uncertain);
+      const dashed = relation.evidence !== 'record' || Boolean(relation.uncertain);
       const key = `${dashed}/${bright}`;
       let batch = batches.get(key);
       if (!batch) { batch = { dashed, bright, coordinates: [], colors: [] }; batches.set(key, batch); }
@@ -652,7 +652,7 @@ export function createNebulaScene(container: HTMLElement, options: SceneOptions)
     edgeHint.hidden = !relation;
     if (relation) {
       const edge = graph.relations.find(item => item.id === relation)!;
-      edgeHint.textContent = `${edge.label}${edge.evidence === 'interpretation' ? ' · 历史解释' : ' · 史料记载'}`;
+      edgeHint.textContent = `${edge.label}${edge.evidence === 'interpretation' ? ' · 历史解释' : edge.evidence === 'index' ? ' · 原文索引' : ' · 史料记载'}`;
       edgeHint.style.left = `${THREE.MathUtils.clamp(x, 90, width - 90)}px`;
       edgeHint.style.top = `${Math.max(45, y)}px`;
     }

@@ -1,0 +1,31 @@
+{
+  "provenance": {
+    "project": "史记知识库",
+    "author": "鲍捷及项目贡献者",
+    "url": "https://github.com/baojie/shiji-kb",
+    "commit": "6b836e3fac1b900ccc6e9299fd6896c0e18ec132",
+    "license": "CC BY-NC-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "importedAt": "2026-09-29",
+    "files": {
+      "events": "26918f0501c7e762d7b49f709bde2c830491509851850b3fc1f828395bf6797b",
+      "entities": "3200fe390dedd2568e2dfa218e042111346f7e45e5188b971d983f8c3e41ada7",
+      "relations": "39212d8f9cd66b6f1411fc41da3042bb17bd8e0163088912a98a07d889070468"
+    }
+  },
+  "chapters": 130,
+  "people": 5297,
+  "events": 3197,
+  "relations": 29248,
+  "matchedQuotes": 1530,
+  "eventsMissingQuotes": 220,
+  "additionalEventNames": 237,
+  "uncertainEvents": 1018,
+  "categories": {
+    "military": 0,
+    "political": 0,
+    "family": 0,
+    "influence": 2526,
+    "textual": 26722
+  }
+}

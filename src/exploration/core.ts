@@ -1,6 +1,7 @@
 import { entities, relations, sources } from '../domain/data';
 import { DEFAULT_TOPIC, entityTopic, relationTopic, sourceTopic, topicById } from '../domain/topics';
 import type { Entity, GraphView, Relation, RelationCategory, SpatialSnapshot, TopicId, Vec3 } from '../domain/types';
+import { Converter } from 'opencc-js/t2cn';
 
 export interface ExploreState {
   topicId: TopicId;
@@ -18,7 +19,7 @@ export interface ExploreState {
   spatial?: SpatialSnapshot;
 }
 
-const ALL_CATEGORIES: RelationCategory[] = ['military', 'political', 'family', 'influence'];
+const ALL_CATEGORIES: RelationCategory[] = ['military', 'political', 'family', 'influence', 'textual'];
 const DEFAULT_NEIGHBORS = 12;
 const MAX_NODES = 50;
 
@@ -31,18 +32,20 @@ export const DEFAULT_STATE: ExploreState = {
   fullId: null, sourceId: null,
 };
 
-export function entityById(id: string): Entity | undefined {
-  return entities.find((entity) => entity.id === id);
-}
+const entityIndex = new Map(entities.map(entity => [entity.id, entity]));
+const relationIndex = new Map(relations.map(relation => [relation.id, relation]));
+export function entityById(id: string): Entity | undefined { return entityIndex.get(id); }
 
 export function relationById(id: string): Relation | undefined {
-  return relations.find((relation) => relation.id === id);
+  return relationIndex.get(id);
 }
 
 /** Missing dates are never interpreted as an open-ended historical interval. */
 export function relationMatches(relation: Relation, state: ExploreState): boolean {
   if (relationTopic(relation) !== state.topicId) return false;
   if (!state.categories.includes(relation.category)) return false;
+  // Bibliographic chapter edges describe the source, not a dated historical interaction.
+  if (relation.category === 'textual' && (entityById(relation.source)?.kind === 'chapter' || entityById(relation.target)?.kind === 'chapter')) return true;
   if (relation.start === null || relation.end === null) return state.showUndated;
   if (relation.uncertain && !state.showUndated) return false;
   return relation.start <= relation.end && relation.start <= state.toYear && relation.end >= state.fromYear;
@@ -103,7 +106,7 @@ export function buildGraph(input: ExploreState): GraphView {
     included.has(relation.source) && included.has(relation.target));
   const activeIds = new Set(visibleRelations.flatMap((relation) => [relation.source, relation.target]));
   const contextIds = nodes.filter((entity) =>
-    entity.start > state.toYear || entity.end < state.fromYear || !activeIds.has(entity.id)
+    (entity.start !== null && entity.start > state.toYear) || (entity.end !== null && entity.end < state.fromYear) || !activeIds.has(entity.id)
   ).map((entity) => entity.id);
   return {
     nodes, relations: visibleRelations, contextIds,
@@ -119,14 +122,15 @@ for (const [traditional, simplified] of [
   ['項', '项'], ['漢', '汉'], ['韓', '韩'], ['陳', '陈'], ['勝', '胜'], ['廣', '广'],
   ['蕭', '萧'], ['噲', '哙'], ['鴻', '鸿'], ['門', '门'], ['澤', '泽'], ['鄉', '乡'],
 ] as const) charMap.set(traditional, simplified);
-const normalize = (value: string) => Array.from(value.normalize('NFKC').toLocaleLowerCase())
+const toSimplified = Converter({ from: 'tw', to: 'cn' });
+const normalize = (value: string) => Array.from(toSimplified(value.normalize('NFKC').toLocaleLowerCase()))
   .map((char) => charMap.get(char) ?? char).join('').replace(/\s+/g, '').trim();
 
+const searchableEntities = entities.map((entity, order) => ({ entity, order, names: [entity.name, ...entity.aliases].map(normalize) }));
 export function searchEntities(query: string): Entity[] {
   const needle = normalize(query.slice(0, 200));
   if (!needle) return [];
-  const result = entities.map((entity, order) => {
-    const names = [entity.name, ...entity.aliases].map(normalize);
+  const result = searchableEntities.map(({ entity, order, names }) => {
     const rank = names.some((name) => name === needle) ? 0
       : names.some((name) => name.startsWith(needle)) ? 1
       : names.some((name) => name.includes(needle)) ? 2 : -1;
@@ -188,7 +192,7 @@ export function sanitizeState(input: unknown): ExploreState {
   const categoryInput = value.categories;
   const categories = Array.isArray(categoryInput)
     ? ALL_CATEGORIES.filter((category) => categoryInput.includes(category))
-    : [...DEFAULT_STATE.categories];
+    : [...DEFAULT_STATE.categories, ...(topicId === 'shiji' ? ['textual' as const] : [])];
   const expandedIds = Array.isArray(value.expandedIds)
     ? [...new Set(value.expandedIds.filter((id): id is string => validEntityId(id, topicId) !== null))].slice(0, MAX_NODES)
     : [];
