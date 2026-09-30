@@ -37,10 +37,10 @@ sudo -n install -m 644 "$base/source/deploy/historical-nebula-api.service" /etc/
 sudo -n systemctl daemon-reload
 sudo -n systemctl enable --now historical-nebula-api
 sudo -n systemctl restart historical-nebula-api
-health="$(curl -fsS --retry 5 --retry-delay 2 --max-time 15 http://127.0.0.1:8000/api/v1/health)"
+health="$(curl -fsS --retry 5 --retry-delay 2 --max-time 15 http://127.0.0.1:18763/api/v1/health)"
 python3 -c 'import json,sys; h=json.loads(sys.argv[1]); assert h["ok"] and h["documents"] >= 3800, h' "$health"
 for resource in /api/v1/data/shiji/001.json /api/v1/data/histories/hanshu/004.json /api/v1/data/modern/chapters/hong-kong-return.json /api/v1/data/modern/documents/hong-kong-declaration.json /api/v1/data/modern/qingshigao/529.json; do
-    curl -fsS --max-time 30 "http://127.0.0.1:8000$resource" -o /dev/null
+    curl -fsS --max-time 30 "http://127.0.0.1:18763$resource" -o /dev/null
 done
 echo 'API_VERIFIED'
 
