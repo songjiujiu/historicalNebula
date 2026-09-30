@@ -9,3 +9,9 @@ Build locally with `npm run build`, create a frontend archive from `dist`, and p
 For local development, install `backend/requirements-dev.txt`, configure `HISTORY_DB_HOST`, `HISTORY_DB_PORT`, `HISTORY_DB_NAME`, `HISTORY_DB_USER`, `HISTORY_DB_PASSWORD`, run `flask --app 'backend.app:create_app' run`, then `npm run dev`. Vite proxies `/api` to Flask at `127.0.0.1:5000` by default. Source data is not served by Vite.
 
 Background and source metadata remain bundled in the frontend for instant navigation; full book text, search indexes, modern prose, original documents, and Qing chapters are read from MySQL through Flask.
+
+## Jenkins builds
+
+The `historical-nebula-build` Jenkins job reads the committed revision in `/srv/historical-nebula/source` and extracts it into an isolated workspace. It runs the frontend tests, builds the Vite app, runs the Flask backend tests, and archives `historical-nebula-<revision>.tar.gz`. A build does not change the live site or database. To build newer code, update the server source checkout first, then run the job.
+
+Jenkins is bound to `127.0.0.1:8080` on the server. Access it through an SSH tunnel: `ssh -L 8080:127.0.0.1:8080 ubuntu@82.157.197.102`, then visit `http://localhost:8080/`. The administrator password is stored on the server at `/etc/jenkins-admin.secret` with restricted permissions. The job configuration is versioned as `deploy/jenkins-job.xml`; its build commands live in `deploy/jenkins-build.sh`.

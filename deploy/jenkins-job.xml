@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <actions/>
+  <description>Build the checked-out Historical Nebula revision on this server. Runs frontend and backend tests, then archives the Vite dist package. This job does not deploy.</description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+set -Eeuo pipefail
+
+source_dir=/srv/historical-nebula/source
+base_workspace=${WORKSPACE:?}
+if [[ "$base_workspace" != /var/lib/jenkins/workspace/historical-nebula-build ]]; then
+  echo "Unexpected Jenkins workspace: $base_workspace" >&amp;2
+  exit 1
+fi
+
+revision=$(git -c safe.directory="$source_dir" -C "$source_dir" rev-parse HEAD)
+rm -rf -- "$base_workspace/project"
+mkdir -p "$base_workspace/project"
+git -c safe.directory="$source_dir" -C "$source_dir" archive "$revision" | tar -xf - -C "$base_workspace/project"
+
+export BUILD_REVISION="${revision:0:12}"
+export WORKSPACE="$base_workspace/project"
+bash "$WORKSPACE/deploy/jenkins-build.sh"</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.ArtifactArchiver>
+      <artifacts>project/historical-nebula-*.tar.gz</artifacts>
+      <allowEmptyArchive>false</allowEmptyArchive>
+      <onlyIfSuccessful>true</onlyIfSuccessful>
+      <fingerprint>true</fingerprint>
+    </hudson.tasks.ArtifactArchiver>
+  </publishers>
+  <buildWrappers/>
+</project>
