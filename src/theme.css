@@ -1,0 +1,24 @@
+/* The site is built from dark editorial surfaces. The light palette inverts those
+   surfaces as one layer, keeping every reader, dialog and highlighted passage in
+   the same color family without maintaining a second set of hundreds of tokens. */
+html[data-theme='light'] { color-scheme: light; background: #e8edf6; }
+html[data-theme='light'] body { background: #e8edf6; }
+html[data-theme='light'] #app { filter: invert(1) hue-rotate(180deg); }
+/* Modal dialogs enter the browser top layer and no longer inherit #app's filter. */
+html[data-theme='light'] dialog:modal { filter: invert(1) hue-rotate(180deg); }
+html[data-theme='light'] dialog::backdrop { background: #16243b66; }
+html[data-theme='dark'] { color-scheme: dark; }
+
+.app-header .main-nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.app-header .main-nav::-webkit-scrollbar { display: none; }
+.theme-switch { margin-left: auto; flex: none; display: inline-flex; align-items: center; gap: 3px; padding: 4px; border: 1px solid #384458; border-radius: 8px; background: #171f2c; }
+.theme-switch button { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-height: 31px; padding: 0 9px; border-radius: 5px; color: #9caabe; font-size: 11px; white-space: nowrap; }
+.theme-switch button:hover { color: #ead7ae; }
+.theme-switch button[aria-pressed='true'] { background: #3a3b35; color: #f1d7a3; box-shadow: 0 1px 3px #05091255; }
+.theme-switch .icon { width: 14px; height: 14px; }
+@media(max-width:760px) {
+  .app-header .theme-switch { margin-left: auto; }
+  .theme-switch { gap: 1px; padding: 3px; }
+  .theme-switch button { min-height: 29px; padding: 0 7px; font-size: 10px; }
+  .theme-switch .icon { width: 13px; height: 13px; }
+}

@@ -1,4 +1,5 @@
 import './style.css';
+import './theme.css';
 import { icon } from './ui/icons';
 import { parseBookLocation } from './domain/shiji-book';
 import { createReadingGuide } from './ui/reading-guide';
@@ -40,11 +41,14 @@ let modernTexts: ReturnType<typeof import('./ui/modern-texts').createModernTexts
 let textsLoading: Promise<void> | null = null;
 let modernGuides: ReturnType<typeof import('./ui/modern-guides').createModernGuides> | null = null;
 let modernGuidesLoading: Promise<void> | null = null;
+type ColorTheme = 'dark' | 'light';
+const savedTheme: ColorTheme = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <header class="app-header">
     <a class="brand" href="${import.meta.env.BASE_URL}" aria-label="历史星云首页"><span class="brand-mark">${icon('star')}</span><span>历史星云<small>HISTORICAL NEBULA</small></span></a>
     <nav class="main-nav" aria-label="主导航"><button class="nav-item" data-action="history-journey">读懂历史</button><button class="nav-item" data-action="reading-guides">史记导读</button><button class="nav-item" data-action="history-guides">二十四史导读</button><button class="nav-item" data-action="modern-guides">清至当代导读</button><button class="nav-item" data-action="shiji-book">史记原文</button><button class="nav-item" data-action="dynastic-library">二十四史原文</button><button class="nav-item" data-action="modern-texts">清至当代正文</button></nav>
+    <div class="theme-switch" role="group" aria-label="页面显示模式"><button type="button" data-action="theme-dark" aria-pressed="${savedTheme === 'dark'}" title="黑夜模式">${icon('moon')}<span>黑夜</span></button><button type="button" data-action="theme-light" aria-pressed="${savedTheme === 'light'}" title="白天模式">${icon('sun')}<span>白天</span></button></div>
   </header>
   <div id="journey-root"></div>
   <div id="reading-root"></div>
@@ -60,6 +64,14 @@ const $ = <T extends HTMLElement = HTMLElement>(selector: string) => document.qu
 function toast(message: string) {
   $('#toast').textContent = message; $('#toast').classList.add('visible');
   clearTimeout(toastTimer); toastTimer = window.setTimeout(() => $('#toast').classList.remove('visible'), 4000);
+}
+function setTheme(theme: ColorTheme) {
+  document.documentElement.dataset.theme = theme;
+  document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#e8edf6' : '#0a0e18');
+  for (const option of ['dark', 'light'] as const) {
+    $<HTMLButtonElement>(`[data-action="theme-${option}"]`).setAttribute('aria-pressed', String(option === theme));
+  }
+  try { localStorage.setItem('historical-nebula:theme:v1', theme); } catch { /* Theme still works for this visit. */ }
 }
 async function openBook(volume?: number, query?: string, block?: string) {
   const request = ++bookRequest;
@@ -223,6 +235,8 @@ const historyJourney = createHistoryJourney($('#journey-root'), {
 document.addEventListener('click', event => {
   const target = (event.target as Element).closest<HTMLElement>('[data-action]');
   switch (target?.dataset.action) {
+    case 'theme-dark': setTheme('dark'); break;
+    case 'theme-light': setTheme('light'); break;
     case 'history-journey': enterJourney(); break;
     case 'reading-guides': enterGuides(); break;
     case 'history-guides': enterHistoryGuides(); break;
