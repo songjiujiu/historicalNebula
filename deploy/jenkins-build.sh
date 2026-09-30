@@ -9,7 +9,7 @@ printf 'npm: '; npm --version
 printf 'Python: '; python3 --version
 
 npm ci --no-audit --no-fund
-npm test -- --maxWorkers=1 --minWorkers=1 --no-file-parallelism
+npm test -- --maxWorkers=1 --no-file-parallelism
 npm run build
 
 python3 -m venv .venv
