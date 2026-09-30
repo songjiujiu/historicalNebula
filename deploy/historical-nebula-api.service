@@ -1,0 +1,22 @@
+[Unit]
+Description=Historical Nebula Flask API
+After=network.target mysql.service
+Requires=mysql.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/srv/historical-nebula/source
+EnvironmentFile=/etc/historical-nebula/api.env
+ExecStart=/srv/historical-nebula/venv/bin/gunicorn --workers 2 --threads 4 --bind 127.0.0.1:8000 --timeout 90 'backend.app:create_app()'
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/tmp
+
+[Install]
+WantedBy=multi-user.target

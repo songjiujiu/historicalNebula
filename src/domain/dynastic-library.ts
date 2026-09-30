@@ -1,4 +1,5 @@
 import manifest from './generated/dynastic-manifest.json';
+import { corpusApiUrl } from './corpus-api';
 
 export const dynasticBooks = manifest.books;
 export type DynasticBook = typeof dynasticBooks[number];
@@ -49,7 +50,7 @@ export function loadDynasticChapter(book: DynasticBook, volume: number): Promise
   if (!chapter) return Promise.reject(new Error('卷号不存在'));
   const key = `${book.id}/${volume}`;
   if (!chapterCache.has(key)) {
-    const path = `${import.meta.env.BASE_URL}data/histories/${book.id}/${String(volume).padStart(3, '0')}.json`;
+    const path = corpusApiUrl(`histories/${book.id}/${String(volume).padStart(3, '0')}.json`);
     chapterCache.set(key, fetch(path).then(async response => {
       if (!response.ok) throw new Error('原文加载失败');
       const data = await response.json() as DynasticText;
@@ -63,7 +64,7 @@ export function loadDynasticChapter(book: DynasticBook, volume: number): Promise
 const searchCache = new Map<string, Promise<DynasticSearchVolume[]>>();
 export function loadDynasticSearch(book: DynasticBook): Promise<DynasticSearchVolume[]> {
   if (!searchCache.has(book.id)) {
-    searchCache.set(book.id, fetch(`${import.meta.env.BASE_URL}data/histories/${book.id}/search.json`).then(async response => {
+    searchCache.set(book.id, fetch(corpusApiUrl(`histories/${book.id}/search.json`)).then(async response => {
       if (!response.ok) throw new Error('全文检索索引加载失败');
       const data = await response.json() as DynasticSearchVolume[];
       if (!Array.isArray(data) || data.length !== book.chapters.length) throw new Error('全文检索索引不完整');

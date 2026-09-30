@@ -1,4 +1,5 @@
 import manifest from './generated/modern-texts-manifest.json';
+import { corpusApiUrl } from './corpus-api';
 
 export const modernChapters = manifest.chapters;
 export const modernDocuments = manifest.documents;
@@ -32,7 +33,7 @@ export function modernTextLocation(href: string) {
 const cache = new Map<string, Promise<unknown>>();
 async function json<T>(path: string): Promise<T> {
   if (!cache.has(path)) {
-    const promise = fetch(`${import.meta.env.BASE_URL}data/modern/${path}`).then(async response => {
+    const promise = fetch(corpusApiUrl(`modern/${path}`)).then(async response => {
       if (!response.ok) throw new Error('正文暂时无法加载');
       return response.json();
     }).catch(error => { cache.delete(path); throw error; });
