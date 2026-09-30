@@ -98,6 +98,24 @@ it('finds new events by era, title and people, and exposes a Qing continuation f
   click('[data-journey-era="contemporary"]');
   expect(document.querySelector('.journey-results')!.textContent).toContain('最新选至2024年');
 });
+it('walks a beginner through one question with simultaneous north and south, exact evidence and shareable steps', () => {
+  const { reader, onSource } = setup();
+  click('.journey-hero [data-journey-action="question"]');
+  expect(location.search).toContain('question=western-jin');
+  expect(document.querySelectorAll('.question-map-cell')).toHaveLength(6);
+  expect(document.querySelector('.question-scene')!.textContent).toContain('三国结束了');
+  click('.question-actions [data-question-step="1"]');
+  expect(location.search).toContain('step=2');
+  expect(document.querySelector('.question-map-cell.north.active')!.textContent).toContain('多个政权');
+  expect(document.querySelector('.question-map-cell.south.active')!.textContent).toContain('东晋');
+  click('[data-question-source="eastern-jin"]');
+  expect(onSource).toHaveBeenCalledWith(journeyEvent('eastern-jin'), journeyEvent('eastern-jin')!.sources[0]);
+  history.replaceState(null, '', '/?question=western-jin&step=3'); reader.showFromUrl();
+  expect(document.querySelector('.question-scene')!.textContent).toContain('南方又换朝');
+  click('.question-actions [data-journey-event="liu-song"]');
+  expect(location.search).toContain('journey=liu-song');
+  expect(document.querySelector('.journey-detail-heading')!.textContent).toContain('刘裕建宋');
+});
 it('switches eras and reading scope in place, keeping the selected control focused instead of jumping to the hero', () => {
   const { reader } = setup();
   const search = document.querySelector<HTMLInputElement>('[data-journey-search]')!;

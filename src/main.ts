@@ -11,7 +11,7 @@ import { modernGuideUrl } from './domain/modern-guide-location';
 type ReadingMode = 'journey' | 'guide' | 'histories' | 'library' | 'texts' | 'modern-guides';
 function normalizeLocation() {
   const url = new URL(location.href);
-  if (url.search && !['journey', 'library', 'reading', 'route', 'histories', 'texts', 'modern-guides'].some(key => url.searchParams.has(key))) {
+  if (url.search && !['question', 'journey', 'library', 'reading', 'route', 'histories', 'texts', 'modern-guides'].some(key => url.searchParams.has(key))) {
     url.search = '?journey=';
     if (!parseBookLocation(url.hash)) url.hash = '';
     history.replaceState(history.state, '', url);
@@ -23,6 +23,7 @@ function modeFromUrl(): ReadingMode {
   if (params.has('modern-guides')) return 'modern-guides';
   if (params.has('library')) return 'library';
   if (params.has('histories')) return 'histories';
+  if (params.has('question')) return 'journey';
   if (params.has('journey')) return 'journey';
   return params.has('reading') || params.has('route') ? 'guide' : 'journey';
 }
