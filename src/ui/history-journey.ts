@@ -1,11 +1,13 @@
 import { escapeHtml as esc } from './icons';
 import { historyBookNames, journeyEras, journeyEvents, journeyEra, journeyEvent, journeyUrl, journeySourceUrl, quickJourneyIds, type JourneyEvent, type JourneySource } from '../domain/history-journey';
 import { journeyReference, journeyReferenceUrl } from '../domain/journey-references';
+import { modernChapter, modernTextUrl } from '../domain/modern-texts';
 import './history-journey.css';
 
 interface JourneyOptions {
   onSource: (event: JourneyEvent, source: JourneySource) => void;
   onLibrary: () => void;
+  onText?: (href: string) => void;
 }
 const KEY = 'historical-nebula:journey:v1';
 export function createHistoryJourney(host: HTMLElement, options: JourneyOptions) {
@@ -31,7 +33,7 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
   ])];
   const eventButton = (event: JourneyEvent) => `<button class="journey-event-card" data-journey-event="${event.id}"><span class="journey-event-year">${esc(event.year)}</span><span class="journey-card-body"><strong>${esc(event.title)}</strong><span>${esc(event.summary)}</span><small>${sourceLabels(event).map(esc).join(' · ')}${read.has(event.id) ? ' · 已读懂 ✓' : ''}</small></span><span class="journey-card-arrow" aria-hidden="true">↗</span></button>`;
   function rail() {
-    return `<aside class="journey-rail"><span class="journey-overline">按时代找位置</span><nav aria-label="历史时代"><button data-journey-era="" aria-current="${!eraId && !selected ? 'page' : 'false'}"><b>◎</b><span>全部时代<small>从上古到当代</small></span></button>${journeyEras.map((era, index) => `<button data-journey-era="${era.id}" aria-current="${era.id === (selected?.era ?? eraId) ? 'page' : 'false'}"><b>${String(index + 1).padStart(2, '0')}</b><span>${era.title}<small>${era.years}</small></span></button>`).join('')}</nav><div class="journey-rail-note"><strong>史书不是历史的目录顺序</strong><p>上古至明可读二十四史原文；清到当代另附参考资料。先跟事件走，再核对依据。</p><button data-journey-action="library">查看 24 部史书 →</button></div></aside>`;
+    return `<aside class="journey-rail"><span class="journey-overline">按时代找位置</span><nav aria-label="历史时代"><button data-journey-era="" aria-current="${!eraId && !selected ? 'page' : 'false'}"><b>◎</b><span>全部时代<small>从上古到当代</small></span></button>${journeyEras.map((era, index) => `<button data-journey-era="${era.id}" aria-current="${era.id === (selected?.era ?? eraId) ? 'page' : 'false'}"><b>${String(index + 1).padStart(2, '0')}</b><span>${era.title}<small>${era.years}</small></span></button>`).join('')}</nav><div class="journey-rail-note"><strong>史书不是历史的目录顺序</strong><p>上古至明可读二十四史原文；清到当代可读白话正文与相关史料。先跟事件走，再核对依据。</p><button data-journey-action="library">查看 24 部史书 →</button></div></aside>`;
   }
   function eraMap(era: typeof journeyEras[number]) {
     return `<div class="journey-era-map" aria-label="${era.title}政权关系">${era.lanes.map(lane => `<p>${esc(lane)}</p>`).join('')}<small>${esc(era.note)}</small></div>`;
@@ -50,9 +52,9 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
   function home() {
     selected = undefined;
     host.innerHTML = `<main class="journey-shell">
-      <header class="journey-hero"><div><span class="journey-overline">给第一次读历史的你 · 从上古读到当代</span><h1>先把历史<br><em>连成一条线。</em></h1><p>不用先背朝代和人名。跟着关键事件，看清当时的局面、发生的变化，以及它怎样通向下一段历史。</p><div class="journey-hero-actions"><button class="primary-button" data-journey-action="start">从第一件事开始 →</button><button class="secondary-button" data-journey-event="qing-founded">从清朝接着读 →</button>${recent ? `<button class="secondary-button" data-journey-action="resume">继续上次阅读</button>` : ''}</div></div><div class="journey-intro-card"><span class="journey-overline">每个事件，三步就能读</span><ol><li><b>01</b><span><strong>先看懂</strong><small>用白话理解来龙去脉</small></span></li><li><b>02</b><span><strong>再串起来</strong><small>看看前一件事与后一件事</small></span></li><li><b>03</b><span><strong>点击看依据</strong><small>打开原文段落或相关资料</small></span></li></ol><p>从《史记》与二十四史，接着读清朝、民国和当代。<br>原文库仍为 24 部史书；清到当代提供白话导读与参考链接。</p></div></header>
+      <header class="journey-hero"><div><span class="journey-overline">给第一次读历史的你 · 从上古读到当代</span><h1>先把历史<br><em>连成一条线。</em></h1><p>不用先背朝代和人名。跟着关键事件，看清当时的局面、发生的变化，以及它怎样通向下一段历史。</p><div class="journey-hero-actions"><button class="primary-button" data-journey-action="start">从第一件事开始 →</button><button class="secondary-button" data-journey-event="qing-founded">从清朝接着读 →</button>${recent ? `<button class="secondary-button" data-journey-action="resume">继续上次阅读</button>` : ''}</div></div><div class="journey-intro-card"><span class="journey-overline">每个事件，三步就能读</span><ol><li><b>01</b><span><strong>先看懂</strong><small>用白话理解来龙去脉</small></span></li><li><b>02</b><span><strong>再串起来</strong><small>看看前一件事与后一件事</small></span></li><li><b>03</b><span><strong>点击看依据</strong><small>打开原文段落或相关资料</small></span></li></ol><p>从《史记》与二十四史，接着读清朝、民国和当代。<br>清到当代新增 34 篇白话正文，可对照《清史稿》与近现代文献。</p></div></header>
       <div class="journey-layout">${rail()}<div class="journey-main"><section class="journey-controls" aria-label="选择阅读范围"><div><h2>你的历史主线</h2><p>先读概要，再选一个事件展开。</p></div><div class="journey-scope" role="group" aria-label="主线长短"><button data-journey-scope="quick" aria-pressed="${scope !== 'all'}">快速主线 · ${quickJourneyIds.length} 件事</button><button data-journey-scope="all" aria-pressed="${scope === 'all'}">全部关键节点 · ${journeyEvents.length}</button></div></section><label class="journey-search"><span>找事件或人物</span><input data-journey-search type="search" maxlength="100" value="${esc(query)}" placeholder="如：辛亥革命、改革开放、港澳回归" autocomplete="off"></label><p class="journey-result-count" role="status" aria-live="polite"></p><div class="journey-results"></div></div></div>
-      <p class="journey-footnote">这是选取关键事件的入门路线，帮助建立时间与因果线索，不等于全书所有事件的汇总或逐句翻译。二十四史正文保留原文，缺录提示见目录。清到当代为综合导读与外部资料索引，最新事件选至2024年。</p></main>`;
+      <p class="journey-footnote">这是选取关键事件的入门路线，帮助建立时间与因果线索，不等于全书所有事件的汇总或逐句翻译。二十四史正文保留原文，缺录提示见目录。清到当代另有站内白话正文、清史稿及文献选读，最新事件选至2024年。</p></main>`;
     renderResults();
     revealActiveEra();
   }
@@ -81,13 +83,17 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
       ${references.map(reference => `<a class="journey-source-card journey-reference-card" href="${esc(journeyReferenceUrl(reference))}" target="_blank" rel="noopener noreferrer" data-journey-reference="${reference.id}"><span>${esc(reference.title)}<small>${esc(reference.publisher)} · ${reference.kind}${reference.language ? ' · 英文资料' : ''}${reference.format ? ' · PDF' : ''}</small></span><p>定位关键词：<mark>${esc(reference.locator)}</mark></p><b>打开参考资料 ↗ <span>新标签页</span></b></a>`).join('')}
       <small>${references.length ? '本站导读是综合解释，参考资料支持相关事实或提供当事方视角；并非逐句翻译，也不代表已收录这些资料的全文。资料核对日期：2026年9月29日。' : '摘句采用简体字形。多条出处可能分别支持事件的不同阶段，也可能提供另一部史书的视角。'}</small></section>`;
   }
+  function readingEntry(event: JourneyEvent) {
+    const chapter = modernChapter(event.id); if (!chapter) return '';
+    return `<section class="journey-reading-entry"><span class="journey-overline">接着读 · 站内正文</span><h2>想把这件事读完整？</h2><p>${chapter.outline.map(h => esc(h.title)).join(' → ')}</p><small>${chapter.characters.toLocaleString()} 字 · 白话历史正文 · 篇末对照史料</small><br><a class="primary-button" data-journey-text href="${esc(modernTextUrl('chapters', event.id, event.id, 'p1'))}">阅读正文 →</a></section>`;
+  }
   function detail(event: JourneyEvent) {
     selected = event; recent = event.id; persist();
     const era = journeyEra(event.era)!;
     if (!route().includes(event)) scope = 'all';
     const items = route(), index = items.indexOf(event), prev = items[index - 1], next = items[index + 1];
     const activeRead = read.has(event.id);
-    host.innerHTML = `<main class="journey-shell journey-detail-shell"><div class="journey-layout">${rail()}<article class="journey-main journey-detail"><div class="journey-detail-top"><button data-journey-action="home">← 返回历史主线</button><span>${scope === 'all' ? '全部关键节点' : '快速主线'} · ${index + 1} / ${items.length}</span></div><header class="journey-detail-heading"><span class="journey-overline">${era.title} · ${esc(event.year)}</span><h1 tabindex="-1">${esc(event.title)}</h1><p>${esc(event.summary)}</p></header>${eraMap(era)}<div class="journey-people"><span>先认清人物与机构</span>${event.people.map(person => `<span>${esc(person)}</span>`).join('')}</div><div class="journey-explanation">${[['之前是什么局面', event.before], ['到底发生了什么', event.happening], ['后来改变了什么', event.after]].map(([title, body], i) => `<section><span class="journey-step-number">0${i + 1}</span><div><h2>${title}</h2><p>${esc(body)}</p></div></section>`).join('')}</div><section class="journey-takeaway"><span>只记住这一点</span><p>${esc(event.remember)}</p></section>${event.caution ? `<p class="journey-caution"><strong>阅读时留意：</strong>${esc(event.caution)}</p>` : ''}
+    host.innerHTML = `<main class="journey-shell journey-detail-shell"><div class="journey-layout">${rail()}<article class="journey-main journey-detail"><div class="journey-detail-top"><button data-journey-action="home">← 返回历史主线</button><span>${scope === 'all' ? '全部关键节点' : '快速主线'} · ${index + 1} / ${items.length}</span></div><header class="journey-detail-heading"><span class="journey-overline">${era.title} · ${esc(event.year)}</span><h1 tabindex="-1">${esc(event.title)}</h1><p>${esc(event.summary)}</p></header>${readingEntry(event)}${eraMap(era)}<div class="journey-people"><span>先认清人物与机构</span>${event.people.map(person => `<span>${esc(person)}</span>`).join('')}</div><div class="journey-explanation">${[['之前是什么局面', event.before], ['到底发生了什么', event.happening], ['后来改变了什么', event.after]].map(([title, body], i) => `<section><span class="journey-step-number">0${i + 1}</span><div><h2>${title}</h2><p>${esc(body)}</p></div></section>`).join('')}</div><section class="journey-takeaway"><span>只记住这一点</span><p>${esc(event.remember)}</p></section>${event.caution ? `<p class="journey-caution"><strong>阅读时留意：</strong>${esc(event.caution)}</p>` : ''}
       ${sourceSection(event)}
       <div class="journey-complete"><button class="secondary-button" data-journey-action="complete" aria-pressed="${activeRead}">${activeRead ? '已读懂 ✓ · 点击取消' : '我读懂了，记下进度 ✓'}</button><span role="status" data-journey-progress>${read.size} / ${journeyEvents.length} 个节点已读懂</span></div><nav class="journey-neighbors" aria-label="前后事件">${prev ? `<button data-journey-event="${prev.id}"><small>← 回看前一件事 · ${esc(prev.year)}</small><strong>${esc(prev.title)}</strong><span>${esc(prev.summary)}</span></button>` : '<div class="journey-route-edge">你已来到这条路线的起点。</div>'}${next ? `<button class="journey-next" data-journey-event="${next.id}"><small>接着看 · ${esc(next.year)} →</small><strong>${esc(next.title)}</strong><span>${esc(next.summary)}</span></button>` : '<div class="journey-route-edge"><strong>已到这条路线的终点</strong><p>可以回到主线补读其他事件，或打开史书深入阅读。</p><button data-journey-action="home">返回主线 →</button></div>'}</nav><p class="journey-footnote">相邻卡片按阅读顺序衔接，可能跨越数十年；前后排列不代表唯一或直接的因果关系。</p></article></div></main>`;
     revealActiveEra();
@@ -112,6 +118,10 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
   }
   host.addEventListener('click', ev => {
     const target = (ev.target as Element).closest<HTMLElement>('button,a'); if (!target) return;
+    if (target.hasAttribute('data-journey-text') && options.onText) {
+      if (ev.ctrlKey || ev.metaKey || ev.shiftKey || ev.altKey || ev.button !== 0) return;
+      ev.preventDefault(); options.onText((target as HTMLAnchorElement).href); return;
+    }
     if (target.dataset.journeySource !== undefined && selected) {
       // Preserve normal open-in-new-tab and modified-click behavior of real source links.
       if (ev.ctrlKey || ev.metaKey || ev.shiftKey || ev.altKey || ev.button !== 0) return;

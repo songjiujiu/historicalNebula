@@ -1,0 +1,12 @@
+[
+  {"id":"republic-constitution","page":"中華民國臨時約法","title":"中华民国临时约法","date":"1912年3月11日","events":["xinhai","beiyang"],"cue":"主權","note":"阅读共和国对主权、权利和政府权限的规定。法律条文表达制度目标，不代表当时已全部实现。"},
+  {"id":"united-front-declaration","page":"中國國民黨第一次全國代表大會宣言","title":"中国国民党第一次全国代表大会宣言","date":"1924年1月","events":["first-united-front","northern-expedition"],"cue":"民權","note":"这份政治宣言帮助理解第一次国共合作时期的共同纲领，保留发布者当时的立场与措辞。"},
+  {"id":"prc-proclamation","page":"中华人民共和国中央人民政府公告","title":"中华人民共和国中央人民政府公告","date":"1949年10月1日","events":["civil-war","prc-founded"],"cue":"成立","note":"中央人民政府成立时发布的公告。文中的政治评价是发布者当时的表述。"},
+  {"id":"sez-regulation","page":"广东省经济特区条例","title":"广东省经济特区条例","date":"1980年8月26日","events":["reform-opening"],"cue":"第一条","note":"用经济特区的实际规则理解对外开放。这是1980年的制度文件，并非1978年三中全会公报。"},
+  {"id":"martial-law","page":"国务院关于在北京市部分地区实行戒严的命令","title":"国务院关于在北京市部分地区实行戒严的命令","date":"1989年5月20日","events":["tiananmen-1989"],"cue":"戒严","note":"本文件只记录政府的戒严决定与当时措辞，不能代替对抗议、镇压、伤亡及当事人经历的全面了解。"},
+  {"id":"constitution-1993","page":"中华人民共和国宪法修正案 (1993年)","title":"中华人民共和国宪法修正案（1993年）","date":"1993年3月29日","events":["southern-tour"],"cue":"市场经济","note":"1992年改革加快后的制度变化；这不是南方谈话的逐字记录。"},
+  {"id":"hong-kong-declaration","page":"中华人民共和国政府和大不列颠及北爱尔兰联合王国政府关于香港问题的联合声明 (条约汇编)","title":"中英关于香港问题的联合声明","date":"1984年12月19日","events":["hong-kong-return"],"cue":"一九九七年七月一日","note":"从联合声明及其附件阅读回归日期、特别行政区安排与过渡期机制。"},
+  {"id":"macao-declaration","page":"中华人民共和国政府和葡萄牙共和国政府关于澳门问题的联合声明","title":"中葡关于澳门问题的联合声明","date":"1987年4月13日","events":["macao-return"],"cue":"1999年12月20日","note":"从联合声明及其附件阅读澳门回归日期和制度安排，并与香港的文件对照。"},
+  {"id":"constitution-2018","page":"中华人民共和国宪法修正案 (2018年)","title":"中华人民共和国宪法修正案（2018年）","date":"2018年3月11日","events":["constitution-2018"],"cue":"第四十五条","note":"阅读国家主席、副主席任职规定的变化，并联系同次修宪的其他条款。"},
+  {"id":"wenchuan-reconstruction","page":"汶川地震灾后恢复重建条例","title":"汶川地震灾后恢复重建条例","date":"2008年6月8日","events":["wenchuan"],"cue":"第一条","note":"震后恢复重建的行政法规，用于了解救灾之后的安置与重建责任。"}
+]

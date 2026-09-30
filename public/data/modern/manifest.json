@@ -1,0 +1,1046 @@
+{
+  "checked": "2026-09-29",
+  "chapters": [
+    {
+      "id": "qing-founded",
+      "title": "清朝建立并入关：接上明末的故事",
+      "date": "公元1636 — 1644年",
+      "era": "qing",
+      "characters": 609,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "明朝崩溃时，清已经存在"
+        },
+        {
+          "id": "p4",
+          "title": "入关以后，战争并未结束"
+        },
+        {
+          "id": "p7",
+          "title": "接下来要看什么"
+        }
+      ]
+    },
+    {
+      "id": "qing-consolidation",
+      "title": "平三藩与台湾政权更替",
+      "date": "公元1673 — 1683年",
+      "era": "qing",
+      "characters": 564,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "为什么皇帝还要面对藩王"
+        },
+        {
+          "id": "p4",
+          "title": "台湾政权的变化是另一条线"
+        },
+        {
+          "id": "p7",
+          "title": "国家稳定与百姓恢复"
+        }
+      ]
+    },
+    {
+      "id": "high-qing",
+      "title": "康雍乾时期：人口增长与治理压力",
+      "date": "17世纪后期 — 18世纪",
+      "era": "qing",
+      "characters": 582,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "“盛世”究竟在说什么"
+        },
+        {
+          "id": "p4",
+          "title": "人多了，土地与治理怎么办"
+        },
+        {
+          "id": "p7",
+          "title": "不把历史简化成突然衰落"
+        }
+      ]
+    },
+    {
+      "id": "opium-war",
+      "title": "鸦片战争：清朝面对新的外部压力",
+      "date": "公元1840 — 1842年",
+      "era": "late-qing",
+      "characters": 595,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "从贸易矛盾到禁烟冲突"
+        },
+        {
+          "id": "p4",
+          "title": "战败改变了哪些规则"
+        },
+        {
+          "id": "p7",
+          "title": "战争没有结束清朝的全部危机"
+        }
+      ]
+    },
+    {
+      "id": "taiping",
+      "title": "太平天国：清朝内部的大规模战争",
+      "date": "公元1851 — 1864年",
+      "era": "late-qing",
+      "characters": 577,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "为什么会有这么大的起事"
+        },
+        {
+          "id": "p4",
+          "title": "清廷怎样应对"
+        },
+        {
+          "id": "p7",
+          "title": "与洋务运动怎样连接"
+        }
+      ]
+    },
+    {
+      "id": "self-strengthening",
+      "title": "洋务运动：先学造船、制炮和办工厂",
+      "date": "19世纪60年代 — 90年代",
+      "era": "late-qing",
+      "characters": 546,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "“自强”首先面对什么问题"
+        },
+        {
+          "id": "p4",
+          "title": "一艘军舰背后还有什么"
+        },
+        {
+          "id": "p7",
+          "title": "为什么甲午战败造成更大震动"
+        }
+      ]
+    },
+    {
+      "id": "sino-japanese-war",
+      "title": "甲午战争：清朝战败，改革呼声加急",
+      "date": "公元1894 — 1895年",
+      "era": "late-qing",
+      "characters": 551,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "朝鲜问题引发的战争"
+        },
+        {
+          "id": "p4",
+          "title": "《马关条约》的代价"
+        },
+        {
+          "id": "p7",
+          "title": "改革为何突然变得迫切"
+        }
+      ]
+    },
+    {
+      "id": "hundred-days",
+      "title": "戊戌变法：改革尝试被政变中断",
+      "date": "公元1898年",
+      "era": "late-qing",
+      "characters": 551,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "改革者想改变哪些事情"
+        },
+        {
+          "id": "p4",
+          "title": "为什么很快被中断"
+        },
+        {
+          "id": "p7",
+          "title": "失败之后仍有变化"
+        }
+      ]
+    },
+    {
+      "id": "boxer",
+      "title": "义和团与八国联军：危机进一步扩大",
+      "date": "公元1900 — 1901年",
+      "era": "late-qing",
+      "characters": 520,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "地方冲突怎样变成国际战争"
+        },
+        {
+          "id": "p4",
+          "title": "北京陷落之后"
+        },
+        {
+          "id": "p7",
+          "title": "新政与革命同时发展"
+        }
+      ]
+    },
+    {
+      "id": "xinhai",
+      "title": "辛亥革命与清帝退位：帝制结束",
+      "date": "公元1911 — 1912年",
+      "era": "late-qing",
+      "characters": 564,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "清朝为什么难以维持"
+        },
+        {
+          "id": "p4",
+          "title": "从起义到建立共和国"
+        },
+        {
+          "id": "p7",
+          "title": "革命成功后还有什么难题"
+        }
+      ]
+    },
+    {
+      "id": "beiyang",
+      "title": "从袁世凯到军阀竞争：共和国的难题",
+      "date": "公元1912 — 1916年及以后",
+      "era": "republic",
+      "characters": 580,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "共和国的名字与实际权力"
+        },
+        {
+          "id": "p4",
+          "title": "称帝失败以后"
+        },
+        {
+          "id": "p7",
+          "title": "青年为什么开始寻找新道路"
+        }
+      ]
+    },
+    {
+      "id": "may-fourth",
+      "title": "五四运动：外交争议引发社会动员",
+      "date": "公元1919年",
+      "era": "republic",
+      "characters": 544,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "战胜国为什么还要抗议"
+        },
+        {
+          "id": "p4",
+          "title": "思想变化与社会参与"
+        },
+        {
+          "id": "p7",
+          "title": "从思潮到组织"
+        }
+      ]
+    },
+    {
+      "id": "first-united-front",
+      "title": "中共成立与第一次国共合作",
+      "date": "公元1921 — 1924年",
+      "era": "republic",
+      "characters": 558,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "两个政党怎样走到一起"
+        },
+        {
+          "id": "p4",
+          "title": "合作带来了什么条件"
+        },
+        {
+          "id": "p7",
+          "title": "共同目标不等于没有分歧"
+        }
+      ]
+    },
+    {
+      "id": "northern-expedition",
+      "title": "北伐与国共分裂：合作转向内战",
+      "date": "公元1926 — 1928年",
+      "era": "republic",
+      "characters": 522,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "北伐要打败谁"
+        },
+        {
+          "id": "p4",
+          "title": "合作为什么破裂"
+        },
+        {
+          "id": "p7",
+          "title": "把日本侵华这条线放进来"
+        }
+      ]
+    },
+    {
+      "id": "mukden",
+      "title": "九一八事变：日本侵占中国东北",
+      "date": "公元1931年",
+      "era": "republic",
+      "characters": 538,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "东北为什么成为目标"
+        },
+        {
+          "id": "p4",
+          "title": "占领与抵抗同时发生"
+        },
+        {
+          "id": "p7",
+          "title": "1931与1937怎样区分"
+        }
+      ]
+    },
+    {
+      "id": "war-resistance",
+      "title": "全民族抗战：长期战争与巨大牺牲",
+      "date": "公元1937 — 1945年",
+      "era": "republic",
+      "characters": 536,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "全面战争怎样改变生活"
+        },
+        {
+          "id": "p4",
+          "title": "不同战场怎样相连"
+        },
+        {
+          "id": "p7",
+          "title": "胜利为什么没有立即带来和平"
+        }
+      ]
+    },
+    {
+      "id": "civil-war",
+      "title": "国共内战：大陆政权发生转变",
+      "date": "公元1946 — 1949年",
+      "era": "republic",
+      "characters": 525,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "谈判与冲突并行"
+        },
+        {
+          "id": "p4",
+          "title": "大陆政权怎样发生转变"
+        },
+        {
+          "id": "p7",
+          "title": "从战争史转向重建史"
+        }
+      ]
+    },
+    {
+      "id": "prc-founded",
+      "title": "中华人民共和国成立：从战争走向重建",
+      "date": "公元1949年",
+      "era": "prc-early",
+      "characters": 547,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "新政府面对怎样的社会"
+        },
+        {
+          "id": "p4",
+          "title": "恢复生活与改造制度"
+        },
+        {
+          "id": "p7",
+          "title": "内部重建与外部关系"
+        }
+      ]
+    },
+    {
+      "id": "korean-war",
+      "title": "朝鲜战争：新中国卷入冷战冲突",
+      "date": "公元1950 — 1953年",
+      "era": "prc-early",
+      "characters": 511,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "半岛分裂与冷战"
+        },
+        {
+          "id": "p4",
+          "title": "为什么停战不等于和平条约"
+        },
+        {
+          "id": "p7",
+          "title": "对中国有什么影响"
+        }
+      ]
+    },
+    {
+      "id": "first-five-year",
+      "title": "一五计划：集中力量建设工业",
+      "date": "公元1953 — 1957年",
+      "era": "prc-early",
+      "characters": 558,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "为什么要制定五年计划"
+        },
+        {
+          "id": "p4",
+          "title": "建设工厂也在改变制度"
+        },
+        {
+          "id": "p7",
+          "title": "成就怎样转化为更高目标"
+        }
+      ]
+    },
+    {
+      "id": "great-leap",
+      "title": "大跃进与大饥荒：急于求成的代价",
+      "date": "公元1958 — 1962年前后",
+      "era": "prc-early",
+      "characters": 515,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "快速赶超的目标怎样落到基层"
+        },
+        {
+          "id": "p4",
+          "title": "饥荒为什么如此严重"
+        },
+        {
+          "id": "p7",
+          "title": "调整之后仍留下什么"
+        }
+      ]
+    },
+    {
+      "id": "cultural-revolution",
+      "title": "文化大革命：政治运动深入日常生活",
+      "date": "公元1966 — 1976年",
+      "era": "prc-early",
+      "characters": 541,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "政治运动为什么进入日常生活"
+        },
+        {
+          "id": "p4",
+          "title": "为什么不能只记几个政治名词"
+        },
+        {
+          "id": "p7",
+          "title": "结束之后怎样重新出发"
+        }
+      ]
+    },
+    {
+      "id": "un-seat",
+      "title": "联合国中国代表权发生变化",
+      "date": "公元1971年",
+      "era": "prc-early",
+      "characters": 537,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "联合国里改变的是谁代表中国"
+        },
+        {
+          "id": "p4",
+          "title": "为什么这是重要外交转折"
+        },
+        {
+          "id": "p7",
+          "title": "文件说到哪里，就先读到哪里"
+        }
+      ]
+    },
+    {
+      "id": "reform-opening",
+      "title": "改革开放：从恢复秩序到改变发展办法",
+      "date": "公元1978年起",
+      "era": "reform",
+      "characters": 546,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "为什么要改变发展的办法"
+        },
+        {
+          "id": "p4",
+          "title": "农村与沿海怎样先发生变化"
+        },
+        {
+          "id": "p7",
+          "title": "改革怎样进入普通人的生活"
+        }
+      ]
+    },
+    {
+      "id": "tiananmen-1989",
+      "title": "1989年政治风波：抗议与武力镇压",
+      "date": "公元1989年",
+      "era": "reform",
+      "characters": 493,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "抗议在什么背景下出现"
+        },
+        {
+          "id": "p4",
+          "title": "戒严与武力镇压"
+        },
+        {
+          "id": "p7",
+          "title": "此后留下的影响"
+        }
+      ]
+    },
+    {
+      "id": "southern-tour",
+      "title": "南方谈话与市场经济目标",
+      "date": "公元1992年",
+      "era": "reform",
+      "characters": 515,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "改革方向为什么再次成为问题"
+        },
+        {
+          "id": "p4",
+          "title": "“市场经济”怎样影响规则"
+        },
+        {
+          "id": "p7",
+          "title": "新机会与新调整"
+        }
+      ]
+    },
+    {
+      "id": "hong-kong-return",
+      "title": "香港回归：特别行政区成立",
+      "date": "公元1997年7月1日",
+      "era": "reform",
+      "characters": 567,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "从晚清条约接到20世纪末"
+        },
+        {
+          "id": "p4",
+          "title": "特别行政区意味着什么"
+        },
+        {
+          "id": "p7",
+          "title": "怎样用原文核对"
+        }
+      ]
+    },
+    {
+      "id": "macao-return",
+      "title": "澳门回归：另一个特别行政区成立",
+      "date": "公元1999年12月20日",
+      "era": "reform",
+      "characters": 530,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "澳门与香港不是同一个故事"
+        },
+        {
+          "id": "p4",
+          "title": "从过渡安排到特别行政区"
+        },
+        {
+          "id": "p7",
+          "title": "把两次回归放在一起记"
+        }
+      ]
+    },
+    {
+      "id": "wto-entry",
+      "title": "加入世贸组织：中国更深地进入全球贸易",
+      "date": "公元2001年",
+      "era": "contemporary",
+      "characters": 515,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "为什么要经过长期谈判"
+        },
+        {
+          "id": "p4",
+          "title": "国际规则怎样影响普通人"
+        },
+        {
+          "id": "p7",
+          "title": "中国与世界相互影响"
+        }
+      ]
+    },
+    {
+      "id": "wenchuan",
+      "title": "汶川地震：灾难、救援与重建",
+      "date": "公元2008年5月12日",
+      "era": "contemporary",
+      "characters": 493,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "一次地震怎样成为长期历史"
+        },
+        {
+          "id": "p4",
+          "title": "救援之后为什么还要重建"
+        },
+        {
+          "id": "p7",
+          "title": "灾害带来的公共问题"
+        }
+      ]
+    },
+    {
+      "id": "beijing-olympics",
+      "title": "北京奥运会：在世界舞台上的大型相遇",
+      "date": "公元2008年8月",
+      "era": "contemporary",
+      "characters": 512,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "赛事背后是一座城市的准备"
+        },
+        {
+          "id": "p4",
+          "title": "怎样看待大型活动的影响"
+        },
+        {
+          "id": "p7",
+          "title": "不同赛事要分开记"
+        }
+      ]
+    },
+    {
+      "id": "constitution-2018",
+      "title": "宪法修改：读懂制度变化的一个节点",
+      "date": "公元2018年",
+      "era": "contemporary",
+      "characters": 500,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "制度变化为什么也是历史"
+        },
+        {
+          "id": "p4",
+          "title": "任期条款究竟怎样改"
+        },
+        {
+          "id": "p7",
+          "title": "怎样继续阅读"
+        }
+      ]
+    },
+    {
+      "id": "covid-pandemic",
+      "title": "新冠疫情：公共卫生危机改变日常生活",
+      "date": "公元2019年底 — 2023年",
+      "era": "contemporary",
+      "characters": 580,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "从疫情出现到全球传播"
+        },
+        {
+          "id": "p4",
+          "title": "政策在不同阶段怎样变化"
+        },
+        {
+          "id": "p7",
+          "title": "怎样记录一段仍有影响的历史"
+        }
+      ]
+    },
+    {
+      "id": "change-six",
+      "title": "嫦娥六号：带回月球背面的样品",
+      "date": "公元2024年6月25日",
+      "era": "contemporary",
+      "characters": 561,
+      "blocks": 8,
+      "outline": [
+        {
+          "id": "p1",
+          "title": "为什么要去月球背面取样"
+        },
+        {
+          "id": "p4",
+          "title": "2024年发生了什么"
+        },
+        {
+          "id": "p7",
+          "title": "把科技事件放回历史主线"
+        }
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "id": "republic-constitution",
+      "page": "中華民國臨時約法",
+      "title": "中华民国临时约法",
+      "date": "1912年3月11日",
+      "events": [
+        "xinhai",
+        "beiyang"
+      ],
+      "cue": "主權",
+      "note": "阅读共和国对主权、权利和政府权限的规定。法律条文表达制度目标，不代表当时已全部实现。",
+      "block": "p10",
+      "characters": 2948,
+      "blocks": 124,
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E8%87%A8%E6%99%82%E7%B4%84%E6%B3%95",
+      "archiveSha256": "04b085b24994cbf9bf957e0d3d6283b26755103f0ba71f4a7d90e4bb60ead992",
+      "license": "文献原作属公有领域或法律、行政文件；维基文库及贡献者转录，依 EPUB 元数据采用 CC BY-SA 3.0。",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    },
+    {
+      "id": "united-front-declaration",
+      "page": "中國國民黨第一次全國代表大會宣言",
+      "title": "中国国民党第一次全国代表大会宣言",
+      "date": "1924年1月",
+      "events": [
+        "first-united-front",
+        "northern-expedition"
+      ],
+      "cue": "民權",
+      "note": "这份政治宣言帮助理解第一次国共合作时期的共同纲领，保留发布者当时的立场与措辞。",
+      "block": "p2",
+      "characters": 7216,
+      "blocks": 54,
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E4%B8%AD%E5%9C%8B%E5%9C%8B%E6%B0%91%E9%BB%A8%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%85%A8%E5%9C%8B%E4%BB%A3%E8%A1%A8%E5%A4%A7%E6%9C%83%E5%AE%A3%E8%A8%80",
+      "archiveSha256": "845f4858dbe5f1041c37df326889286acf7dfd7f512ce75328600438c34eac5a",
+      "license": "文献原作属公有领域或法律、行政文件；维基文库及贡献者转录，依 EPUB 元数据采用 CC BY-SA 3.0。",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    },
+    {
+      "id": "prc-proclamation",
+      "page": "中华人民共和国中央人民政府公告",
+      "title": "中华人民共和国中央人民政府公告",
+      "date": "1949年10月1日",
+      "events": [
+        "civil-war",
+        "prc-founded"
+      ],
+      "cue": "成立",
+      "note": "中央人民政府成立时发布的公告。文中的政治评价是发布者当时的表述。",
+      "block": "p7",
+      "characters": 927,
+      "blocks": 9,
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E4%B8%AD%E5%A4%AE%E4%BA%BA%E6%B0%91%E6%94%BF%E5%BA%9C%E5%85%AC%E5%91%8A",
+      "archiveSha256": "7b50c5e8c54d22aed0686d7bd175257846a429274d83973f9c36fc41f5f0fcbb",
+      "license": "文献原作属公有领域或法律、行政文件；维基文库及贡献者转录，依 EPUB 元数据采用 CC BY-SA 3.0。",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    },
+    {
+      "id": "sez-regulation",
+      "page": "广东省经济特区条例",
+      "title": "广东省经济特区条例",
+      "date": "1980年8月26日",
+      "events": [
+        "reform-opening"
+      ],
+      "cue": "第一条",
+      "note": "用经济特区的实际规则理解对外开放。这是1980年的制度文件，并非1978年三中全会公报。",
+      "block": "p2",
+      "characters": 2075,
+      "blocks": 41,
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E5%B9%BF%E4%B8%9C%E7%9C%81%E7%BB%8F%E6%B5%8E%E7%89%B9%E5%8C%BA%E6%9D%A1%E4%BE%8B",
+      "archiveSha256": "5c7592157d78eb5d83e7d47cdb41547a1873a48cb5b2b7d24e766882ff6fee0e",
+      "license": "文献原作属公有领域或法律、行政文件；维基文库及贡献者转录，依 EPUB 元数据采用 CC BY-SA 3.0。",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    },
+    {
+      "id": "martial-law",
+      "page": "国务院关于在北京市部分地区实行戒严的命令",
+      "title": "国务院关于在北京市部分地区实行戒严的命令",
+      "date": "1989年5月20日",
+      "events": [
+        "tiananmen-1989"
+      ],
+      "cue": "戒严",
+      "note": "本文件只记录政府的戒严决定与当时措辞，不能代替对抗议、镇压、伤亡及当事人经历的全面了解。",
+      "block": "p3",
+      "characters": 241,
+      "blocks": 5,
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E5%9B%BD%E5%8A%A1%E9%99%A2%E5%85%B3%E4%BA%8E%E5%9C%A8%E5%8C%97%E4%BA%AC%E5%B8%82%E9%83%A8%E5%88%86%E5%9C%B0%E5%8C%BA%E5%AE%9E%E8%A1%8C%E6%88%92%E4%B8%A5%E7%9A%84%E5%91%BD%E4%BB%A4",
+      "archiveSha256": "15e3b91d58263fc53d007bda0fda7bfec2f87ca51376f011d9ea86f19d686386",
+      "license": "文献原作属公有领域或法律、行政文件；维基文库及贡献者转录，依 EPUB 元数据采用 CC BY-SA 3.0。",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    },
+    {
+      "id": "constitution-1993",
+      "page": "中华人民共和国宪法修正案 (1993年)",
+      "title": "中华人民共和国宪法修正案（1993年）",
+      "date": "1993年3月29日",
+      "events": [
+        "southern-tour"
+      ],
+      "cue": "市场经济",
+      "note": "1992年改革加快后的制度变化；这不是南方谈话的逐字记录。",
+      "block": "p5",
+      "characters": 1625,
+      "blocks": 9,
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E5%AE%AA%E6%B3%95%E4%BF%AE%E6%AD%A3%E6%A1%88_(1993%E5%B9%B4)",
+      "archiveSha256": "6e7c4002da1907f1779deeedc6cf815961003af5d37a514125d6105f11350681",
+      "license": "文献原作属公有领域或法律、行政文件；维基文库及贡献者转录，依 EPUB 元数据采用 CC BY-SA 3.0。",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    },
+    {
+      "id": "hong-kong-declaration",
+      "page": "中华人民共和国政府和大不列颠及北爱尔兰联合王国政府关于香港问题的联合声明 (条约汇编)",
+      "title": "中英关于香港问题的联合声明",
+      "date": "1984年12月19日",
+      "events": [
+        "hong-kong-return"
+      ],
+      "cue": "一九九七年七月一日",
+      "note": "从联合声明及其附件阅读回归日期、特别行政区安排与过渡期机制。",
+      "block": "p3",
+      "characters": 9913,
+      "blocks": 135,
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E6%94%BF%E5%BA%9C%E5%92%8C%E5%A4%A7%E4%B8%8D%E5%88%97%E9%A2%A0%E5%8F%8A%E5%8C%97%E7%88%B1%E5%B0%94%E5%85%B0%E8%81%94%E5%90%88%E7%8E%8B%E5%9B%BD%E6%94%BF%E5%BA%9C%E5%85%B3%E4%BA%8E%E9%A6%99%E6%B8%AF%E9%97%AE%E9%A2%98%E7%9A%84%E8%81%94%E5%90%88%E5%A3%B0%E6%98%8E_(%E6%9D%A1%E7%BA%A6%E6%B1%87%E7%BC%96)",
+      "archiveSha256": "ed62f420aec9074a65d7a83ee9962ed2bff7d072b66071ab93bf499c5d0b1efa",
+      "license": "文献原作属公有领域或法律、行政文件；维基文库及贡献者转录，依 EPUB 元数据采用 CC BY-SA 3.0。",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    },
+    {
+      "id": "macao-declaration",
+      "page": "中华人民共和国政府和葡萄牙共和国政府关于澳门问题的联合声明",
+      "title": "中葡关于澳门问题的联合声明",
+      "date": "1987年4月13日",
+      "events": [
+        "macao-return"
+      ],
+      "cue": "1999年12月20日",
+      "note": "从联合声明及其附件阅读澳门回归日期和制度安排，并与香港的文件对照。",
+      "block": "p3",
+      "characters": 7957,
+      "blocks": 129,
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E6%94%BF%E5%BA%9C%E5%92%8C%E8%91%A1%E8%90%84%E7%89%99%E5%85%B1%E5%92%8C%E5%9B%BD%E6%94%BF%E5%BA%9C%E5%85%B3%E4%BA%8E%E6%BE%B3%E9%97%A8%E9%97%AE%E9%A2%98%E7%9A%84%E8%81%94%E5%90%88%E5%A3%B0%E6%98%8E",
+      "archiveSha256": "953a60bdedc4b915fe529d3759dea7609e6d7d5ffa5af2db1efca1570b97ad36",
+      "license": "文献原作属公有领域或法律、行政文件；维基文库及贡献者转录，依 EPUB 元数据采用 CC BY-SA 3.0。",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    },
+    {
+      "id": "constitution-2018",
+      "page": "中华人民共和国宪法修正案 (2018年)",
+      "title": "中华人民共和国宪法修正案（2018年）",
+      "date": "2018年3月11日",
+      "events": [
+        "constitution-2018"
+      ],
+      "cue": "第四十五条",
+      "note": "阅读国家主席、副主席任职规定的变化，并联系同次修宪的其他条款。",
+      "block": "p15",
+      "characters": 4500,
+      "blocks": 37,
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E5%AE%AA%E6%B3%95%E4%BF%AE%E6%AD%A3%E6%A1%88_(2018%E5%B9%B4)",
+      "archiveSha256": "b979f38d67e3cbca3a9e6480c890b32d2141d036a66400f0dfa400101d6006cb",
+      "license": "文献原作属公有领域或法律、行政文件；维基文库及贡献者转录，依 EPUB 元数据采用 CC BY-SA 3.0。",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    },
+    {
+      "id": "wenchuan-reconstruction",
+      "page": "汶川地震灾后恢复重建条例",
+      "title": "汶川地震灾后恢复重建条例",
+      "date": "2008年6月8日",
+      "events": [
+        "wenchuan"
+      ],
+      "cue": "第一条",
+      "note": "震后恢复重建的行政法规，用于了解救灾之后的安置与重建责任。",
+      "block": "p2",
+      "characters": 10030,
+      "blocks": 155,
+      "sourceUrl": "https://zh.wikisource.org/wiki/%E6%B1%B6%E5%B7%9D%E5%9C%B0%E9%9C%87%E7%81%BE%E5%90%8E%E6%81%A2%E5%A4%8D%E9%87%8D%E5%BB%BA%E6%9D%A1%E4%BE%8B",
+      "archiveSha256": "ec4d626d64856506172099afad85e7ce0c6317123979ba5fdb16e537fa50aa4c",
+      "license": "文献原作属公有领域或法律、行政文件；维基文库及贡献者转录，依 EPUB 元数据采用 CC BY-SA 3.0。",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+    },
+    {
+      "id": "covid-policy",
+      "title": "国家卫生健康委员会公告（2022年第7号）",
+      "date": "2022年12月26日",
+      "events": [
+        "covid-pandemic"
+      ],
+      "cue": "2023年1月8日",
+      "sourceUrl": "https://www.nhc.gov.cn/xcs/zhengcwj/202212/b6984c15b07542e0baecd651f73133ac.shtml",
+      "note": "国内防控调整的正式公告，注意公布日期与实施日期不同；它不是世卫组织在2023年5月的决定。",
+      "license": "行政性质文件；依《中华人民共和国著作权法》第五条不适用著作权法。",
+      "block": "p3",
+      "characters": 159,
+      "blocks": 6
+    }
+  ],
+  "qingLinks": [
+    {
+      "event": "qing-founded",
+      "volume": 3,
+      "cue": "定有天下之號曰大清",
+      "label": "1636年改国号",
+      "block": "p2"
+    },
+    {
+      "event": "qing-founded",
+      "volume": 4,
+      "cue": "自成棄燕京西走",
+      "label": "1644年入关后的军事进展",
+      "block": "p10"
+    },
+    {
+      "event": "qing-consolidation",
+      "volume": 7,
+      "cue": "鄭克塽率其屬劉國軒等迎降",
+      "label": "1683年郑氏归降",
+      "block": "p22"
+    },
+    {
+      "event": "qing-consolidation",
+      "volume": 6,
+      "cue": "吳三桂反，殺雲南巡撫朱國治",
+      "label": "1673年三藩之乱开始",
+      "block": "p164"
+    },
+    {
+      "event": "high-qing",
+      "volume": 120,
+      "cue": "凡滋生人丁",
+      "label": "赋役与财政的史家概述；保留原书褒贬",
+      "block": "p3"
+    },
+    {
+      "event": "opium-war",
+      "volume": 18,
+      "cue": "褫林則徐、鄧廷楨職",
+      "label": "战争初期清廷的人事与防务应对",
+      "block": "p123"
+    },
+    {
+      "event": "opium-war",
+      "volume": 19,
+      "cue": "耆英奏廣州、福州、廈門、寧波、上海各海口",
+      "label": "1842年战后五口通商",
+      "block": "p22"
+    },
+    {
+      "event": "taiping",
+      "volume": 475,
+      "cue": "洪秀全，廣東花縣人",
+      "label": "洪秀全传；清方立场需辨读",
+      "block": "p1"
+    },
+    {
+      "event": "self-strengthening",
+      "volume": 411,
+      "cue": "嘗設廣方言館",
+      "label": "李鸿章兴办洋务",
+      "block": "p16"
+    },
+    {
+      "event": "sino-japanese-war",
+      "volume": 24,
+      "cue": "馬關會議。和約成",
+      "label": "1895年议和与条约安排",
+      "block": "p4"
+    },
+    {
+      "event": "xinhai",
+      "volume": 25,
+      "cue": "特率皇帝將統治權公諸全國",
+      "label": "1912年清帝退位诏书",
+      "block": "p46"
+    },
+    {
+      "event": "hundred-days",
+      "volume": 24,
+      "cue": "楊深秀、楊銳、林旭、劉光第、譚嗣同、康廣仁俱處斬",
+      "label": "戊戌政变与六君子遇害",
+      "block": "p55"
+    },
+    {
+      "event": "boxer",
+      "volume": 24,
+      "cue": "拳匪起山東",
+      "label": "义和团兴起；原书采用清方称谓",
+      "block": "p77"
+    }
+  ]
+}

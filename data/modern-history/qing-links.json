@@ -1,0 +1,15 @@
+[
+  {"event":"qing-founded","volume":3,"cue":"定有天下之號曰大清","label":"1636年改国号"},
+  {"event":"qing-founded","volume":4,"cue":"自成棄燕京西走","label":"1644年入关后的军事进展"},
+  {"event":"qing-consolidation","volume":7,"cue":"鄭克塽率其屬劉國軒等迎降","label":"1683年郑氏归降"},
+  {"event":"qing-consolidation","volume":6,"cue":"吳三桂反，殺雲南巡撫朱國治","label":"1673年三藩之乱开始"},
+  {"event":"high-qing","volume":120,"cue":"凡滋生人丁","label":"赋役与财政的史家概述；保留原书褒贬"},
+  {"event":"opium-war","volume":18,"cue":"褫林則徐、鄧廷楨職","label":"战争初期清廷的人事与防务应对"},
+  {"event":"opium-war","volume":19,"cue":"耆英奏廣州、福州、廈門、寧波、上海各海口","label":"1842年战后五口通商"},
+  {"event":"taiping","volume":475,"cue":"洪秀全，廣東花縣人","label":"洪秀全传；清方立场需辨读"},
+  {"event":"self-strengthening","volume":411,"cue":"嘗設廣方言館","label":"李鸿章兴办洋务"},
+  {"event":"sino-japanese-war","volume":24,"cue":"馬關會議。和約成","label":"1895年议和与条约安排"},
+  {"event":"xinhai","volume":25,"cue":"特率皇帝將統治權公諸全國","label":"1912年清帝退位诏书"},
+  {"event":"hundred-days","volume":24,"cue":"楊深秀、楊銳、林旭、劉光第、譚嗣同、康廣仁俱處斬","label":"戊戌政变与六君子遇害"},
+  {"event":"boxer","volume":24,"cue":"拳匪起山東","label":"义和团兴起；原书采用清方称谓"}
+]

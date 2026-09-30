@@ -5,11 +5,13 @@ import { createReadingGuide } from './ui/reading-guide';
 import { createHistoryJourney } from './ui/history-journey';
 import { journeyUrl, journeySourceUrl, journeyEvents } from './domain/history-journey';
 import { historyGuideUrl, historyGuideSourceUrl } from './domain/history-guides';
+import { modernTextUrl } from './domain/modern-texts';
+import { modernGuideUrl } from './domain/modern-guide-location';
 
-type ReadingMode = 'journey' | 'guide' | 'histories' | 'library';
+type ReadingMode = 'journey' | 'guide' | 'histories' | 'library' | 'texts' | 'modern-guides';
 function normalizeLocation() {
   const url = new URL(location.href);
-  if (url.search && !['journey', 'library', 'reading', 'route', 'histories'].some(key => url.searchParams.has(key))) {
+  if (url.search && !['journey', 'library', 'reading', 'route', 'histories', 'texts', 'modern-guides'].some(key => url.searchParams.has(key))) {
     url.search = '?journey=';
     if (!parseBookLocation(url.hash)) url.hash = '';
     history.replaceState(history.state, '', url);
@@ -17,6 +19,8 @@ function normalizeLocation() {
 }
 function modeFromUrl(): ReadingMode {
   const params = new URL(location.href).searchParams;
+  if (params.has('texts')) return 'texts';
+  if (params.has('modern-guides')) return 'modern-guides';
   if (params.has('library')) return 'library';
   if (params.has('histories')) return 'histories';
   if (params.has('journey')) return 'journey';
@@ -31,16 +35,22 @@ let dynasticLibrary: ReturnType<typeof import('./ui/dynastic-library').createDyn
 let dynasticLoading: Promise<void> | null = null;
 let historyGuides: ReturnType<typeof import('./ui/history-guides').createHistoryGuides> | null = null;
 let guidesLoading: Promise<void> | null = null;
+let modernTexts: ReturnType<typeof import('./ui/modern-texts').createModernTexts> | null = null;
+let textsLoading: Promise<void> | null = null;
+let modernGuides: ReturnType<typeof import('./ui/modern-guides').createModernGuides> | null = null;
+let modernGuidesLoading: Promise<void> | null = null;
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <header class="app-header">
     <a class="brand" href="${import.meta.env.BASE_URL}" aria-label="历史星云首页"><span class="brand-mark">${icon('star')}</span><span>历史星云<small>HISTORICAL NEBULA</small></span></a>
-    <nav class="main-nav" aria-label="主导航"><button class="nav-item" data-action="history-journey">读懂历史</button><button class="nav-item" data-action="reading-guides">史记导读</button><button class="nav-item" data-action="history-guides">二十四史导读</button><button class="nav-item" data-action="shiji-book">史记原文</button><button class="nav-item" data-action="dynastic-library">二十四史原文</button></nav>
+    <nav class="main-nav" aria-label="主导航"><button class="nav-item" data-action="history-journey">读懂历史</button><button class="nav-item" data-action="reading-guides">史记导读</button><button class="nav-item" data-action="history-guides">二十四史导读</button><button class="nav-item" data-action="modern-guides">清至当代导读</button><button class="nav-item" data-action="shiji-book">史记原文</button><button class="nav-item" data-action="dynastic-library">二十四史原文</button><button class="nav-item" data-action="modern-texts">清至当代正文</button></nav>
   </header>
   <div id="journey-root"></div>
   <div id="reading-root"></div>
   <div id="history-guides-root"></div>
   <div id="dynastic-root"></div>
+  <div id="modern-texts-root"></div>
+  <div id="modern-guides-root"></div>
   <footer class="app-footer"><span>${icon('star')}二十四史 3,213 卷可阅读卷次，少数历法表缺录。</span><span>原文整理 · 待审校<button data-action="about-data">关于数据 ${icon('info')}</button></span></footer>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <dialog id="dialog" class="app-dialog" aria-label="关于内容与来源"></dialog>
@@ -96,18 +106,29 @@ async function ensureHistoryGuides() {
   return guidesLoading;
 }
 function render(refresh = true) {
-  for (const [mode, root, action] of [['journey', '#journey-root', 'history-journey'], ['guide', '#reading-root', 'reading-guides'], ['histories', '#history-guides-root', 'history-guides'], ['library', '#dynastic-root', 'dynastic-library']]) {
+  for (const [mode, root, action] of [['journey', '#journey-root', 'history-journey'], ['guide', '#reading-root', 'reading-guides'], ['histories', '#history-guides-root', 'history-guides'], ['library', '#dynastic-root', 'dynastic-library'], ['texts', '#modern-texts-root', 'modern-texts'], ['modern-guides', '#modern-guides-root', 'modern-guides']]) {
     $(root).classList.toggle('hidden', appMode !== mode);
     const button = $(`[data-action="${action}"]`);
     button.classList.toggle('active', appMode === mode);
     if (appMode === mode) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current');
   }
   if (appMode !== 'histories') historyGuides?.hide();
+  const activeNav = document.querySelector<HTMLElement>('.main-nav [aria-current="page"]');
+  const nav = document.querySelector<HTMLElement>('.main-nav');
+  if (activeNav && nav) {
+    const item = activeNav.getBoundingClientRect(), viewport = nav.getBoundingClientRect();
+    if (item.right > viewport.right) nav.scrollLeft += item.right - viewport.right + 10;
+    else if (item.left < viewport.left) nav.scrollLeft += item.left - viewport.left - 10;
+  }
   if (appMode !== 'library') dynasticLibrary?.hide();
+  if (appMode !== 'texts') modernTexts?.hide();
+  if (appMode !== 'modern-guides') modernGuides?.hide();
   if (!refresh) return;
   if (appMode === 'journey') historyJourney.showFromUrl();
   else if (appMode === 'guide') readingGuide.showFromUrl();
   else if (appMode === 'histories') void ensureHistoryGuides();
+  else if (appMode === 'texts') void ensureModernTexts();
+  else if (appMode === 'modern-guides') void ensureModernGuides();
   else void ensureDynasticLibrary();
 }
 function closeDialog() {
@@ -115,6 +136,50 @@ function closeDialog() {
   if (dialog.open) { dialog.close(); dialogPreviousFocus?.focus(); }
 }
 function prepareNavigation() { bookRequest++; closeDialog(); }
+async function ensureModernTexts() {
+  if (modernTexts) { void modernTexts.showFromUrl(); return; }
+  if (textsLoading) return textsLoading;
+  $('#modern-texts-root').innerHTML = '<p class="dynasty-loading">正在打开清至当代正文…</p>';
+  textsLoading = (async () => {
+    try {
+      const { createModernTexts } = await import('./ui/modern-texts');
+      modernTexts = createModernTexts($('#modern-texts-root'), { onJourney: enterJourney, onGuide: enterModernGuides });
+      if (appMode === 'texts') void modernTexts.showFromUrl();
+    } catch {
+      $('#modern-texts-root').innerHTML = '<p>正文目录加载失败。</p><button data-action="retry-texts">重新加载</button>';
+    } finally { textsLoading = null; }
+  })();
+  return textsLoading;
+}
+function enterModernTexts(href = modernTextUrl()) {
+  prepareNavigation(); appMode = 'texts';
+  history.pushState({ texts: true }, '', href); render(); window.scrollTo({ top: 0 });
+}
+async function ensureModernGuides() {
+  if (modernGuides) { modernGuides.showFromUrl(); return; }
+  if (modernGuidesLoading) return modernGuidesLoading;
+  $('#modern-guides-root').innerHTML = '<p class="dynasty-loading">正在打开清至当代导读…</p>';
+  modernGuidesLoading = (async () => {
+    try {
+      const { createModernGuides } = await import('./ui/modern-guides');
+      modernGuides = createModernGuides($('#modern-guides-root'), { onText: enterModernTexts });
+      if (appMode === 'modern-guides') modernGuides.showFromUrl();
+    } catch {
+      $('#modern-guides-root').innerHTML = '<p>导读暂时无法加载。</p><button data-action="retry-modern-guides">重新加载</button>';
+    } finally { modernGuidesLoading = null; }
+  })();
+  return modernGuidesLoading;
+}
+function enterModernGuides(href = modernGuideUrl()) {
+  prepareNavigation(); appMode = 'modern-guides';
+  history.pushState({ modernGuide: true }, '', href); render(false);
+  void ensureModernGuides().then(() => {
+    if (appMode !== 'modern-guides' || location.href !== href) return;
+    const lesson = $('#modern-guides-root').querySelector<HTMLElement>('[data-mg-lesson]');
+    if (lesson) { lesson.scrollIntoView({ block: 'start' }); lesson.focus({ preventScroll: true }); }
+    else window.scrollTo({ top: 0 });
+  });
+}
 function enterJourney(eventId = '') {
   prepareNavigation();
   const scope = new URL(location.href).searchParams.get('scope') ?? 'quick';
@@ -141,12 +206,13 @@ function enterDynasticLibrary(book = '', volume?: number) {
 }
 function aboutData() {
   const dialog = $<HTMLDialogElement>('#dialog'); dialogPreviousFocus = document.activeElement as HTMLElement;
-  dialog.innerHTML = `<div class="dialog-header"><span>关于内容与来源</span><button class="icon-button" data-action="dialog-close" aria-label="关闭">${icon('close')}</button></div><div class="source-content"><h2>沿着事件，回到史书</h2><p>历史主线从上古延伸至当代，选取 ${journeyEvents.length} 个关键事件，用白话说明背景、经过和影响。其中 ${journeyEvents.reduce((count, event) => count + event.sources.length, 0)} 条出处可定位到二十四史的原文；清朝到当代另附博物馆、档案、大学与机构资料链接，最新事件选至2024年。这是入门选读，不是全部史实或逐句翻译，也不表示已收录清代与现代史资料全文。</p><p>《史记》130 卷提供独立入门导读、分段阅读、完整原文与年表。转录来自 <a href="https://zh.wikisource.org/wiki/史記" target="_blank" rel="noopener noreferrer">维基文库及贡献者</a>，来源与许可说明保留在阅读器内。</p><p>另接入《汉书》至《明史》23 部、3,083 卷的转录、卷目与本书检索。新增二十四史导读按时代背景、关键人物、事件经过与影响、阅读重点展开，讲解可往返定位原文；这是书级入门与事件选读，并非新增各卷的逐卷讲解。主要来源是 <a href="https://osf.io/tp729/" target="_blank" rel="noopener noreferrer">Zinin 与 Xu 的二十四史语料</a>；部分短卷与宗室世系表参考维基文库、gujilab 和 hunterhug。至少 12 卷历法表格缺录，阅读页已标示。</p><p>简繁切换只转换字形。转录、卷名与导读仍需结合校勘本核对；卷次覆盖不等于逐字完整。</p><div class="detail-actions"><button class="primary-button" data-action="dynastic-library">二十四史目录</button><button class="secondary-button" data-action="shiji-book">史记原文</button></div></div>`;
+  dialog.innerHTML = `<div class="dialog-header"><span>关于内容与来源</span><button class="icon-button" data-action="dialog-close" aria-label="关闭">${icon('close')}</button></div><div class="source-content"><h2>沿着事件，回到史书</h2><p>历史主线从上古延伸至当代，选取 ${journeyEvents.length} 个关键事件，用白话说明背景、经过和影响。其中 ${journeyEvents.reduce((count, event) => count + event.sources.length, 0)} 条出处可定位到二十四史的原文；清朝到当代新增34篇站内白话正文、11份近现代文献原文，并接入《清史稿》529卷目录（523卷有正文，卷29星表部分缺录，卷30—35正文缺录）。白话正文与史料原文分别标注，可从事件进入、定位段落再返回。另附署名参考资料，最新事件选至2024年；属于入门选读，不代表全部史实或全部近现代史料。</p><p>《史记》130 卷提供独立入门导读、分段阅读、完整原文与年表。转录来自 <a href="https://zh.wikisource.org/wiki/史記" target="_blank" rel="noopener noreferrer">维基文库及贡献者</a>，来源与许可说明保留在阅读器内。</p><p>另接入《汉书》至《明史》23 部、3,083 卷的转录、卷目与本书检索。新增二十四史导读按时代背景、关键人物、事件经过与影响、阅读重点展开，讲解可往返定位原文；这是书级入门与事件选读，并非新增各卷的逐卷讲解。主要来源是 <a href="https://osf.io/tp729/" target="_blank" rel="noopener noreferrer">Zinin 与 Xu 的二十四史语料</a>；部分短卷与宗室世系表参考维基文库、gujilab 和 hunterhug。至少 12 卷历法表格缺录，阅读页已标示。</p><p>简繁切换只转换字形。转录、卷名与导读仍需结合校勘本核对；卷次覆盖不等于逐字完整。</p><div class="detail-actions"><button class="primary-button" data-action="dynastic-library">二十四史目录</button><button class="secondary-button" data-action="shiji-book">史记原文</button></div></div>`;
   dialog.showModal();
 }
 const readingGuide = createReadingGuide($('#reading-root'), { onBook: (volume, block) => void openBook(volume, undefined, block), onHistories: () => enterHistoryGuides() });
 const historyJourney = createHistoryJourney($('#journey-root'), {
   onLibrary: enterDynasticLibrary,
+  onText: enterModernTexts,
   onSource: (event, source) => {
     if (source.book === 'shiji') { void openBook(source.volume, source.cue, source.block); return; }
     prepareNavigation(); appMode = 'library';
@@ -162,6 +228,10 @@ document.addEventListener('click', event => {
     case 'retry-guides': void ensureHistoryGuides(); break;
     case 'dynastic-library': enterDynasticLibrary(); break;
     case 'retry-library': void ensureDynasticLibrary(); break;
+    case 'modern-texts': enterModernTexts(); break;
+    case 'modern-guides': enterModernGuides(); break;
+    case 'retry-modern-guides': void ensureModernGuides(); break;
+    case 'retry-texts': void ensureModernTexts(); break;
     case 'shiji-book': closeDialog(); void openBook(); break;
     case 'about-data': aboutData(); break;
     case 'dialog-close': closeDialog(); break;
@@ -173,7 +243,7 @@ document.addEventListener('keydown', event => {
   event.preventDefault();
   if (document.querySelector('.book-dialog[open]')) { $('#book-query').focus(); return; }
   if (appMode === 'journey' && !document.querySelector('[data-journey-search]')) enterJourney();
-  const selector = appMode === 'library' ? '#dynastic-root [data-library-search], #dynastic-root [data-library-filter]' : appMode === 'guide' ? '#reading-query' : appMode === 'histories' ? '#history-guides-root [data-hg-search], #history-guides-root [data-hg-select]' : '[data-journey-search]';
+  const selector = appMode === 'modern-guides' ? '#modern-guides-root [data-mg-search], #modern-guides-root [data-mg-step][aria-current=step]' : appMode === 'texts' ? '#modern-texts-root [data-text-search], #modern-texts-root [data-text-find]' : appMode === 'library' ? '#dynastic-root [data-library-search], #dynastic-root [data-library-filter]' : appMode === 'guide' ? '#reading-query' : appMode === 'histories' ? '#history-guides-root [data-hg-search], #history-guides-root [data-hg-select]' : '[data-journey-search]';
   document.querySelector<HTMLInputElement>(selector)?.focus();
 });
 function restoreBook() {
@@ -184,5 +254,5 @@ function restoreBook() {
 window.addEventListener('popstate', () => {
   prepareNavigation(); normalizeLocation(); appMode = modeFromUrl(); render(); restoreBook();
 });
-window.addEventListener('hashchange', restoreBook);
+window.addEventListener('hashchange', () => { restoreBook(); if (appMode === 'texts') modernTexts?.locateFromUrl(); });
 render(); restoreBook();

@@ -13,7 +13,9 @@
     "fetch:dynastic": "node scripts/fetch-dynastic-histories.mjs",
     "fetch:dynastic:short": "node scripts/fetch-dynastic-short-volumes.mjs",
     "import:dynastic": "node scripts/import-dynastic-histories.mjs",
-    "verify:dynastic": "node scripts/verify-dynastic-histories.mjs"
+    "verify:dynastic": "node scripts/verify-dynastic-histories.mjs",
+    "fetch:modern": "node scripts/fetch-modern-documents.mjs",
+    "import:modern": "node scripts/import-qingshigao.mjs && node scripts/import-modern-texts.mjs"
   },
   "dependencies": {
     "opencc-js": "^1.4.2",

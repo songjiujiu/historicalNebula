@@ -121,3 +121,5 @@
   .journey-explanation p { font-size: 15px; } .journey-takeaway { padding: 20px; } .journey-takeaway p { font-size: 15px; }
   .journey-sources h2 { font-size: 23px; } .journey-source-card { padding: 18px; } .journey-neighbors { grid-template-columns: 1fr; }
 }
+/* Kept with the event page so the entry is styled before its reader is lazy-loaded. */
+.journey-reading-entry{border:1px solid #9d895d;background:#c5ae7710;border-radius:10px;padding:24px;margin:26px 0}.journey-reading-entry h2{font-size:22px;font-weight:500;margin:12px 0}.journey-reading-entry p{line-height:1.8;color:#a8b9cd}.journey-reading-entry small{display:block;margin-top:10px;color:#8d9fb5}.journey-reading-entry a{display:inline-flex;margin-top:12px;text-decoration:none;align-items:center}
