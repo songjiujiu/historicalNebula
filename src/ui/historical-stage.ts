@@ -12,12 +12,12 @@ export function historicalStage(recent: string, readCount: number) {
     ['jiutangshu', '旧唐书', '唐', historyGuideUrl('jiutangshu')],
     ['qingshigao', '清史稿', '清', modernGuideUrl('qing')],
   ];
-  return `<header class="journey-hero immersive-hero">
+  return `<header class="journey-hero immersive-hero" data-scroll-state="waiting">
     <div class="stage-copy"><span class="journey-overline">从上古读到当代</span><h1>展开历史，<br>看懂来路。</h1><p>跟着事件走，读懂人物与时代。</p>
       <div class="stage-actions"><button class="primary-button" data-journey-action="explore">开始探索 →</button><button class="secondary-button" data-journey-action="${recent ? 'resume' : 'start'}">${recent ? '继续阅读' : '从头读起'}</button></div>
       <blockquote>“以史为鉴，可以知兴替。”<cite>——《旧唐书》</cite></blockquote>
     </div>
-    <div class="scroll-stage" data-history-model="history-scroll"><img src="${base}history-scroll-poster.png" width="1256" height="364" alt="绘画式历史长卷，从古代宫阙、桥梁延伸至现代城市" fetchpriority="high"><div class="stage-canvas" aria-hidden="true"></div></div>
+    <div class="scroll-stage" data-history-model="history-scroll"><div class="scroll-art"><img src="${base}history-scroll-poster.png" width="1256" height="364" alt="绘画式历史长卷，从古代宫阙、桥梁延伸至现代城市" fetchpriority="high"><div class="stage-canvas" aria-hidden="true"></div></div><div class="scroll-turn" aria-hidden="true"></div></div>
     <nav class="scroll-eras" aria-label="长卷时代入口">${[['early', '先秦'], ['qinhan', '秦汉'], ['suitang', '隋唐'], ['songyuan', '宋元'], ['ming', '明'], ['qing', '清'], ['republic', '近现代']].map(([id,title])=>`<button data-stage-era="${id}"><i></i>${title}</button>`).join('')}</nav>
     <button class="stage-event" data-journey-event="qin-unifies"><img class="event-seal" src="${base}qin-portrait.png" alt="" width="82" height="104"><span><strong>秦统一六国</strong><small>前221年 · 从分立走向统一</small><b>查看事件导读 ↗</b></span></button>
   </header>

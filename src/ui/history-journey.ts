@@ -5,6 +5,7 @@ import { modernChapter, modernTextUrl } from '../domain/modern-texts';
 import { featuredQuestionId, featuredQuestionStep, featuredQuestionUrl, renderFeaturedQuestion } from './featured-question';
 import './history-journey.css';
 import { historicalStage } from './historical-stage';
+import { mountScrollEntrance } from './scroll-entrance';
 
 interface JourneyOptions {
   onSource: (event: JourneyEvent, source: JourneySource) => void;
@@ -16,7 +17,9 @@ const KEY = 'historical-nebula:journey:v1';
 export function createHistoryJourney(host: HTMLElement, options: JourneyOptions) {
   let selected: JourneyEvent | undefined;
   let disposeStage: (() => void) | undefined;
+  let disposeEntrance: (() => void) | undefined;
   let stageRequest = 0;
+  let stageHidden = false;
   let eraId = '';
   let scope = 'quick';
   let query = '';
@@ -55,15 +58,18 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
     else if (item.left < viewport.left) nav.scrollLeft += item.left - viewport.left;
   }
   function home() {
+    disposeEntrance?.(); disposeStage?.(); disposeStage = undefined;
     selected = undefined;
     host.innerHTML = `<main class="journey-shell immersive-shell">${historicalStage(recent, read.size)}<div class="journey-layout">${rail()}<div class="journey-main"><section class="journey-controls" aria-label="选择阅读范围"><div><h2>你的历史主线</h2><p>先读概要，再选一个事件展开。</p></div><div class="journey-scope" role="group" aria-label="主线长短"><button data-journey-scope="quick" aria-pressed="${scope !== 'all'}">快速主线 · ${quickJourneyIds.length} 件事</button><button data-journey-scope="all" aria-pressed="${scope === 'all'}">全部关键节点 · ${journeyEvents.length}</button></div></section><label class="journey-search"><span>找事件或人物</span><input data-journey-search type="search" maxlength="100" value="${esc(query)}" placeholder="如：辛亥革命、改革开放、港澳回归" autocomplete="off"></label><p class="journey-result-count" role="status" aria-live="polite"></p><div class="journey-results"></div></div></div>
       <p class="journey-footnote">这是选取关键事件的入门路线，帮助建立时间与因果线索，不等于全书所有事件的汇总或逐句翻译。二十四史正文保留原文，缺录提示见目录。清到当代另有站内白话正文、清史稿及文献选读，最新事件选至2024年。</p></main>`;
     renderResults();
     revealActiveEra();
+    const entrance = mountScrollEntrance(host);
+    disposeEntrance = entrance.dispose;
     const token = ++stageRequest;
     if ('WebGLRenderingContext' in window && window.innerWidth >= 760) void import('./history-model-viewer').then(async module => {
       if (token !== stageRequest) return;
-      const dispose = await module.mountHistoryModels(host);
+      const dispose = await module.mountHistoryModels(host, { scrollReady: entrance.finished });
       if (token !== stageRequest) dispose(); else disposeStage = dispose;
     }).catch(() => {});
   }
@@ -97,6 +103,7 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
     return `<section class="journey-reading-entry"><span class="journey-overline">接着读 · 站内正文</span><h2>想把这件事读完整？</h2><p>${chapter.outline.map(h => esc(h.title)).join(' → ')}</p><small>${chapter.characters.toLocaleString()} 字 · 白话历史正文 · 篇末对照史料</small><br><a class="primary-button" data-journey-text href="${esc(modernTextUrl('chapters', event.id, event.id, 'p1'))}">阅读正文 →</a></section>`;
   }
   function detail(event: JourneyEvent) {
+    disposeEntrance?.(); disposeEntrance = undefined;
     stageRequest++; disposeStage?.(); disposeStage = undefined;
     selected = event; recent = event.id; persist();
     const era = journeyEra(event.era)!;
@@ -126,8 +133,11 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
     const heading = host.querySelector<HTMLElement>('h1'); heading?.setAttribute('tabindex', '-1'); heading?.focus({ preventScroll: true });
   }
   function showFromUrl() {
+    const entering = stageHidden;
+    stageHidden = false;
     const params = new URL(location.href).searchParams;
     if (params.get('question') === featuredQuestionId) {
+      disposeEntrance?.(); disposeEntrance = undefined;
       stageRequest++; disposeStage?.(); disposeStage = undefined;
       selected = undefined;
       host.innerHTML = renderFeaturedQuestion(featuredQuestionStep(params));
@@ -143,7 +153,7 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
     eraId = journeyEra(params.get('era'))?.id ?? ''; scope = params.get('scope') === 'all' ? 'all' : 'quick'; query = '';
     const event = journeyEvent(params.get('journey'));
     if (event) detail(event);
-    else if (!selected && host.querySelector('.journey-results')) refreshFilters();
+    else if (!entering && !selected && host.querySelector('.journey-results')) refreshFilters();
     else home();
   }
   host.addEventListener('click', ev => {
@@ -214,5 +224,11 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
     const input = event.target as HTMLInputElement;
     if (input.matches('[data-journey-search]')) { query = input.value; renderResults(); }
   });
-  return { showFromUrl };
+  function hide() {
+    if (stageHidden) return;
+    stageHidden = true; stageRequest++;
+    disposeEntrance?.(); disposeEntrance = undefined;
+    disposeStage?.(); disposeStage = undefined;
+  }
+  return { showFromUrl, hide };
 }

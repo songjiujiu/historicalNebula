@@ -2,11 +2,14 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 /** Demand-rendered Blender assets. No drifting labels or permanent animation loop. */
-export async function mountHistoryModels(host: HTMLElement): Promise<() => void> {
+export async function mountHistoryModels(host: HTMLElement, options: { scrollReady?: Promise<void> } = {}): Promise<() => void> {
   if (!('WebGLRenderingContext' in window) || window.innerWidth < 760 || (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData) return () => {};
   const cleanups: (() => void)[] = [];
   const loader = new GLTFLoader();
   await Promise.all(Array.from(host.querySelectorAll<HTMLElement>('[data-history-model]')).map(async stage => {
+    // Keep the same poster throughout the entrance; switching canvases mid-roll can flash.
+    if (stage.dataset.historyModel === 'history-scroll') await options.scrollReady;
+    if (!stage.isConnected) return;
     let renderer: THREE.WebGLRenderer;
     try { renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'low-power' }); }
     catch { return; }

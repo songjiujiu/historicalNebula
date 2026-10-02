@@ -146,6 +146,7 @@ function render(refresh = true) {
   if (appMode === 'library' || appMode === 'texts') sourceSummary.setAttribute('aria-current', 'page');
   else sourceSummary.removeAttribute('aria-current');
   if (appMode !== 'histories') historyGuides?.hide();
+  if (appMode !== 'journey') historyJourney.hide();
   const activeNav = document.querySelector<HTMLElement>('.main-nav [aria-current="page"]');
   const nav = document.querySelector<HTMLElement>('.main-nav');
   if (activeNav && nav) {
