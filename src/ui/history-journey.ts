@@ -6,6 +6,7 @@ import { featuredQuestionId, featuredQuestionStep, featuredQuestionUrl, renderFe
 import './history-journey.css';
 import { historicalStage } from './historical-stage';
 import { mountScrollEntrance } from './scroll-entrance';
+import { mountBookOpening } from './book-opening';
 
 interface JourneyOptions {
   onSource: (event: JourneyEvent, source: JourneySource) => void;
@@ -18,6 +19,7 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
   let selected: JourneyEvent | undefined;
   let disposeStage: (() => void) | undefined;
   let disposeEntrance: (() => void) | undefined;
+  let bookOpening: ReturnType<typeof mountBookOpening> | undefined;
   let stageRequest = 0;
   let stageHidden = false;
   let eraId = '';
@@ -58,6 +60,7 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
     else if (item.left < viewport.left) nav.scrollLeft += item.left - viewport.left;
   }
   function home() {
+    bookOpening?.dispose(); bookOpening = undefined;
     disposeEntrance?.(); disposeStage?.(); disposeStage = undefined;
     selected = undefined;
     host.innerHTML = `<main class="journey-shell immersive-shell">${historicalStage(recent, read.size)}<div class="journey-layout">${rail()}<div class="journey-main"><section class="journey-controls" aria-label="选择阅读范围"><div><h2>你的历史主线</h2><p>先读概要，再选一个事件展开。</p></div><div class="journey-scope" role="group" aria-label="主线长短"><button data-journey-scope="quick" aria-pressed="${scope !== 'all'}">快速主线 · ${quickJourneyIds.length} 件事</button><button data-journey-scope="all" aria-pressed="${scope === 'all'}">全部关键节点 · ${journeyEvents.length}</button></div></section><label class="journey-search"><span>找事件或人物</span><input data-journey-search type="search" maxlength="100" value="${esc(query)}" placeholder="如：辛亥革命、改革开放、港澳回归" autocomplete="off"></label><p class="journey-result-count" role="status" aria-live="polite"></p><div class="journey-results"></div></div></div>
@@ -103,6 +106,7 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
     return `<section class="journey-reading-entry"><span class="journey-overline">接着读 · 站内正文</span><h2>想把这件事读完整？</h2><p>${chapter.outline.map(h => esc(h.title)).join(' → ')}</p><small>${chapter.characters.toLocaleString()} 字 · 白话历史正文 · 篇末对照史料</small><br><a class="primary-button" data-journey-text href="${esc(modernTextUrl('chapters', event.id, event.id, 'p1'))}">阅读正文 →</a></section>`;
   }
   function detail(event: JourneyEvent) {
+    bookOpening?.dispose(); bookOpening = undefined;
     disposeEntrance?.(); disposeEntrance = undefined;
     stageRequest++; disposeStage?.(); disposeStage = undefined;
     selected = event; recent = event.id; persist();
@@ -133,6 +137,7 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
     const heading = host.querySelector<HTMLElement>('h1'); heading?.setAttribute('tabindex', '-1'); heading?.focus({ preventScroll: true });
   }
   function showFromUrl() {
+    bookOpening?.dispose(); bookOpening = undefined;
     const entering = stageHidden;
     stageHidden = false;
     const params = new URL(location.href).searchParams;
@@ -160,7 +165,9 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
     const target = (ev.target as Element).closest<HTMLElement>('button,a'); if (!target) return;
     if (target.dataset.stageBook && options.onGuide) {
       if (ev.ctrlKey || ev.metaKey || ev.shiftKey || ev.altKey || ev.button !== 0) return;
-      ev.preventDefault(); options.onGuide(target.dataset.stageBook); return;
+      ev.preventDefault();
+      bookOpening ??= mountBookOpening(host, book => options.onGuide!(book));
+      bookOpening.open(target.dataset.stageBook); return;
     }
     if (target.dataset.stageEra) {
       navigate('', target.dataset.stageEra, 'all');
@@ -227,6 +234,7 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
   function hide() {
     if (stageHidden) return;
     stageHidden = true; stageRequest++;
+    bookOpening?.dispose(); bookOpening = undefined;
     disposeEntrance?.(); disposeEntrance = undefined;
     disposeStage?.(); disposeStage = undefined;
   }

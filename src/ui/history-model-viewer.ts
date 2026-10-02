@@ -32,6 +32,7 @@ export async function mountHistoryModels(host: HTMLElement, options: { scrollRea
     const onContextLost = (event: Event) => { event.preventDefault(); stage.classList.remove('model-ready'); };
     renderer.domElement.addEventListener('webglcontextlost',onContextLost);
     const onHover = (event: Event) => {
+      if (stage.dataset.openingBook) return;
       const target = (event.target as Element).closest<HTMLElement>('[data-stage-book]');
       active = event.type === 'pointerleave' || event.type === 'focusout' ? '' : target?.dataset.stageBook ?? '';
       if (!roots.size || reduced) return;
@@ -48,11 +49,18 @@ export async function mountHistoryModels(host: HTMLElement, options: { scrollRea
       }; frame = requestAnimationFrame(animate);
     };
     const region = stage.closest('.shelf-display');
+    const onBookOpening = () => {
+      cancelAnimationFrame(frame); active = '';
+      roots.forEach(root => root.position.copy(root.userData.home as THREE.Vector3));
+      draw();
+    };
+    stage.addEventListener('bookopeningstart', onBookOpening);
     region?.addEventListener('pointerover',onHover); region?.addEventListener('pointerleave',onHover);
     region?.addEventListener('focusin',onHover); region?.addEventListener('focusout',onHover);
     const release = () => {
       alive=false;cancelAnimationFrame(frame);observer.disconnect();
       renderer.domElement.removeEventListener('webglcontextlost',onContextLost);
+      stage.removeEventListener('bookopeningstart', onBookOpening);
       region?.removeEventListener('pointerover',onHover);region?.removeEventListener('pointerleave',onHover);
       region?.removeEventListener('focusin',onHover);region?.removeEventListener('focusout',onHover);
       scene.traverse(object=>{
