@@ -3,6 +3,7 @@ import './theme.css';
 import { icon } from './ui/icons';
 import { parseBookLocation } from './domain/shiji-book';
 import { createReadingGuide } from './ui/reading-guide';
+import { guideHomeUrl } from './exploration/reading';
 import { createHistoryJourney } from './ui/history-journey';
 import { journeyUrl, journeySourceUrl, journeyEvents } from './domain/history-journey';
 import { historyGuideUrl, historyGuideSourceUrl } from './domain/history-guides';
@@ -12,7 +13,7 @@ import { modernGuideUrl } from './domain/modern-guide-location';
 type ReadingMode = 'journey' | 'guide' | 'histories' | 'library' | 'texts' | 'modern-guides';
 function normalizeLocation() {
   const url = new URL(location.href);
-  if (url.search && !['question', 'journey', 'library', 'reading', 'route', 'histories', 'texts', 'modern-guides'].some(key => url.searchParams.has(key))) {
+  if (url.search && !['question', 'journey', 'library', 'guide', 'reading', 'route', 'histories', 'texts', 'modern-guides'].some(key => url.searchParams.has(key))) {
     url.search = '?journey=';
     if (!parseBookLocation(url.hash)) url.hash = '';
     history.replaceState(history.state, '', url);
@@ -26,7 +27,7 @@ function modeFromUrl(): ReadingMode {
   if (params.has('histories')) return 'histories';
   if (params.has('question')) return 'journey';
   if (params.has('journey')) return 'journey';
-  return params.has('reading') || params.has('route') ? 'guide' : 'journey';
+  return params.has('guide') || params.has('reading') || params.has('route') ? 'guide' : 'journey';
 }
 normalizeLocation();
 let appMode = modeFromUrl();
@@ -202,7 +203,7 @@ function enterJourney(eventId = '') {
 function enterGuides(volume?: number) {
   prepareNavigation(); appMode = 'guide';
   if (volume) { render(false); readingGuide.openVolume(volume); }
-  else { history.pushState({ reading: true }, '', readingGuide.readingUrl); render(); window.scrollTo({ top: 0 }); }
+  else { history.pushState({ reading: true }, '', guideHomeUrl(location.href)); render(); window.scrollTo({ top: 0 }); }
 }
 function enterHistoryGuides(book = '', step = '') {
   prepareNavigation();

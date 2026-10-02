@@ -8,3 +8,15 @@
 /* The guide introduction stands on its own, without the retired story card. */
 .reading-home .reading-home-hero { display: block; }
 .reading-home .reading-resume { margin-top: 20px; }
+
+.reading-route-cards>button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.reading-route-cards .reading-route-cta{display:block;margin-top:15px;color:#d9bb7f;font-size:11px}
+.reading-route-page{max-width:1120px;min-height:calc(100dvh - var(--header))}
+.reading-route-back{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:26px;color:#8599b5;font-size:11px}
+.reading-route-back button{color:#cbb582}
+.reading-route-hero{padding:33px 36px;border:1px solid #3c4b60;border-radius:12px;background:linear-gradient(135deg,#1a2b3dc7,#111a28);}
+.reading-route-hero h1{font:500 34px/1.5 "Noto Serif SC",SimSun,serif;color:#f0e6d0;margin:10px 0}
+.reading-route-hero p{max-width:690px;color:#a9bbd1;font-size:14px;line-height:1.9}
+.reading-route-hero .primary-button{width:auto;padding:0 19px;margin-top:20px}
+.reading-route-page .reading-directory{margin-top:35px}
+@media(max-width:760px){.reading-route-back{align-items:flex-start}.reading-route-back>span{max-width:120px;text-align:right}.reading-route-hero{padding:25px 20px}.reading-route-hero h1{font-size:27px}.reading-route-hero p{font-size:13px}}

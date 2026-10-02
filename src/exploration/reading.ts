@@ -2,6 +2,10 @@ import { chapterGuide, readingRoute } from '../domain/chapter-guides';
 import { chapterByVolume } from '../domain/shiji-book';
 
 export interface GuideLocation { volume: number | null; section: number; route: string }
+export function guideHomeUrl(base: string) {
+  const url = new URL(base); url.search = '?guide='; url.hash = ''; url.username = ''; url.password = '';
+  return url.href;
+}
 export function guideLocation(value: string): GuideLocation {
   const url = new URL(value);
   const route = readingRoute(url.searchParams.get('route'));
