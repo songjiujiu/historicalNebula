@@ -9,6 +9,7 @@ import { journeyUrl, journeySourceUrl, journeyEvents } from './domain/history-jo
 import { historyGuideUrl, historyGuideSourceUrl } from './domain/history-guides';
 import { modernTextUrl } from './domain/modern-texts';
 import { modernGuideUrl } from './domain/modern-guide-location';
+import './editorial.css';
 
 type ReadingMode = 'journey' | 'guide' | 'histories' | 'library' | 'texts' | 'modern-guides';
 function normalizeLocation() {
