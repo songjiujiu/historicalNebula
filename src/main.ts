@@ -11,6 +11,8 @@ import { modernTextUrl } from './domain/modern-texts';
 import { modernGuideUrl } from './domain/modern-guide-location';
 import './editorial.css';
 import './ui/historical-stage.css';
+import './ui/reading-light.css';
+import './ui/daylight-stage.css';
 
 type ReadingMode = 'journey' | 'guide' | 'histories' | 'library' | 'texts' | 'modern-guides';
 function normalizeLocation() {
@@ -80,7 +82,7 @@ function toast(message: string) {
 }
 function setTheme(theme: ColorTheme) {
   document.documentElement.dataset.theme = theme;
-  document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#e8edf6' : '#0a0e18');
+  document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#f3ede2' : '#0a0e18');
   for (const option of ['dark', 'light'] as const) {
     $<HTMLButtonElement>(`[data-action="theme-${option}"]`).setAttribute('aria-pressed', String(option === theme));
   }
@@ -274,8 +276,10 @@ document.addEventListener('click', event => {
   }
 });
 $('#dialog').addEventListener('cancel', event => { event.preventDefault(); closeDialog(); });
-sourceMenu.addEventListener('focusout', () => {
-  queueMicrotask(() => { if (!sourceMenu.contains(document.activeElement)) closeSourceMenu(); });
+sourceMenu.addEventListener('focusout', event => {
+  // activeElement is temporarily body while focus moves between the summary
+  // and an item. Closing at that point swallows the item's pointer click.
+  if (event.relatedTarget instanceof Node && !sourceMenu.contains(event.relatedTarget)) closeSourceMenu();
 });
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape' && sourceMenu.open) {

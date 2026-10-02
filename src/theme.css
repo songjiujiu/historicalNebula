@@ -1,12 +1,37 @@
-/* The site is built from dark editorial surfaces. The light palette inverts those
-   surfaces as one layer, keeping every reader, dialog and highlighted passage in
-   the same color family without maintaining a second set of hundreds of tokens. */
-html[data-theme='light'] { color-scheme: light; background: #e8edf6; }
-html[data-theme='light'] body { background: #e8edf6; }
-html[data-theme='light'] #app { filter: invert(1) hue-rotate(180deg); }
-/* Modal dialogs enter the browser top layer and no longer inherit #app's filter. */
-html[data-theme='light'] dialog:modal { filter: invert(1) hue-rotate(180deg); }
-html[data-theme='light'] dialog::backdrop { background: #16243b66; }
+/* Light mode uses real paper/ink colors. Never invert photographs, WebGL
+   canvases or modal readers together with the page. */
+html[data-theme='light'] {
+  color-scheme: light;
+  --paper: #f3ede2;
+  --paper-surface: #fffbf3;
+  --paper-inset: #ebe3d5;
+  --paper-selected: #e6d8bd;
+  --paper-border: #d2c5ae;
+  --paper-ink: #352d23;
+  --paper-text: #514b40;
+  --paper-muted: #736b5e;
+  --paper-accent: #825b23;
+  --paper-sage: #405b45;
+  --paper-sage-bg: #e3e9dd;
+  --muted: var(--paper-muted);
+  --soft: var(--paper-text);
+  --line: var(--paper-border);
+  --gold: var(--paper-accent);
+  --panel: var(--paper-surface);
+  --blue: #446577;
+  --text-primary: var(--paper-ink);
+  --editorial-ink: var(--paper-ink);
+  --editorial-muted: var(--paper-muted);
+  --editorial-accent: var(--paper-accent);
+  --editorial-rule: var(--paper-border);
+  --editorial-surface: var(--paper-surface);
+  background: var(--paper);
+  color: var(--paper-text);
+}
+html[data-theme='light'] body { background: var(--paper); }
+html[data-theme='light'] #app,
+html[data-theme='light'] dialog:modal { filter: none; }
+html[data-theme='light'] dialog::backdrop { background: #31291d66; }
 html[data-theme='dark'] { color-scheme: dark; }
 
 .app-header .main-nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }

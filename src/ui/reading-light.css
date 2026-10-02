@@ -1,0 +1,167 @@
+/* Explicit light colors for reading surfaces. The historical stage keeps its
+   own art direction in historical-stage.css; artwork never uses an invert. */
+html[data-theme='light'] :is(#journey-root,#reading-root,#history-guides-root,#dynastic-root,#modern-texts-root,#modern-guides-root){background:var(--paper);color:var(--paper-text)}
+html[data-theme='light'] :is(.reading-home,.hg-home,.story-shell,.mg-shell,.mt-shell,.dynasty-shell,.journey-detail-shell,.question-shell){background:transparent;color:var(--paper-text)}
+html[data-theme='light'] :is(.journey-layout,.journey-footnote,.stage-secondary-entry){color:var(--paper-text)}
+html[data-theme='light'] :is(.primary-button,.mg-shell .mg-primary){background:linear-gradient(120deg,#caa35e,#b9873e);color:#21190d;border-color:#a77832;box-shadow:0 3px 12px #7b603418}
+html[data-theme='light'] :is(.primary-button:hover,.mg-shell .mg-primary:hover){background:#bd914c;color:#21190d}
+html[data-theme='light'] :is(.secondary-button,.mg-shell button,.mt-shell button){background:var(--paper-surface);color:var(--paper-accent);border-color:var(--paper-border)}
+html[data-theme='light'] :is(.secondary-button:hover,.mg-shell button:hover,.mt-shell button:hover,.icon-button:hover){background:var(--paper-selected);color:var(--paper-ink)}
+html[data-theme='light'] :is(.text-button,.icon-button,.mg-shell a,.mt-shell a){color:var(--paper-accent)}
+html[data-theme='light'] :is(.text-button:hover,.mg-shell a:hover,.mt-shell a:hover){color:#624012}
+html[data-theme='light'] :where(.journey-layout,.journey-detail-shell,.reading-home,.story-shell,.hg-home,.mg-shell,.mt-shell,.dynasty-shell,.book-dialog,.app-dialog) button:not(.primary-button):not(.mg-primary):hover{color:var(--paper-accent)}
+html[data-theme='light'] :is(.reading-search,.journey-search,.book-search,.dynasty-search,.hg-side select,.mg-shell input,.mg-shell select,.mt-shell input[type=search],.mt-shell select,.dynasty-catalog-heading input,.share-input){background:var(--paper-surface);border-color:var(--paper-border);color:var(--paper-text);box-shadow:none}
+html[data-theme='light'] :is(.reading-search input,.journey-search input,.book-search input,.dynasty-search input,.search-dialog-input input){color:var(--paper-ink)}
+html[data-theme='light'] :is(.reading-search input,.journey-search input,.book-search input,.dynasty-search input,.search-dialog-input input,.mg-shell input,.mt-shell input,.dynasty-catalog-heading input)::placeholder{color:var(--paper-muted);opacity:1}
+html[data-theme='light'] :is(.journey-search span,.reading-search>.icon,.mg-shell label,.mt-shell label,.hg-side label,.book-sidebar label,.dynasty-catalog-heading label,.dynasty-search-label){color:var(--paper-muted)}
+html[data-theme='light'] :is(.journey-overline,.story-kicker,.book-kicker,.mg-overline,.mg-section-heading>span){color:var(--paper-accent)}
+html[data-theme='light'] :is(.app-footer,.dialog-header){background:var(--paper-inset);color:var(--paper-muted);border-color:var(--paper-border)}
+html[data-theme='light'] .app-footer button{color:var(--paper-accent)}
+html[data-theme='light'] :is(.toast,.app-dialog,.book-dialog){background:var(--paper-surface);color:var(--paper-text);border-color:var(--paper-border);box-shadow:0 20px 70px #51432d33;scrollbar-color:#b9aa91 transparent}
+html[data-theme='light'] :is(.source-content h2,.settings-content h2,.full-content>h2){color:var(--paper-ink)}
+html[data-theme='light'] :is(.source-content>p,.source-note,.full-content>p,.settings-content>label:not(.switch-row)){color:var(--paper-text)}
+html[data-theme='light'] .source-note{background:var(--paper-inset);border-color:var(--paper-border)}
+html[data-theme='light'] :is(.source-content a,.full-content>h3,.detail-eyebrow){color:var(--paper-accent)}
+html[data-theme='light'] .fine-print{color:var(--paper-muted)!important}
+html[data-theme='light'] ::selection{background:#dcc28c;color:#292216}
+html[data-theme='light'] ::-webkit-scrollbar-thumb{background:#b9aa91}
+
+/* Historical timeline and event explanations. */
+html[data-theme='light'] :is(.journey-controls h2,.journey-era-section>header h2,.journey-card-body strong,.journey-detail-heading h1,.journey-explanation h2,.journey-sources h2,.journey-neighbors strong,.journey-empty h2){color:var(--paper-ink)}
+html[data-theme='light'] :is(.journey-controls p,.journey-result-count,.journey-rail nav small,.journey-rail nav b,.journey-footnote,.journey-detail-top,.journey-source-card small,.journey-source-card b span,.journey-sources>div>p,.journey-sources>small,.journey-neighbors small,.journey-neighbors span,.journey-complete>span,.journey-card-body small,.journey-reading-entry small){color:var(--paper-muted)}
+html[data-theme='light'] :is(.journey-era-section>header p,.journey-era-section>header h2 small,.journey-card-body>span,.journey-rail-note,.journey-detail-heading>p,.journey-explanation p,.journey-caution,.journey-empty p,.journey-source-card q,.journey-reference-card p,.journey-route-edge,.journey-reading-entry p){color:var(--paper-text)}
+html[data-theme='light'] :is(.journey-rail-note strong,.journey-source-card>span){color:var(--paper-ink)}
+html[data-theme='light'] :is(.journey-rail-note button,.journey-detail-top button,.journey-event-year,.journey-card-arrow,.journey-step-number,.journey-source-card b,.journey-route-edge button){color:var(--paper-accent)}
+html[data-theme='light'] :is(.journey-rail-note,.journey-scope,.journey-explanation section,.journey-neighbors>button,.journey-route-edge,.journey-empty){border-color:var(--paper-border)}
+html[data-theme='light'] .journey-rail nav button{color:var(--paper-text);border-color:transparent}
+html[data-theme='light'] .journey-rail nav button:hover{background:var(--paper-inset);color:var(--paper-ink)}
+html[data-theme='light'] .journey-rail nav [aria-current=page]{background:var(--paper-selected);border-color:#bda57b;color:var(--paper-accent)}
+html[data-theme='light'] .journey-scope button{color:var(--paper-muted)}
+html[data-theme='light'] .journey-scope [aria-pressed=true]{background:var(--paper-selected);color:var(--paper-ink)}
+html[data-theme='light'] .journey-era-map{background:var(--paper-sage-bg);border-color:#829476}
+html[data-theme='light'] .journey-era-map p{color:var(--paper-sage)}
+html[data-theme='light'] .journey-era-map small{color:#65705f}
+html[data-theme='light'] .journey-event-list{border-color:var(--paper-border)}
+html[data-theme='light'] .journey-event-card{background:var(--paper-surface);border-color:var(--paper-border)!important;box-shadow:0 3px 13px #92785008}
+html[data-theme='light'] .journey-event-card:hover{background:#f9f0df;border-color:#b49964!important}
+html[data-theme='light'] .journey-event-card:before{background:#a47c39;box-shadow:0 0 0 5px var(--paper)}
+html[data-theme='light'] .journey-people>span{background:var(--paper-inset);color:var(--paper-text)}
+html[data-theme='light'] .journey-people>span:first-child{background:none;color:var(--paper-accent)}
+html[data-theme='light'] :is(.journey-takeaway,.journey-reading-entry){background:#eee3cb;border-color:#c7b48d}
+html[data-theme='light'] .journey-takeaway span{color:var(--paper-accent)}
+html[data-theme='light'] .journey-takeaway p{color:var(--paper-ink)}
+html[data-theme='light'] .journey-source-card{background:var(--paper-surface);border-color:var(--paper-border)}
+html[data-theme='light'] .journey-source-card:hover{background:#f9f0df;border-color:#b49964}
+html[data-theme='light'] .journey-reference-card mark{background:#e6d6ab;color:#5b451d}
+html[data-theme='light'] .journey-neighbors .journey-next{background:var(--paper-sage-bg);border-color:#9cad90}
+html[data-theme='light'] .journey-complete [aria-pressed=true]{background:var(--paper-sage-bg);color:var(--paper-sage);border-color:#91a286}
+
+/* Shiji routes and shared chapter guide components. */
+html[data-theme='light'] :is(.reading-home-hero h1,.reading-route-hero h1,.reading-section-title h2,.reading-route-cards strong,.reading-chapter-cards strong,.reading-detail .story-chapter-heading h1,.reading-detail .story-current-step>h2,.reading-companion h2){color:var(--paper-ink)}
+html[data-theme='light'] :is(.reading-home-hero p,.reading-home-hero p strong,.reading-route-cards>button>p,.reading-route-hero p,.reading-chapter-cards p,.reading-cast p,.reading-companion p,.reading-source-preview,.reading-source-preview blockquote,.reading-category-explanation){color:var(--paper-text)}
+html[data-theme='light'] :is(.reading-scope,.reading-section-title>span,.reading-route-cards>button>span,.reading-results-caption,.reading-chapter-cards small,.reading-empty,.reading-home-foot,.reading-detail-top,.reading-source-actions>span,.reading-source-preview>small,.reading-route-back){color:var(--paper-muted)}
+html[data-theme='light'] :is(.reading-route-cards .reading-route-cta,.reading-card-cta,.reading-card-number,.reading-cast strong,.reading-source-actions .text-button,.reading-source-preview>span,.reading-route-back button){color:var(--paper-accent)}
+html[data-theme='light'] :is(.reading-route-hero,.reading-start,.reading-route-cards>button,.reading-chapter-cards>button,.reading-cast>div,.reading-companion){background:var(--paper-surface);border-color:var(--paper-border);box-shadow:0 3px 16px #836d4508}
+html[data-theme='light'] :is(.reading-route-cards>button:hover,.reading-route-cards>button[aria-pressed=true],.reading-chapter-cards>button:hover){background:#f5ead5;border-color:#bda57b}
+html[data-theme='light'] .reading-route-cards .route-index{color:#ad884b22}
+html[data-theme='light'] :is(.reading-category-tabs button,.story-step-tabs button){border-color:var(--paper-border);color:var(--paper-muted)}
+html[data-theme='light'] :is(.reading-category-tabs button[aria-pressed=true],.story-step-tabs button[aria-current=step]){background:var(--paper-selected);border-color:#bba177;color:var(--paper-accent)}
+html[data-theme='light'] :is(.reading-companion-heading,.reading-source-actions){border-color:var(--paper-border)}
+html[data-theme='light'] .reading-caution{background:#f0e6ce;border-color:#ab8648;color:#70542b}
+html[data-theme='light'] .reading-index-note{color:var(--paper-muted)!important}
+html[data-theme='light'] :is(.reading-completion,.story-completion){background:var(--paper-sage-bg);border-color:#a3b095;color:var(--paper-sage)}
+html[data-theme='light'] :is(.reading-completion p,.story-completion p){color:var(--paper-sage)}
+html[data-theme='light'] .editorial-books i{background:linear-gradient(90deg,#ded0b4,#f3e5c8);border-color:#b4a07b;color:#66522c;box-shadow:7px 12px 18px #6f573d22}
+html[data-theme='light'] .editorial-books i:nth-child(2n){background:linear-gradient(90deg,#a5b39d,#c4cdb8);color:#354e3d}
+html[data-theme='light'] .editorial-seal{border-color:#a65e49;color:#9b503c}
+html[data-theme='light'] :is(.story-route-title,.story-chapter-heading h2,.story-current-step h4,.story-cast-grid strong,.story-reading h3,.story-route-note strong){color:var(--paper-ink)}
+html[data-theme='light'] :is(.story-question,.story-background>p,.story-outcome>p,.story-current-step>p,.story-terms dd,.story-recap ul){color:var(--paper-text)}
+html[data-theme='light'] :is(.story-route-title small,.story-route small,.story-route-note,.story-route-note p,.story-chapter-meta,.story-sources summary>span,.story-sources>p,.story-cast-grid small,.story-step-tabs button span,.story-page-note){color:var(--paper-muted)}
+html[data-theme='light'] :is(.story-chapter-meta>span:first-child,.story-reading h3>span,.story-takeaway>span,.story-takeaway>p,.story-terms dt,.story-sources>button,.story-page-note button){color:var(--paper-accent)}
+html[data-theme='light'] :is(.story-current-step,.story-sources,.story-cast-grid button){background:var(--paper-surface);border-color:var(--paper-border)}
+html[data-theme='light'] :is(.story-sources summary,.story-terms summary,.story-recap summary,.story-sources>button>span){color:var(--paper-text)}
+html[data-theme='light'] .story-route li>button{color:var(--paper-muted)}
+html[data-theme='light'] .story-route [aria-current=step]{color:var(--paper-accent);background:var(--paper-selected)}
+html[data-theme='light'] .story-route-number{background:var(--paper-surface);border-color:var(--paper-border);color:var(--paper-muted)}
+html[data-theme='light'] .story-route [aria-current=step] .story-route-number{background:#a58042;color:#fff8e8;border-color:#a58042}
+html[data-theme='light'] .story-route li:not(:last-child):after{border-color:var(--paper-border)}
+html[data-theme='light'] .story-avatar{color:#6c5679;background:#e6dceb}
+html[data-theme='light'] .story-avatar.han{color:#35615b;background:#dcebe3}
+html[data-theme='light'] .story-avatar.chu{color:#8a5b32;background:#f2e3cc}
+html[data-theme='light'] :is(.story-complete,.hg-detail .story-outcome small){color:var(--paper-sage)}
+
+/* Twenty-four histories book guides. */
+html[data-theme='light'] :is(.hg-hero h1,.hg-start h2,.hg-section-head h2,.hg-card h3,.hg-detail .story-reading h1,.hg-chapter-list strong){color:var(--paper-ink)}
+html[data-theme='light'] :is(.hg-hero p,.hg-hero strong,.hg-start p,.hg-card p,.hg-side strong,.hg-side>p,.hg-connection p,.hg-explanation p,.hg-detail .story-current-step>p.hg-event-lead,.hg-read-on>p,.hg-related>p,.hg-catalog-note){color:var(--paper-text)}
+html[data-theme='light'] :is(.hg-hero .hg-scope,.hg-section-head>span,.hg-card>span,.hg-card small,.hg-footnote,.hg-empty,.hg-side small,.hg-side .hg-side-note,.hg-chapter-list span,.hg-chapter-list small,.hg-preview-note){color:var(--paper-muted)}
+html[data-theme='light'] :is(.hg-card b,.hg-connection strong,.hg-explanation h4,.hg-chapters>summary){color:var(--paper-accent)}
+html[data-theme='light'] :is(.hg-start,.hg-card,.hg-chapters,.hg-chapter-list>button){background:var(--paper-surface);border-color:var(--paper-border)}
+html[data-theme='light'] :is(.hg-card:hover,.hg-chapter-list>button:hover){background:#f5ead5;border-color:#bda57b}
+html[data-theme='light'] .hg-connection{background:var(--paper-inset);border-color:#b29a70}
+html[data-theme='light'] .hg-side li>button>span{color:var(--paper-muted);border-color:var(--paper-border)}
+html[data-theme='light'] .hg-side [aria-current=step]{background:var(--paper-selected);border-color:#bba177}
+html[data-theme='light'] .hg-side [aria-current=step] strong{color:var(--paper-accent)}
+html[data-theme='light'] .hg-side [aria-current=step]>span{background:#a58042;color:#fff8e8;border-color:#a58042}
+html[data-theme='light'] .hg-source-tabs button{color:var(--paper-muted);border-color:var(--paper-border)}
+html[data-theme='light'] .hg-source-tabs [aria-pressed=true]{color:var(--paper-accent);background:var(--paper-selected);border-color:#bba177}
+html[data-theme='light'] .hg-companion mark{background:#e8d29c;color:#503915;border-color:#b1955b}
+html[data-theme='light'] .hg-detail [data-hg-status]{color:var(--paper-sage)}
+
+/* Qing-to-contemporary guides and prose. */
+html[data-theme='light'] :is(.mg-shell h1,.mg-shell h2,.mg-shell h3,.mg-shell h4,.mt-shell h1,.mt-shell h2,.mt-shell h3){color:var(--paper-ink)}
+html[data-theme='light'] :is(.mg-hero>p,.mg-era-grid p,.mg-question-list p,.mg-era-intro>p,.mg-era-intro details,.mg-connection p,.mg-lesson header>p,.mg-background p,.mg-background ul,.mg-sections p,.mt-hero>p,.mt-heading>p,.mt-guide-entry p,.mt-doc-list p,.mt-reader-aside>strong,.mt-reader-aside nav a,.mt-references p,.mt-provenance p){color:var(--paper-text)}
+html[data-theme='light'] :is(.mg-progress-line,.mg-top,.mg-section-heading p,.mg-era-grid small,.mg-era-grid article>span:last-child,.mg-result-count,.mg-question-list small,.mg-sources article p,.mg-source-note,.mt-era h2 small,.mt-card-meta,.mt-doc-list small,.mt-related small,.mt-references small){color:var(--paper-muted)}
+html[data-theme='light'] .mg-article-name{color:var(--paper-muted)!important}
+html[data-theme='light'] .mt-paragraph{color:var(--paper-muted)!important;opacity:1}
+html[data-theme='light'] :is(.mg-era-number,.mg-step-number,.mg-connection>span,.mg-background span,.mg-takeaway>span,.mg-era-intro dt,.mg-shell summary,.mt-guide-entry strong){color:var(--paper-accent)}
+html[data-theme='light'] :is(.mg-era-grid article,.mg-sections li,.mt-card-wrap,.mt-volume){background:var(--paper-surface);border-color:var(--paper-border)}
+html[data-theme='light'] :is(.mg-era-grid article:hover,.mt-card-wrap:hover,.mt-volume:hover){background:#f9f0df;border-color:#bda57b}
+html[data-theme='light'] :is(.mg-route,.mg-catalog,.mg-question-list article,.mg-era-intro,.mg-background,.mg-sources article,.mg-neighbors,.mt-tabs a,.mt-doc-list article,.mt-block td,.mt-block th,.mt-related,.mt-references,.mt-provenance,.mt-neighbors){border-color:var(--paper-border)}
+html[data-theme='light'] :is(.mg-note,.mg-connection,.mt-note,.mt-guide-entry){background:var(--paper-sage-bg);color:var(--paper-sage);border-color:#99aa91}
+html[data-theme='light'] .mg-takeaway{background:#ece6cf;border-color:#c5b790}
+html[data-theme='light'] .mg-takeaway small{color:#5b6550}
+html[data-theme='light'] :is(.mg-era-nav a,.mg-step-nav a,.mt-tabs a){color:var(--paper-muted)}
+html[data-theme='light'] :is(.mg-era-nav a[aria-current=true],.mg-step-nav a[aria-current=step],.mt-tabs a[aria-current=page]){color:var(--paper-accent);background:var(--paper-selected);border-color:#bba177}
+html[data-theme='light'] .mt-warning{background:#f2e6cc;color:#785723;border-color:#bd9a5b}
+html[data-theme='light'] .mt-reading-top{background:#f3ede2f5;border-color:var(--paper-border);color:var(--paper-muted)}
+html[data-theme='light'] .mt-block.mt-highlight{border-color:#ac8137;background:#e8d6ac66}
+html[data-theme='light'] .mt-block th{background:var(--paper-inset);color:var(--paper-ink)}
+
+/* Original-text readers, including tables, search hits and pinned return links. */
+html[data-theme='light'] :is(.dynasty-top h1,.dynasty-welcome h2,.dynasty-route h2,.dynasty-catalog-heading h2,.dynasty-era-heading h2,.dynasty-book-card strong,.dynasty-side-head h2,.dynasty-book-intro h2,.dynasty-results h2,.dynasty-reader-heading h2,.dynasty-reading-note h3,.book-main h2,.book-top h1,.book-featured strong,.book-reading-route h3,.book-format-guide h3,.book-intro h3,.book-chapter strong){color:var(--paper-ink)}
+html[data-theme='light'] :is(.dynasty-top p,.dynasty-welcome p,.dynasty-route p,.dynasty-book-card p,.dynasty-volume strong,.dynasty-book-intro p,.dynasty-results p,.dynasty-book-intro .dynasty-lead,.dynasty-reading-note p,.dynasty-guide-intro p,.book-overview>p,.book-results>p,.book-reading-route>p,.book-format-guide dd,.book-intro p,.book-block-content,.book-hit span){color:var(--paper-text)}
+html[data-theme='light'] :is(.dynasty-status,.dynasty-welcome-stats,.dynasty-era-heading p,.dynasty-book-card>span,.dynasty-disclaimer,.dynasty-side-head p,.dynasty-side-actions,.dynasty-catalog-pages,.dynasty-volume span,.dynasty-volume small,.dynasty-genre-grid span,.dynasty-neighbors span,.dynasty-breadcrumb,.dynasty-reader-heading p,.dynasty-reading-note small,.dynasty-event-return small,.dynasty-loading,.dynasty-error,.book-top h1 span,.book-category-hint,.book-chapter span,.book-chapter small,.book-edition,.book-status,.book-stats span,.book-featured small,.book-featured span,.book-format-guide dt small,.book-intro .book-intro-boundary,.book-related-disclosure>summary span,.book-related-disclosure>p,.book-next-reading>span,.book-provenance,.book-muted,.book-subtitle,.book-related span,.book-block-tools,.book-block-tools a,.book-hit strong small,.book-empty,.book-loading){color:var(--paper-muted)}
+html[data-theme='light'] :is(.dynasty-welcome-stats b,.dynasty-route strong,.dynasty-book-card small,.dynasty-era-heading>span,.dynasty-search button,.dynasty-preface,.dynasty-book-intro h3,.dynasty-question strong,.dynasty-genre-grid strong,.dynasty-breadcrumb button,.dynasty-reading-note strong,.dynasty-guide-intro strong,.dynasty-event-return strong,.book-stats b,.book-search button,.book-featured b,.book-format-guide dt,.book-intro p strong,.book-format summary,.book-provenance a,.book-hit strong,.book-block-tools button[aria-pressed=true]){color:var(--paper-accent)}
+html[data-theme='light'] :is(.dynasty-welcome,.dynasty-route li,.dynasty-book-card,.dynasty-side,.dynasty-question,.dynasty-genre-grid>div,.dynasty-reading-note,.dynasty-guide-intro,.book-featured button,.book-intro,.book-next-reading,.book-format-guide dl>div){background:var(--paper-surface);border-color:var(--paper-border)}
+html[data-theme='light'] :is(.dynasty-book-card:hover,.book-featured button:hover){background:#f8eedc;border-color:#b79a68}
+html[data-theme='light'] :is(.dynasty-top,.dynasty-era-heading,.dynasty-side-head,.dynasty-catalog-pages,.dynasty-reader-heading,.book-top,.book-sidebar,.book-stats,.book-format,.book-related-disclosure,.book-provenance,.book-related,.book-hit,.book-block th,.book-block td){border-color:var(--paper-border)}
+html[data-theme='light'] :is(.dynasty-route li div div button,.dynasty-neighbors button,.dynasty-reading-actions button,.book-categories button,.book-related button){color:var(--paper-text);border-color:var(--paper-border)}
+html[data-theme='light'] :is(.dynasty-route li div div button:hover,.dynasty-neighbors button:hover,.dynasty-volume:hover,.dynasty-volume.active,.book-chapter:hover,.book-chapter.active,.book-categories button.active){color:var(--paper-accent);background:var(--paper-selected);border-color:#bba177}
+html[data-theme='light'] .dynasty-route li>span{background:#aa884b;color:#fffaea}
+html[data-theme='light'] :is(.dynasty-side-head button,.dynasty-side-actions button,.dynasty-catalog-pages button,.book-library-actions,.book-related-disclosure>summary){color:var(--paper-text)}
+html[data-theme='light'] .dynasty-reading-note .dynasty-incomplete{color:#805c29;border-color:#b98b45}
+html[data-theme='light'] .dynasty-event-return{background:#ece4d1;border-color:#c1ae85;box-shadow:0 8px 25px #b29b701f}
+html[data-theme='light'] .book-sidebar{background:#f0e8da}
+html[data-theme='light'] .book-chapter.active strong{color:var(--paper-accent)}
+html[data-theme='light'] .book-intro .book-intro-note{color:#70562c;border-color:#b09360}
+html[data-theme='light'] .book-block-content a{color:#496577;text-decoration-color:#97aab0}
+html[data-theme='light'] .book-block th{background:var(--paper-inset);color:var(--paper-ink)}
+html[data-theme='light'] .book-block tr:nth-child(even){background:#f4eddf}
+html[data-theme='light'] :is(.book-target,.dynasty-reader .book-target){background:#ecdcb766;border-left-color:#ad833a}
+html[data-theme='light'] :is(.book-block mark,.book-hit mark,.dynasty-reader .journey-source-match){background:#e9cf8c;color:#483517}
+
+/* Guided question: north/south stays color-coded in daylight. */
+html[data-theme='light'] :is(.question-heading h1,.question-steps strong,.question-map-heading h2,.question-scene h2,.question-evidence h2,.question-recap h2){color:var(--paper-ink)}
+html[data-theme='light'] :is(.question-heading p,.question-scene>p,.question-insight strong,.question-evidence q,.question-recap article p){color:var(--paper-text)}
+html[data-theme='light'] :is(.question-topline,.question-steps span,.question-map-heading small,.question-map-corner,.question-map-year,.question-map-axis,.question-map>p,.question-evidence>p,.question-caution){color:var(--paper-muted)}
+html[data-theme='light'] :is(.question-topline button,.question-heading h1 em,.question-steps small,.question-scene-count,.question-insight span,.question-evidence>a span,.question-evidence b,.question-recap article b){color:var(--paper-accent)}
+html[data-theme='light'] :is(.question-steps button,.question-map,.question-scene,.question-evidence,.question-recap article){background:var(--paper-surface);border-color:var(--paper-border)}
+html[data-theme='light'] .question-steps button:hover{background:#f4ead6}
+html[data-theme='light'] .question-steps button[aria-current=step]{background:var(--paper-selected);border-color:#b59a65;box-shadow:none}
+html[data-theme='light'] .question-map-cell{background:#e0e9e9;border-color:#b5c8c9;color:#415e65}
+html[data-theme='light'] .question-map-cell.south{background:#e8ecd8;border-color:#c4cfae;color:#586347}
+html[data-theme='light'] .question-map-cell.active{color:#5f471e;border-color:#a98442;box-shadow:0 0 0 1px #a9844255 inset}
+html[data-theme='light'] .question-map-year.active{color:var(--paper-accent)}
+html[data-theme='light'] .question-insight{background:var(--paper-sage-bg);border-color:#9aa776}
+html[data-theme='light'] :is(.question-evidence>a,.question-recap){border-color:var(--paper-border)}
+html[data-theme='light'] .question-share-status{color:var(--paper-sage)}
