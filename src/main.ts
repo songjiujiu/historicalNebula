@@ -10,6 +10,7 @@ import { historyGuideUrl, historyGuideSourceUrl } from './domain/history-guides'
 import { modernTextUrl } from './domain/modern-texts';
 import { modernGuideUrl } from './domain/modern-guide-location';
 import './editorial.css';
+import './ui/historical-stage.css';
 
 type ReadingMode = 'journey' | 'guide' | 'histories' | 'library' | 'texts' | 'modern-guides';
 function normalizeLocation() {
@@ -48,9 +49,11 @@ const savedTheme: ColorTheme = document.documentElement.dataset.theme === 'light
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <header class="app-header">
-    <a class="brand" href="${import.meta.env.BASE_URL}" aria-label="历史星云首页"><span class="brand-mark">${icon('star')}</span><span>历史星云<small>HISTORICAL NEBULA</small></span></a>
-    <nav class="main-nav" aria-label="主导航"><button class="nav-item" data-action="history-journey">读懂历史</button><button class="nav-item" data-action="reading-guides">史记导读</button><button class="nav-item" data-action="history-guides">二十四史导读</button><button class="nav-item" data-action="modern-guides">清至当代导读</button><button class="nav-item" data-action="shiji-book">史记原文</button><button class="nav-item" data-action="dynastic-library">二十四史原文</button><button class="nav-item" data-action="modern-texts">清至当代正文</button></nav>
-    <div class="theme-switch" role="group" aria-label="页面显示模式"><button type="button" data-action="theme-dark" aria-pressed="${savedTheme === 'dark'}" title="黑夜模式">${icon('moon')}<span>黑夜</span></button><button type="button" data-action="theme-light" aria-pressed="${savedTheme === 'light'}" title="白天模式">${icon('sun')}<span>白天</span></button></div>
+    <a class="brand" href="${import.meta.env.BASE_URL}" aria-label="历史星云首页"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 2 37 25 53 11 40 28 62 32 40 37 53 53 36 40 32 62 27 40 11 53 24 36 2 32 25 27 11 11 28 24Z"/><path d="m32 2 0 60m-30-30h60M11 11l42 42M11 53l42-42"/><path d="m32 16 7 16-7 16-7-16Z"/></svg></span><span>历史星云<small>HISTORICAL NEBULA</small></span></a>
+    <span class="brand-caption">让历史照亮当下<br>每一个普通人</span>
+    <nav class="main-nav" aria-label="主导航"><button class="nav-item" data-action="history-journey">读懂历史</button><button class="nav-item" data-action="reading-guides">史记导读</button><button class="nav-item" data-action="history-guides">二十四史导读</button><button class="nav-item" data-action="modern-guides">清至当代导读</button></nav>
+    <div class="theme-switch" role="group" aria-label="页面显示模式"><button type="button" data-action="theme-light" aria-pressed="${savedTheme === 'light'}" title="白天模式" aria-label="白天模式">${icon('sun')}<span>白天</span></button><button type="button" data-action="theme-dark" aria-pressed="${savedTheme === 'dark'}" title="黑夜模式" aria-label="黑夜模式">${icon('moon')}<span>黑夜</span></button></div>
+    <details class="source-menu"><summary aria-label="原文书库"><span>历史不远，就在眼前。</span><b><span data-source-label>原文书库</span> <i aria-hidden="true">⌄</i></b></summary><nav aria-label="史料原文"><button data-action="shiji-book">史记原文</button><button data-action="dynastic-library">二十四史原文</button><button data-action="modern-texts">清至当代正文</button></nav></details>
   </header>
   <div id="journey-root"></div>
   <div id="reading-root"></div>
@@ -63,6 +66,14 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <dialog id="dialog" class="app-dialog" aria-label="关于内容与来源"></dialog>
 `;
 const $ = <T extends HTMLElement = HTMLElement>(selector: string) => document.querySelector<T>(selector)!;
+const sourceMenu = $<HTMLDetailsElement>('.source-menu');
+const sourceSummary = sourceMenu.querySelector<HTMLElement>('summary')!;
+function closeSourceMenu(restoreFocus = false) {
+  if (!sourceMenu.open) return;
+  const focusWasInside = sourceMenu.contains(document.activeElement);
+  sourceMenu.open = false;
+  if (restoreFocus && focusWasInside) sourceSummary.focus({ preventScroll: true });
+}
 function toast(message: string) {
   $('#toast').textContent = message; $('#toast').classList.add('visible');
   clearTimeout(toastTimer); toastTimer = window.setTimeout(() => $('#toast').classList.remove('visible'), 4000);
@@ -127,6 +138,11 @@ function render(refresh = true) {
     button.classList.toggle('active', appMode === mode);
     if (appMode === mode) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current');
   }
+  const sourceTitle = appMode === 'library' ? '二十四史原文' : appMode === 'texts' ? '清至当代正文' : '原文书库';
+  sourceMenu.querySelector<HTMLElement>('[data-source-label]')!.textContent = sourceTitle;
+  sourceSummary.setAttribute('aria-label', sourceTitle === '原文书库' ? sourceTitle : `${sourceTitle}，切换原文书库`);
+  if (appMode === 'library' || appMode === 'texts') sourceSummary.setAttribute('aria-current', 'page');
+  else sourceSummary.removeAttribute('aria-current');
   if (appMode !== 'histories') historyGuides?.hide();
   const activeNav = document.querySelector<HTMLElement>('.main-nav [aria-current="page"]');
   const nav = document.querySelector<HTMLElement>('.main-nav');
@@ -150,7 +166,7 @@ function closeDialog() {
   const dialog = $<HTMLDialogElement>('#dialog');
   if (dialog.open) { dialog.close(); dialogPreviousFocus?.focus(); }
 }
-function prepareNavigation() { bookRequest++; closeDialog(); }
+function prepareNavigation() { bookRequest++; closeSourceMenu(true); closeDialog(); }
 async function ensureModernTexts() {
   if (modernTexts) { void modernTexts.showFromUrl(); return; }
   if (textsLoading) return textsLoading;
@@ -227,6 +243,7 @@ function aboutData() {
 const readingGuide = createReadingGuide($('#reading-root'), { onBook: (volume, block) => void openBook(volume, undefined, block), onHistories: () => enterHistoryGuides() });
 const historyJourney = createHistoryJourney($('#journey-root'), {
   onLibrary: enterDynasticLibrary,
+  onGuide: book => { if (book === 'shiji') enterGuides(); else if (book === 'qingshigao') enterModernGuides(modernGuideUrl('qing')); else enterHistoryGuides(book); },
   onText: enterModernTexts,
   onSource: (event, source) => {
     if (source.book === 'shiji') { void openBook(source.volume, source.cue, source.block); return; }
@@ -236,6 +253,8 @@ const historyJourney = createHistoryJourney($('#journey-root'), {
 });
 document.addEventListener('click', event => {
   const target = (event.target as Element).closest<HTMLElement>('[data-action]');
+  if (target?.closest('.source-menu')) closeSourceMenu(true);
+  else if (!sourceMenu.contains(event.target as Node)) closeSourceMenu();
   switch (target?.dataset.action) {
     case 'theme-dark': setTheme('dark'); break;
     case 'theme-light': setTheme('light'); break;
@@ -255,7 +274,13 @@ document.addEventListener('click', event => {
   }
 });
 $('#dialog').addEventListener('cancel', event => { event.preventDefault(); closeDialog(); });
+sourceMenu.addEventListener('focusout', () => {
+  queueMicrotask(() => { if (!sourceMenu.contains(document.activeElement)) closeSourceMenu(); });
+});
 document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && sourceMenu.open) {
+    event.preventDefault(); closeSourceMenu(true); return;
+  }
   if (!(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== 'k') return;
   event.preventDefault();
   if (document.querySelector('.book-dialog[open]')) { $('#book-query').focus(); return; }

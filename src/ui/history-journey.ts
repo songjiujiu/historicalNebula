@@ -4,15 +4,19 @@ import { journeyReference, journeyReferenceUrl } from '../domain/journey-referen
 import { modernChapter, modernTextUrl } from '../domain/modern-texts';
 import { featuredQuestionId, featuredQuestionStep, featuredQuestionUrl, renderFeaturedQuestion } from './featured-question';
 import './history-journey.css';
+import { historicalStage } from './historical-stage';
 
 interface JourneyOptions {
   onSource: (event: JourneyEvent, source: JourneySource) => void;
   onLibrary: () => void;
+  onGuide?: (book: string) => void;
   onText?: (href: string) => void;
 }
 const KEY = 'historical-nebula:journey:v1';
 export function createHistoryJourney(host: HTMLElement, options: JourneyOptions) {
   let selected: JourneyEvent | undefined;
+  let disposeStage: (() => void) | undefined;
+  let stageRequest = 0;
   let eraId = '';
   let scope = 'quick';
   let query = '';
@@ -52,12 +56,16 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
   }
   function home() {
     selected = undefined;
-    host.innerHTML = `<main class="journey-shell">
-      <header class="journey-hero"><div><span class="journey-overline">给第一次读历史的你 · 从上古读到当代</span><h1>先把历史<br><em>连成一条线。</em></h1><p>不用先背朝代和人名。跟着关键事件，看清当时的局面、发生的变化，以及它怎样通向下一段历史。</p><div class="journey-hero-actions"><button class="primary-button" data-journey-action="question">用一个问题开始 →</button><button class="secondary-button" data-journey-action="start">从第一件事开始 →</button><button class="secondary-button" data-journey-event="qing-founded">从清朝接着读 →</button>${recent ? `<button class="secondary-button" data-journey-action="resume">继续上次阅读</button>` : ''}</div></div><div class="journey-intro-card journey-featured-card"><span class="journey-overline">本期互动阅读 · 约 3 分钟</span><h2>西晋明明统一了，<br><em>为什么又分裂？</em></h2><p>三个转折，同时看北方与南方。每一步都能展开事件，回到史书原文。</p><div class="featured-year"><span>280<br>统一</span><span>316—318<br>西晋结束</span><span>420<br>南朝开始</span></div><button data-journey-action="question">打开这一题 →</button></div></header>
-      <div class="editorial-chronicle" aria-label="历史阅读范围"><span>一卷中国历史</span><div><b>上古 · 先秦</b><i>秦汉</i><i>魏晋南北朝</i><i>隋唐</i><i>宋元明清</i><b>近现代 · 当代</b></div><small>沿时间前行 · 在转折处停留</small></div><div class="journey-layout">${rail()}<div class="journey-main"><section class="journey-controls" aria-label="选择阅读范围"><div><h2>你的历史主线</h2><p>先读概要，再选一个事件展开。</p></div><div class="journey-scope" role="group" aria-label="主线长短"><button data-journey-scope="quick" aria-pressed="${scope !== 'all'}">快速主线 · ${quickJourneyIds.length} 件事</button><button data-journey-scope="all" aria-pressed="${scope === 'all'}">全部关键节点 · ${journeyEvents.length}</button></div></section><label class="journey-search"><span>找事件或人物</span><input data-journey-search type="search" maxlength="100" value="${esc(query)}" placeholder="如：辛亥革命、改革开放、港澳回归" autocomplete="off"></label><p class="journey-result-count" role="status" aria-live="polite"></p><div class="journey-results"></div></div></div>
+    host.innerHTML = `<main class="journey-shell immersive-shell">${historicalStage(recent, read.size)}<div class="journey-layout">${rail()}<div class="journey-main"><section class="journey-controls" aria-label="选择阅读范围"><div><h2>你的历史主线</h2><p>先读概要，再选一个事件展开。</p></div><div class="journey-scope" role="group" aria-label="主线长短"><button data-journey-scope="quick" aria-pressed="${scope !== 'all'}">快速主线 · ${quickJourneyIds.length} 件事</button><button data-journey-scope="all" aria-pressed="${scope === 'all'}">全部关键节点 · ${journeyEvents.length}</button></div></section><label class="journey-search"><span>找事件或人物</span><input data-journey-search type="search" maxlength="100" value="${esc(query)}" placeholder="如：辛亥革命、改革开放、港澳回归" autocomplete="off"></label><p class="journey-result-count" role="status" aria-live="polite"></p><div class="journey-results"></div></div></div>
       <p class="journey-footnote">这是选取关键事件的入门路线，帮助建立时间与因果线索，不等于全书所有事件的汇总或逐句翻译。二十四史正文保留原文，缺录提示见目录。清到当代另有站内白话正文、清史稿及文献选读，最新事件选至2024年。</p></main>`;
     renderResults();
     revealActiveEra();
+    const token = ++stageRequest;
+    if ('WebGLRenderingContext' in window && window.innerWidth >= 760) void import('./history-model-viewer').then(async module => {
+      if (token !== stageRequest) return;
+      const dispose = await module.mountHistoryModels(host);
+      if (token !== stageRequest) dispose(); else disposeStage = dispose;
+    }).catch(() => {});
   }
   function renderResults() {
     const needle = query.trim().toLowerCase();
@@ -89,6 +97,7 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
     return `<section class="journey-reading-entry"><span class="journey-overline">接着读 · 站内正文</span><h2>想把这件事读完整？</h2><p>${chapter.outline.map(h => esc(h.title)).join(' → ')}</p><small>${chapter.characters.toLocaleString()} 字 · 白话历史正文 · 篇末对照史料</small><br><a class="primary-button" data-journey-text href="${esc(modernTextUrl('chapters', event.id, event.id, 'p1'))}">阅读正文 →</a></section>`;
   }
   function detail(event: JourneyEvent) {
+    stageRequest++; disposeStage?.(); disposeStage = undefined;
     selected = event; recent = event.id; persist();
     const era = journeyEra(event.era)!;
     if (!route().includes(event)) scope = 'all';
@@ -119,6 +128,7 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
   function showFromUrl() {
     const params = new URL(location.href).searchParams;
     if (params.get('question') === featuredQuestionId) {
+      stageRequest++; disposeStage?.(); disposeStage = undefined;
       selected = undefined;
       host.innerHTML = renderFeaturedQuestion(featuredQuestionStep(params));
       const steps = host.querySelector<HTMLElement>('.question-steps');
@@ -138,6 +148,14 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
   }
   host.addEventListener('click', ev => {
     const target = (ev.target as Element).closest<HTMLElement>('button,a'); if (!target) return;
+    if (target.dataset.stageBook && options.onGuide) {
+      if (ev.ctrlKey || ev.metaKey || ev.shiftKey || ev.altKey || ev.button !== 0) return;
+      ev.preventDefault(); options.onGuide(target.dataset.stageBook); return;
+    }
+    if (target.dataset.stageEra) {
+      navigate('', target.dataset.stageEra, 'all');
+      host.querySelector('.journey-layout')?.scrollIntoView({ block: 'start' }); return;
+    }
     if (target.dataset.questionSource) {
       if (ev.ctrlKey || ev.metaKey || ev.shiftKey || ev.altKey || ev.button !== 0) return;
       const event = journeyEvent(target.dataset.questionSource);
@@ -159,6 +177,7 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
     if (target.dataset.journeyEra !== undefined) { navigate('', target.dataset.journeyEra, target.dataset.journeyEra ? 'all' : scope); return; }
     if (target.dataset.journeyScope) { navigate('', eraId, target.dataset.journeyScope); return; }
     switch (target.dataset.journeyAction) {
+      case 'explore': host.querySelector('.journey-layout')?.scrollIntoView({ block: 'start', behavior: 'smooth' }); break;
       case 'question': navigateQuestion(); break;
       case 'share-question': {
         const url = featuredQuestionUrl(featuredQuestionStep(new URL(location.href).searchParams));

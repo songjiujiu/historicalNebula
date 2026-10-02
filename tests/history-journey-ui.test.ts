@@ -30,6 +30,28 @@ it('starts small, includes every era, and lets readers find all events by era or
   search.value = '赤壁'; search.dispatchEvent(new Event('input', { bubbles: true }));
   expect(document.querySelector('[data-journey-event="red-cliffs"]')).toBeTruthy();
 });
+it('connects the rendered scroll and bookshelf to real eras, events and book guides', () => {
+  const host = document.createElement('div'); document.body.append(host);
+  const onGuide = vi.fn();
+  createHistoryJourney(host, {onSource: vi.fn(), onLibrary: vi.fn(), onGuide}).showFromUrl();
+  expect(host.querySelectorAll('[data-history-model]')).toHaveLength(2);
+  expect(host.querySelectorAll('.book-hotspots a')).toHaveLength(5);
+  for (const button of host.querySelectorAll<HTMLElement>('[data-stage-era]')) {
+    expect(journeyEras.some(era => era.id === button.dataset.stageEra)).toBe(true);
+  }
+  const book = host.querySelector<HTMLAnchorElement>('.book-hotspots [data-stage-book="hanshu"]')!;
+  const event = new MouseEvent('click', {bubbles: true, cancelable: true});
+  book.dispatchEvent(event);
+  expect(event.defaultPrevented).toBe(true);
+  expect(onGuide).toHaveBeenCalledWith('hanshu');
+  expect(book.href).toContain('histories=hanshu');
+  click('[data-stage-era="suitang"]');
+  expect(location.search).toContain('era=suitang');
+  expect(host.querySelector('.journey-results')!.textContent).toContain('安史之乱');
+  click('.stage-event');
+  expect(location.search).toContain('journey=qin-unifies');
+  expect(host.querySelector('[data-journey-source]')!.getAttribute('href')).toContain('#shiji/6/p21');
+});
 it('opens exact sources, preserves reading order and only marks progress on request', () => {
   history.replaceState(null, '', '/?journey=sui-unifies');
   const { onSource, reader } = setup();
@@ -84,7 +106,7 @@ it('provides contemporary deep links and clearly separates external references f
 it('finds new events by era, title and people, and exposes a Qing continuation from the homepage', () => {
   setup();
   expect(document.querySelector('.journey-hero')!.textContent).toContain('从上古读到当代');
-  click('.journey-hero [data-journey-event="qing-founded"]');
+  click('.stage-secondary-entry [data-journey-event="qing-founded"]');
   expect(document.querySelector('h1')!.textContent).toContain('清朝建立');
   click('[data-journey-action="home"]');
   click('[data-journey-era="reform"]');
@@ -100,7 +122,7 @@ it('finds new events by era, title and people, and exposes a Qing continuation f
 });
 it('walks a beginner through one question with simultaneous north and south, exact evidence and shareable steps', () => {
   const { reader, onSource } = setup();
-  click('.journey-hero [data-journey-action="question"]');
+  click('.stage-secondary-entry [data-journey-action="question"]');
   expect(location.search).toContain('question=western-jin');
   expect(document.querySelectorAll('.question-map-cell')).toHaveLength(6);
   expect(document.querySelector('.question-scene')!.textContent).toContain('三国结束了');

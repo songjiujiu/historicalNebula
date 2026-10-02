@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "source": "Blender 5.2",
+  "scroll": {
+    "model": "history-scroll.glb",
+    "poster": "history-scroll-poster.png",
+    "kind": "camera-mapped relief"
+  },
+  "books": {
+    "model": "history-books.glb",
+    "poster": "history-books-poster.png",
+    "ids": [
+      "shiji",
+      "hanshu",
+      "sanguozhi",
+      "jiutangshu",
+      "qingshigao"
+    ]
+  }
+}

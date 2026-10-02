@@ -3,6 +3,9 @@ dist/
 .vite/
 coverage/
 *.log
+*.blend1
+# Initial local Blender drafts; website assets are in public/site/models.
+/public/models/
 .env
 .env.local
 .venv/
