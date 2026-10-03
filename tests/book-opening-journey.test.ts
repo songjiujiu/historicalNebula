@@ -2,6 +2,9 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { createHistoryJourney } from '../src/ui/history-journey';
 
+const { createBookOpeningScene } = vi.hoisted(() => ({ createBookOpeningScene: vi.fn() }));
+vi.mock('../src/ui/book-opening-scene', () => ({ createBookOpeningScene }));
+
 // These tests cover journey routing during a book transition, not the separate scroll entrance.
 vi.mock('../src/ui/scroll-entrance', () => ({
   mountScrollEntrance: () => ({ finished: Promise.resolve(), dispose: vi.fn() }),
@@ -29,8 +32,8 @@ function advanceFrame(now: number) {
 }
 
 async function decodeSettles() {
-  await Promise.resolve();
-  await Promise.resolve();
+  await vi.dynamicImportSettled();
+  for (let count = 0; count < 8; count++) await Promise.resolve();
 }
 
 beforeEach(() => {
@@ -40,6 +43,9 @@ beforeEach(() => {
   readers = [];
   frameCallbacks = new Map();
   nextFrame = 0;
+  createBookOpeningScene.mockReset().mockImplementation(async () => ({
+    render: vi.fn(), durationMs: 3200, dispose: vi.fn(),
+  }));
   vi.spyOn(document, 'hidden', 'get').mockReturnValue(false);
   vi.spyOn(HTMLElement.prototype, 'scrollIntoView').mockImplementation(() => {});
   vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
@@ -76,7 +82,7 @@ it.each(['.book-hotspots', '.shelf-links'])('opens the selected guide after clic
   advanceFrame(1000);
   advanceFrame(1800);
   expect(onGuide).not.toHaveBeenCalled();
-  advanceFrame(3000);
+  advanceFrame(7000);
   expect(onGuide).toHaveBeenCalledExactlyOnceWith('hanshu');
   expect(document.querySelector('.book-opening-overlay')).toBeNull();
 });
@@ -131,7 +137,7 @@ it('cancels a stale opening on route refresh and can open a new book after retur
   host.querySelector<HTMLAnchorElement>('.shelf-links [data-stage-book="qingshigao"]')!.click();
   await decodeSettles();
   advanceFrame(4000);
-  advanceFrame(6000);
+  advanceFrame(10000);
   expect(onGuide).toHaveBeenCalledExactlyOnceWith('qingshigao');
 });
 

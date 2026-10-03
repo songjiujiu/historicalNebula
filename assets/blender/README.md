@@ -50,3 +50,29 @@ render exposure. Constant Principled materials keep the GLBs independent of
 procedural textures. The posters use the full Cycles studio lighting and are
 the authoritative visual appearance; a realtime viewer's shadow and tone
 mapping may differ. Blender is only needed to regenerate these source assets.
+
+## Articulated bookshelf opening
+
+The five `opening-*.blend` sources rebuild the selected bookshelf volume as a
+real cloth cover, sewn spine, layered page edges, and four double-sided bending
+leaves. The front art is projectively mapped from the same antique cover atlas;
+the page textures are rendered from actual first-volume source paragraphs in
+`public/data`. They are packed into both the Blender source and the GLB.
+
+```powershell
+& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python scripts/blender/build_opening_books.py
+```
+
+Append `-- shiji` to rebuild one volume. Append `-- --export-only` to export the
+five saved sources without rendering them again. Public files under
+`public/site/models/opening` contain one finite `BookOpen` clip. Scene baking is
+intentional: Blender 5.2's NLA track export loses intermediate shape-key weights.
+The asset tests inspect the binary weights to verify the paper curls and settles.
+Source page JPEGs live in `assets/blender/opening-textures`; native closed,
+turning, and open review renders are written to ignored `artifacts/book-opening`.
+
+The browser loads the selected GLB only when clicked, lifts its closed cover,
+plays the animated cover and leaves, then holds the open spread before routing.
+Escape cancels; failed or unsupported WebGL and reduced motion use the ordinary
+guide link. Temporary rendering, texture bitmaps, and GPU resources are released
+when the transition completes or is cancelled.

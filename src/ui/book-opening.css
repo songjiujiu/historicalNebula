@@ -1,34 +1,14 @@
-/* The poster and GLB share one source silhouette during the book transition. */
+/* Only the chosen book leaves the photographic shelf. All open pages are GLB geometry. */
 .books-stage[data-opening-book] > img{visibility:visible;mask-image:var(--book-shelf-mask);mask-size:100% 100%;mask-repeat:no-repeat}
 .books-stage[data-opening-book] .stage-canvas{visibility:hidden}
 .book-hotspots a{cursor:pointer}
-.book-opening-overlay{position:fixed;inset:0;z-index:100;isolation:isolate;--book-backdrop:0}
-.book-opening-overlay:before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,#152522bb,#040a10ec);opacity:var(--book-backdrop)}
-.book-opening-scene{position:absolute;perspective:1400px;perspective-origin:0 45%;pointer-events:none}
-.book-opening-volume{position:absolute;inset:0;transform-style:preserve-3d}
-.book-opening-board,.book-opening-paper,.book-opening-cover,.book-opening-leaf{position:absolute;inset:0;transform-style:preserve-3d;transform-origin:0 50%;border-radius:1px 4px 4px 1px}
-.book-opening-board{background:var(--book-tone);transform:translateZ(-8px);box-shadow:0 2px 0 #17150e,2px 3px 0 #49351d,0 28px 24px #0006}
-.book-opening-paper{inset:1.5% 1.5% 1.5% 3%;transform:translateZ(0);background:#f0e1c0;box-shadow:3px 3px 0 #c1aa7d,5px 5px 0 #776343;overflow:hidden}
-.book-opening-paper:before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#71522b40,transparent 12%,#fff4df 50%,#e8d7b3);border:1px solid #ac885a45}
-.book-opening-paper:after{content:'';position:absolute;left:2%;right:0;bottom:0;height:5px;background:repeating-linear-gradient(0deg,#cdbb8f 0,#f5e9cd 1px,#e6d5ae 2px,#f5e9cd 3px)}
-.book-opening-reading{position:absolute;inset:8% 7% 7% 13%;border:1px solid #9c703b5c;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#49361e;text-align:center;font-family:SimSun,'Songti SC',serif;opacity:0}
-.book-opening-reading>span{font-size:clamp(9px,1vw,12px);letter-spacing:1px;color:#947342}
-.book-opening-reading h2{font-size:clamp(24px,3vw,36px);letter-spacing:5px;line-height:1.4;font-weight:600;margin:14% 0 8%}
-.book-opening-reading i,.book-opening-cover-inside i{display:block;width:27px;height:2px;background:#a67e40;margin:4px auto 13%}
-.book-opening-reading p{font-size:clamp(13px,1.5vw,18px);line-height:1.9;letter-spacing:2px;margin:0}
-.book-opening-reading small{font-size:clamp(8px,.8vw,11px);margin-top:15%;letter-spacing:.4px;color:#866943}
-.book-opening-cover{transform:translateZ(4px);z-index:4}
-.book-opening-cover-front,.book-opening-cover-inside,.book-opening-leaf-front,.book-opening-leaf-back{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:inherit}
-.book-opening-cover-front svg{display:block;width:100%;height:100%;overflow:visible}
-.book-opening-cover-inside{transform:rotateY(180deg);background:linear-gradient(90deg,#c8b080,#eee0bb 18%,#f5e9ca 60%,#b09666);border:6px solid var(--book-tone);box-shadow:inset -10px 0 20px #51351235;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#94754a;text-align:center;font:18px/2 SimSun,serif;letter-spacing:4px}
-.book-opening-cover-inside span{border:1px solid #a4845252;padding:3px 6px;writing-mode:vertical-rl;font-size:clamp(14px,2vw,22px)}
-.book-opening-cover-inside i{margin:10% auto 5%;height:1px}
-.book-opening-cover-inside small{font-size:clamp(9px,1vw,12px);line-height:1.9;letter-spacing:2px}
-.book-opening-leaf{inset:2% 2% 2% 3%;z-index:3}
-.book-opening-leaf-front,.book-opening-leaf-back{background:linear-gradient(90deg,#bea375,#f5e9cc 11%,#eee0bd 93%,#dac49a);border:1px solid #a0825050;box-shadow:inset -3px 0 8px #7e63341a}
-.book-opening-leaf-back{transform:rotateY(180deg);background:linear-gradient(90deg,#e1cea5,#f4e6c7 18%,#ebd9b2 90%,#b79a67)}
-.book-opening-leaf-front:after,.book-opening-leaf-back:after{content:'';position:absolute;inset:13% 13% 14% 16%;opacity:.27;background:repeating-linear-gradient(90deg,transparent 0,transparent 10%,#94734b 10%,#94734b 10.7%,transparent 10.7%,transparent 19%);border-top:1px solid #8f683d;border-bottom:1px solid #8f683d}
-html[data-theme='light'] .book-opening-overlay:before{background:radial-gradient(ellipse at 50% 45%,#f6ecdbe0,#d5c3a6ed)}
-html[data-theme='light'] .book-opening-board{box-shadow:0 2px 0 #49351d,2px 3px 0 #49351d,0 22px 22px #52371940}
-html[data-theme='light'] .book-opening-cover-front{filter:brightness(1.08) saturate(.85)}
-@media(max-width:760px){.book-opening-scene{perspective:900px}.book-opening-cover-inside{border-width:4px}.book-opening-reading h2{margin-top:11%;letter-spacing:3px}.book-opening-reading small{letter-spacing:0}}
+.book-opening-overlay{position:fixed;inset:0;z-index:100;isolation:isolate;pointer-events:none;visibility:hidden;--book-backdrop:0}
+.book-opening-overlay.is-ready{visibility:visible;pointer-events:auto}
+.book-opening-overlay:before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 46%,#24332cb8,#071016ed);opacity:var(--book-backdrop)}
+.book-opening-scene,.book-opening-source{position:absolute;pointer-events:none;will-change:transform,opacity;contain:layout style}
+.book-opening-scene{filter:drop-shadow(0 18px 25px #0005)}
+.book-opening-scene canvas{display:block;width:100%;height:100%}
+.book-opening-source svg{display:block;width:100%;height:100%;overflow:visible}
+html[data-theme='light'] .book-opening-overlay:before{background:radial-gradient(ellipse at 50% 43%,#f5ecd8d4,#c4b294ed)}
+html[data-theme='light'] .book-opening-scene{filter:drop-shadow(0 18px 24px #61482140)}
+@media(prefers-reduced-motion:reduce){.book-opening-overlay{display:none}}

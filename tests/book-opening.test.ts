@@ -1,6 +1,13 @@
 // @vitest-environment happy-dom
-import { afterEach, beforeEach, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, expect, it, vi, type Mock } from 'vitest';
 import { mountBookOpening } from '../src/ui/book-opening';
+
+const { createBookOpeningScene } = vi.hoisted(() => ({ createBookOpeningScene: vi.fn() }));
+vi.mock('../src/ui/book-opening-scene', () => ({ createBookOpeningScene }));
+
+type Scene = { render: Mock<(progress: number) => void>; durationMs: number; dispose: Mock<() => void> };
+type SceneOptions = { id: string; signal: AbortSignal; onUnavailable: () => void };
+function scene(): Scene { return { render: vi.fn(), durationMs: 3200, dispose: vi.fn() }; }
 
 class MotionPreference extends EventTarget {
   matches = false;
@@ -11,10 +18,10 @@ class MotionPreference extends EventTarget {
   }
 }
 
-function deferred() {
-  let resolve!: () => void;
+function deferred<T = void>() {
+  let resolve!: (value: T) => void;
   let reject!: (reason?: unknown) => void;
-  const promise = new Promise<void>((yes, no) => { resolve = yes; reject = no; });
+  const promise = new Promise<T>((yes, no) => { resolve = yes; reject = no; });
   return { promise, resolve, reject };
 }
 
@@ -22,6 +29,7 @@ let preference: MotionPreference;
 let frameCallbacks: Map<number, FrameRequestCallback>;
 let nextFrame: number;
 let controllers: ReturnType<typeof mountBookOpening>[];
+let scenes: Scene[];
 
 function fixture(options: { decode?: Promise<void>; width?: number; withStage?: boolean } = {}) {
   const host = document.createElement('div');
@@ -64,8 +72,12 @@ function advanceFrame(now: number) {
 }
 
 async function decodeSettles() {
-  await Promise.resolve();
-  await Promise.resolve();
+  await vi.waitFor(() => expect(createBookOpeningScene).toHaveBeenCalled(), { timeout: 1000 });
+  for (let count = 0; count < 8; count++) await Promise.resolve();
+}
+
+async function flushAsync() {
+  for (let count = 0; count < 12; count++) await Promise.resolve();
 }
 
 beforeEach(() => {
@@ -75,6 +87,10 @@ beforeEach(() => {
   frameCallbacks = new Map();
   nextFrame = 0;
   controllers = [];
+  scenes = [];
+  createBookOpeningScene.mockReset().mockImplementation(async () => {
+    const model = scene(); scenes.push(model); return model;
+  });
   vi.spyOn(document, 'hidden', 'get').mockReturnValue(false);
   vi.stubGlobal('matchMedia', vi.fn(() => preference));
   vi.stubGlobal('requestAnimationFrame', vi.fn((callback: FrameRequestCallback) => {
@@ -101,6 +117,7 @@ it.each(['shiji', 'hanshu', 'sanguozhi', 'jiutangshu', 'qingshigao'])(
       expect(stage!.dataset.openingBook).toBeUndefined();
       expect(host.hasAttribute('aria-busy')).toBe(false);
       expect(frameCallbacks.size).toBe(0);
+      expect(scenes[0].dispose).toHaveBeenCalledOnce();
     });
     controller.open(id);
     await decodeSettles();
@@ -110,8 +127,11 @@ it.each(['shiji', 'hanshu', 'sanguozhi', 'jiutangshu', 'qingshigao'])(
     advanceFrame(1000);
     advanceFrame(1800);
     expect(onOpen).not.toHaveBeenCalled();
-    advanceFrame(3000);
+    expect(scenes[0].render).not.toHaveBeenLastCalledWith(1);
+    advanceFrame(7000);
     expect(onOpen).toHaveBeenCalledExactlyOnceWith(id);
+    expect(scenes[0].render).toHaveBeenLastCalledWith(1);
+    expect(scenes[0].dispose).toHaveBeenCalledOnce();
     preference.setReduced(true);
     advanceFrame(6000);
     expect(onOpen).toHaveBeenCalledOnce();
@@ -127,7 +147,7 @@ it('keeps the first selected book when another book is clicked during the openin
   controller.open('sanguozhi');
   expect(stage!.dataset.openingBook).toBe('hanshu');
   expect(document.querySelectorAll('.book-opening-overlay')).toHaveLength(1);
-  advanceFrame(3000);
+  advanceFrame(7000);
   expect(onOpen).toHaveBeenCalledExactlyOnceWith('hanshu');
 });
 
@@ -137,7 +157,7 @@ it('cancels a pending opening on disposal even if poster decoding finishes later
   controller.open('shiji');
   controller.dispose();
   pending.resolve();
-  await decodeSettles();
+  await flushAsync();
   advanceFrame(3000);
   expect(onOpen).not.toHaveBeenCalled();
   expect(document.querySelector('.book-opening-overlay')).toBeNull();
@@ -192,9 +212,10 @@ it.each(['reduced motion', 'hidden page'])('enters directly for %s without creat
   if (reason === 'hidden page') vi.spyOn(document, 'hidden', 'get').mockReturnValue(true);
   const { stage, decode, onOpen, controller } = fixture();
   controller.open('sanguozhi');
-  await decodeSettles();
+  await flushAsync();
   expect(onOpen).toHaveBeenCalledExactlyOnceWith('sanguozhi');
   expect(decode).not.toHaveBeenCalled();
+  expect(createBookOpeningScene).not.toHaveBeenCalled();
   expect(document.querySelector('.book-opening-overlay')).toBeNull();
   expect(stage!.dataset.openingBook).toBeUndefined();
   expect(requestAnimationFrame).not.toHaveBeenCalled();
@@ -217,7 +238,7 @@ it('still enters the chosen guide when the cover poster cannot be decoded', asyn
   const { stage, onOpen, controller } = fixture({ decode: pending.promise });
   controller.open('qingshigao');
   pending.reject(new Error('poster unavailable'));
-  await decodeSettles();
+  await flushAsync();
   expect(onOpen).toHaveBeenCalledExactlyOnceWith('qingshigao');
   expect(document.querySelector('.book-opening-overlay')).toBeNull();
   expect(stage!.dataset.openingBook).toBeUndefined();
@@ -227,7 +248,7 @@ it('still enters the chosen guide when the cover poster cannot be decoded', asyn
 it.each([{ withStage: false }, { width: 0 }])('falls back to the guide when the stage cannot be displayed: %j', async options => {
   const { onOpen, controller } = fixture(options);
   controller.open('shiji');
-  await decodeSettles();
+  await flushAsync();
   expect(onOpen).toHaveBeenCalledExactlyOnceWith('shiji');
   expect(document.querySelector('.book-opening-overlay')).toBeNull();
   expect(requestAnimationFrame).not.toHaveBeenCalled();
@@ -236,8 +257,162 @@ it.each([{ withStage: false }, { width: 0 }])('falls back to the guide when the 
 it.each(['missing-book', '__proto__'])('ignores unknown book %s instead of constructing an invalid opening or redirect', async id => {
   const { onOpen, controller } = fixture();
   controller.open(id);
-  await decodeSettles();
+  await flushAsync();
   expect(onOpen).not.toHaveBeenCalled();
   expect(document.querySelector('.book-opening-overlay')).toBeNull();
   expect(requestAnimationFrame).not.toHaveBeenCalled();
+});
+
+it('releases a late model after cancellation without starting its animation or following its old route', async () => {
+  const pending = deferred<Scene>();
+  createBookOpeningScene.mockImplementationOnce(() => pending.promise);
+  const { host, stage, onOpen, controller } = fixture();
+  controller.open('shiji');
+  await decodeSettles();
+  const options = createBookOpeningScene.mock.calls[0][1] as SceneOptions;
+  expect(options.id).toBe('shiji');
+  expect(options.signal.aborted).toBe(false);
+  controller.dispose();
+  expect(options.signal.aborted).toBe(true);
+  const late = scene(); pending.resolve(late);
+  await flushAsync();
+  advanceFrame(7000);
+  expect(late.dispose).toHaveBeenCalledOnce();
+  expect(late.render).not.toHaveBeenCalled();
+  expect(onOpen).not.toHaveBeenCalled();
+  expect(host.hasAttribute('aria-busy')).toBe(false);
+  expect(stage!.dataset.openingBook).toBeUndefined();
+  expect(document.querySelector('.book-opening-overlay')).toBeNull();
+});
+
+it('honors reduced motion while a model is loading and releases the late model without replaying the opening', async () => {
+  const pending = deferred<Scene>();
+  createBookOpeningScene.mockImplementationOnce(() => pending.promise);
+  const { onOpen, controller } = fixture();
+  controller.open('hanshu');
+  await decodeSettles();
+  preference.setReduced(true);
+  expect(onOpen).toHaveBeenCalledExactlyOnceWith('hanshu');
+  expect((createBookOpeningScene.mock.calls[0][1] as SceneOptions).signal.aborted).toBe(true);
+  const late = scene(); pending.resolve(late);
+  await flushAsync();
+  expect(late.dispose).toHaveBeenCalledOnce();
+  expect(late.render).not.toHaveBeenCalled();
+  expect(document.querySelector('.book-opening-overlay')).toBeNull();
+  expect(onOpen).toHaveBeenCalledOnce();
+});
+
+it('keeps a new book opening alive when the previous cancelled model resolves later', async () => {
+  const pending = deferred<Scene>();
+  createBookOpeningScene.mockImplementationOnce(() => pending.promise);
+  const { stage, onOpen, controller } = fixture();
+  controller.open('shiji');
+  await decodeSettles();
+  const previousOptions = createBookOpeningScene.mock.calls[0][1] as SceneOptions;
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+  expect(previousOptions.signal.aborted).toBe(true);
+  controller.open('hanshu');
+  await vi.waitFor(() => expect(createBookOpeningScene).toHaveBeenCalledTimes(2));
+  await flushAsync();
+  const currentOptions = createBookOpeningScene.mock.calls[1][1] as SceneOptions;
+  const current = scenes[0];
+  expect(stage!.dataset.openingBook).toBe('hanshu');
+  const late = scene(); pending.resolve(late);
+  await flushAsync();
+  expect(late.dispose).toHaveBeenCalledOnce();
+  expect(current.dispose).not.toHaveBeenCalled();
+  expect(currentOptions.signal.aborted).toBe(false);
+  expect(stage!.dataset.openingBook).toBe('hanshu');
+  expect(document.querySelectorAll('.book-opening-overlay')).toHaveLength(1);
+  advanceFrame(1000); advanceFrame(7000);
+  expect(onOpen).toHaveBeenCalledExactlyOnceWith('hanshu');
+  expect(current.dispose).toHaveBeenCalledOnce();
+});
+
+it.each(['WebGL unavailable', 'model download failed'])('opens the guide once when %s prevents the modeled animation', async reason => {
+  createBookOpeningScene.mockRejectedValueOnce(new Error(reason));
+  const { host, stage, onOpen, controller } = fixture();
+  controller.open('qingshigao');
+  await vi.waitFor(() => expect(onOpen).toHaveBeenCalledExactlyOnceWith('qingshigao'));
+  const options = createBookOpeningScene.mock.calls[0][1] as SceneOptions;
+  expect(options.signal.aborted).toBe(true);
+  expect(document.querySelector('.book-opening-overlay')).toBeNull();
+  expect(stage!.dataset.openingBook).toBeUndefined();
+  expect(host.hasAttribute('aria-busy')).toBe(false);
+  expect(frameCallbacks.size).toBe(0);
+  options.onUnavailable();
+  expect(onOpen).toHaveBeenCalledOnce();
+});
+
+it('cleans up before navigating once after a WebGL context loss', async () => {
+  const { host, stage, onOpen, controller } = fixture();
+  controller.open('sanguozhi');
+  await decodeSettles();
+  const model = scenes[0];
+  const options = createBookOpeningScene.mock.calls[0][1] as SceneOptions;
+  advanceFrame(1000); advanceFrame(1800);
+  options.onUnavailable();
+  expect(model.dispose).toHaveBeenCalledOnce();
+  expect(options.signal.aborted).toBe(true);
+  expect(onOpen).toHaveBeenCalledExactlyOnceWith('sanguozhi');
+  expect(document.querySelector('.book-opening-overlay')).toBeNull();
+  expect(stage!.dataset.openingBook).toBeUndefined();
+  expect(host.hasAttribute('aria-busy')).toBe(false);
+  expect(frameCallbacks.size).toBe(0);
+  options.onUnavailable(); advanceFrame(7000);
+  expect(onOpen).toHaveBeenCalledOnce();
+  expect(model.dispose).toHaveBeenCalledOnce();
+});
+
+it('does not let an old graphics failure cancel a later opening', async () => {
+  const { stage, onOpen, controller } = fixture();
+  controller.open('shiji');
+  await decodeSettles();
+  const previousOptions = createBookOpeningScene.mock.calls[0][1] as SceneOptions;
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+  controller.open('hanshu');
+  await vi.waitFor(() => expect(createBookOpeningScene).toHaveBeenCalledTimes(2));
+  await flushAsync();
+  previousOptions.onUnavailable();
+  expect(stage!.dataset.openingBook).toBe('hanshu');
+  expect(scenes[1].dispose).not.toHaveBeenCalled();
+  expect(onOpen).not.toHaveBeenCalled();
+  advanceFrame(1000); advanceFrame(7000);
+  expect(onOpen).toHaveBeenCalledExactlyOnceWith('hanshu');
+});
+
+it('still opens the guide if rendering or GPU cleanup fails', async () => {
+  const model = scene();
+  model.render.mockImplementation(() => { throw new Error('lost graphics device'); });
+  model.dispose.mockImplementation(() => { throw new Error('GPU cleanup failed'); });
+  createBookOpeningScene.mockResolvedValueOnce(model);
+  const { host, onOpen, controller } = fixture();
+  controller.open('jiutangshu');
+  await vi.waitFor(() => expect(onOpen).toHaveBeenCalledExactlyOnceWith('jiutangshu'));
+  expect(model.dispose).toHaveBeenCalledOnce();
+  expect(host.hasAttribute('aria-busy')).toBe(false);
+  expect(document.querySelector('.book-opening-overlay')).toBeNull();
+  expect(frameCallbacks.size).toBe(0);
+});
+
+it('does not trap the reader behind a model download that never finishes', async () => {
+  const pending = deferred<Scene>();
+  createBookOpeningScene.mockImplementationOnce(() => pending.promise);
+  vi.useFakeTimers();
+  try {
+    const { host, onOpen, controller } = fixture();
+    controller.open('shiji');
+    await decodeSettles();
+    const options = createBookOpeningScene.mock.calls[0][1] as SceneOptions;
+    await vi.advanceTimersByTimeAsync(4600);
+    expect(onOpen).toHaveBeenCalledExactlyOnceWith('shiji');
+    expect(options.signal.aborted).toBe(true);
+    expect(host.hasAttribute('aria-busy')).toBe(false);
+    expect(document.querySelector('.book-opening-overlay')).toBeNull();
+    const late = scene(); pending.resolve(late);
+    await flushAsync();
+    expect(late.dispose).toHaveBeenCalledOnce();
+    expect(late.render).not.toHaveBeenCalled();
+    expect(onOpen).toHaveBeenCalledOnce();
+  } finally { vi.useRealTimers(); }
 });

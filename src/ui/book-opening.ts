@@ -1,17 +1,19 @@
 import { escapeHtml as esc } from './icons';
+import type { BookOpeningScene } from './book-opening-scene';
 import './book-opening.css';
 
-// The cover silhouettes in the existing 1026 × 334 Blender poster.
+// These silhouettes belong to the existing 1026 × 334 Blender shelf poster.
 const books = {
-  shiji: { name: '史记', era: '上古至西汉', tone: '#715336', points: [[56,33],[75,24],[237,8],[271,249],[264,256],[84,263]] },
-  hanshu: { name: '汉书', era: '西汉', tone: '#343d34', points: [[282,36],[301,33],[434,35],[438,246],[282,249]] },
-  sanguozhi: { name: '三国志', era: '魏 · 蜀 · 吴', tone: '#67362c', points: [[460,36],[478,34],[609,35],[614,245],[461,248]] },
-  jiutangshu: { name: '旧唐书', era: '唐', tone: '#86623e', points: [[636,36],[656,33],[787,35],[790,245],[637,248]] },
-  qingshigao: { name: '清史稿', era: '清', tone: '#263b45', points: [[811,37],[830,34],[956,35],[961,245],[812,248]] },
-} satisfies Record<string, { name: string; era: string; tone: string; points: number[][] }>;
-const duration = 1850;
+  shiji: { points: [[56,33],[75,24],[237,8],[271,249],[264,256],[84,263]] },
+  hanshu: { points: [[282,36],[301,33],[434,35],[438,246],[282,249]] },
+  sanguozhi: { points: [[460,36],[478,34],[609,35],[614,245],[461,248]] },
+  jiutangshu: { points: [[636,36],[656,33],[787,35],[790,245],[637,248]] },
+  qingshigao: { points: [[811,37],[830,34],[956,35],[961,245],[812,248]] },
+} satisfies Record<string, { points: number[][] }>;
+const liftMs = 450;
+const smooth = (value: number) => { const t = Math.min(1, Math.max(0, value)); return t * t * (3 - 2 * t); };
 
-/** A finite, cancellable book transition; routing happens only after the last page settles. */
+/** A real, finite GLB opening; navigation follows the final settled spread. */
 export function mountBookOpening(host: HTMLElement, onOpen: (id: string) => void) {
   let disposed = false;
   let cancelCurrent: (() => void) | undefined;
@@ -36,14 +38,18 @@ export function mountBookOpening(host: HTMLElement, onOpen: (id: string) => void
     const width = bounds.right - bounds.left, height = bounds.bottom - bounds.top;
     const source = { left: rect.left + bounds.left / 1026 * rect.width, top: rect.top + bounds.top / 334 * rect.height,
       width: width / 1026 * rect.width, height: height / 334 * rect.height };
+    const abort = new AbortController();
     let frame = 0, timeout = 0, stopped = false;
     let overlay: HTMLElement | undefined;
+    let model: BookOpeningScene | undefined;
     const stillHere = () => host.isConnected && stage.isConnected && location.href === originalUrl;
 
     function finish(navigate: boolean) {
       if (stopped) return;
       stopped = true;
-      cancelAnimationFrame(frame); clearTimeout(timeout);
+      cancelAnimationFrame(frame); clearTimeout(timeout); abort.abort();
+      try { model?.dispose(); } catch { /* Navigation still works if a WebGL context failed. */ }
+      model = undefined;
       overlay?.remove();
       delete stage!.dataset.openingBook;
       stage!.style.removeProperty('--book-shelf-mask');
@@ -68,72 +74,77 @@ export function mountBookOpening(host: HTMLElement, onOpen: (id: string) => void
     document.addEventListener('visibilitychange', onVisibility);
     window.addEventListener('resize', onResize);
     window.addEventListener('popstate', onHistory);
-    // Missing/slow artwork must not trap a reader on the bookshelf.
+    // Slow artwork or unavailable WebGL must never trap a reader on the shelf.
     timeout = window.setTimeout(() => finish(true), 4500);
 
     void (async () => {
-      try { await poster.decode(); }
-      catch { finish(true); return; }
-      if (stopped) return;
-      if (!stillHere()) { finish(false); return; }
-      clearTimeout(timeout);
-      const polygon = book.points.map(point => point.join(',')).join(' ');
-      const hole = `M0 0H1026V334H0Z M${book.points.map(point => point.join(' ')).join('L')}Z`;
-      const mask = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1026 334"><path fill="white" fill-rule="evenodd" d="${hole}"/></svg>`;
-      stage.style.setProperty('--book-shelf-mask', `url("data:image/svg+xml,${encodeURIComponent(mask)}")`);
-      stage.dataset.openingBook = id;
-      // Freeze the source frame while removing only the selected book from the shelf.
-      stage.dispatchEvent(new Event('bookopeningstart'));
-      overlay = document.createElement('div');
-      overlay.className = 'book-opening-overlay';
-      overlay.setAttribute('aria-hidden', 'true');
-      overlay.innerHTML = `<div class="book-opening-scene" style="--book-tone:${book.tone}">
-        <div class="book-opening-volume">
-          <div class="book-opening-board"></div>
-          <div class="book-opening-paper"><div class="book-opening-reading"><span>${book.era} · 入门导读</span><h2>${book.name}</h2><i></i><p>先看懂时代<br>再走进故事</p><small>局面 · 人物 · 事件 · 原文</small></div></div>
-          ${[0,1,2].map(index => `<div class="book-opening-leaf" data-leaf="${index}"><div class="book-opening-leaf-front"></div><div class="book-opening-leaf-back"></div></div>`).join('')}
-          <div class="book-opening-cover"><div class="book-opening-cover-front"><svg viewBox="${bounds.left} ${bounds.top} ${width} ${height}" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="opening-cover-clip"><polygon points="${polygon}"/></clipPath></defs><image href="${esc(poster.currentSrc || poster.src)}" width="1026" height="334" clip-path="url(#opening-cover-clip)"/></svg></div><div class="book-opening-cover-inside"><span>历史星云</span><i></i><small>从一本史书<br>走进一个时代</small></div></div>
-        </div>
-      </div>`;
-      document.body.append(overlay);
-      const scene = overlay.querySelector<HTMLElement>('.book-opening-scene')!;
-      const volume = overlay.querySelector<HTMLElement>('.book-opening-volume')!;
-      const cover = overlay.querySelector<HTMLElement>('.book-opening-cover')!;
-      const paper = overlay.querySelector<HTMLElement>('.book-opening-paper')!;
-      const board = overlay.querySelector<HTMLElement>('.book-opening-board')!;
-      const leaves = Array.from(overlay.querySelectorAll<HTMLElement>('.book-opening-leaf'));
-      const reading = overlay.querySelector<HTMLElement>('.book-opening-reading')!;
-      const targetWidth = Math.min(260, window.innerWidth * .43, window.innerHeight * .52 * width / height);
-      const target = { left: window.innerWidth / 2 - targetWidth * .07, top: (window.innerHeight - targetWidth * height / width) / 2,
-        width: targetWidth, height: targetWidth * height / width };
-      const smooth = (value: number) => { const t = Math.min(1, Math.max(0, value)); return t * t * (3 - 2 * t); };
-      function paint(progress: number) {
-        const lift = smooth(progress / .36), unfold = smooth((progress - .18) / .49);
-        for (const property of ['left','top','width','height'] as const) scene.style[property] = `${source[property] + (target[property] - source[property]) * lift}px`;
-        overlay!.style.setProperty('--book-backdrop', String(smooth(progress / .24)));
-        volume.style.transform = `rotateX(${lift * 7}deg) rotateY(${-lift * 5}deg)`;
-        cover.style.transform = `translateZ(4px) rotateY(${-unfold * 166}deg)`;
-        paper.style.opacity = board.style.opacity = String(smooth(progress / .15));
-        leaves.forEach((leaf, index) => {
-          const turn = smooth((progress - .40 - index * .10) / .30);
-          leaf.style.opacity = String(smooth(progress / .16));
-          leaf.style.transform = `translateZ(${3 - index * .55}px) rotateY(${-turn * (160 - index * 3)}deg)`;
-        });
-        reading.style.opacity = String(smooth((progress - .70) / .19));
-      }
-      paint(0);
-      let start: number | undefined;
-      const tick = (now: number) => {
+      try {
+        await poster.decode();
         if (stopped) return;
         if (!stillHere()) { finish(false); return; }
-        start ??= now;
-        const progress = Math.min(1, (now - start) / duration);
-        paint(progress);
-        if (progress === 1) finish(true);
-        else frame = requestAnimationFrame(tick);
-      };
-      frame = requestAnimationFrame(tick);
-      timeout = window.setTimeout(() => finish(true), duration + 900);
+        const targetWidth = Math.min(780, window.innerWidth * .87, window.innerHeight * .72 * 1.4);
+        const target = { left: (window.innerWidth - targetWidth) / 2,
+          top: (window.innerHeight - targetWidth / 1.4) / 2, width: targetWidth, height: targetWidth / 1.4 };
+        overlay = document.createElement('div');
+        overlay.className = 'book-opening-overlay';
+        overlay.setAttribute('aria-hidden', 'true');
+        // The source poster only bridges the first lift frames, never the open pages.
+        const polygon = book.points.map(point => point.join(',')).join(' ');
+        overlay.innerHTML = `<div class="book-opening-source"><svg viewBox="${bounds.left} ${bounds.top} ${width} ${height}" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="opening-source-clip"><polygon points="${polygon}"/></clipPath></defs><image href="${esc(poster.currentSrc || poster.src)}" width="1026" height="334" clip-path="url(#opening-source-clip)"/></svg></div><div class="book-opening-scene"></div>`;
+        const scene = overlay.querySelector<HTMLElement>('.book-opening-scene')!;
+        const sourcePreview = overlay.querySelector<HTMLElement>('.book-opening-source')!;
+        for (const property of ['left','top','width','height'] as const) scene.style[property] = `${target[property]}px`;
+        document.body.append(overlay);
+        const { createBookOpeningScene } = await import('./book-opening-scene');
+        if (stopped) return;
+        const loaded = await createBookOpeningScene(scene, { id, signal: abort.signal, onUnavailable: () => finish(true) });
+        if (stopped) { loaded.dispose(); return; }
+        model = loaded;
+        if (!stillHere()) { finish(false); return; }
+        clearTimeout(timeout);
+        const hole = `M0 0H1026V334H0Z M${book.points.map(point => point.join(' ')).join('L')}Z`;
+        const mask = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1026 334"><path fill="white" fill-rule="evenodd" d="${hole}"/></svg>`;
+        stage.style.setProperty('--book-shelf-mask', `url("data:image/svg+xml,${encodeURIComponent(mask)}")`);
+        stage.dataset.openingBook = id;
+        stage.dispatchEvent(new Event('bookopeningstart'));
+        overlay.classList.add('is-ready');
+
+        // The closed mesh occupies the center 1.6 / 3.65 of the renderer's width.
+        const initialWidth = source.width * 3.65 / 1.6;
+        const initialHeight = source.height * (3.65 / 1.4) / 2.2;
+        const initial = { left: source.left + (source.width - initialWidth) / 2,
+          top: source.top + (source.height - initialHeight) / 2, width: initialWidth, height: initialHeight };
+        const previewTarget = { left: target.left + (target.width - target.width * 1.6 / 3.65) / 2,
+          top: target.top + (target.height - target.height * 2.2 / (3.65 / 1.4)) / 2,
+          width: target.width * 1.6 / 3.65, height: target.height * 2.2 / (3.65 / 1.4) };
+        const duration = Math.max(liftMs + 500, loaded.durationMs);
+        function paint(progress: number) {
+          const elapsed = progress * duration, lift = smooth(elapsed / liftMs);
+          for (const property of ['left','top','width','height'] as const) {
+            scene.style[property] = `${initial[property] + (target[property] - initial[property]) * lift}px`;
+            sourcePreview.style[property] = `${source[property] + (previewTarget[property] - source[property]) * lift}px`;
+          }
+          overlay!.style.setProperty('--book-backdrop', String(smooth(elapsed / 360)));
+          sourcePreview.style.opacity = String(1 - smooth(elapsed / 190));
+          scene.style.opacity = String(smooth(elapsed / 190));
+          loaded.render(progress);
+        }
+        paint(0);
+        if (stopped) return;
+        let start: number | undefined;
+        const tick = (now: number) => {
+          if (stopped) return;
+          if (!stillHere()) { finish(false); return; }
+          start ??= now;
+          const progress = Math.min(1, (now - start) / duration);
+          try { paint(progress); } catch { finish(true); return; }
+          if (stopped) return;
+          if (progress === 1) finish(true);
+          else frame = requestAnimationFrame(tick);
+        };
+        frame = requestAnimationFrame(tick);
+        timeout = window.setTimeout(() => finish(true), duration + 900);
+      } catch { finish(true); }
     })();
   }
   return { open, dispose() { disposed = true; cancelCurrent?.(); } };
