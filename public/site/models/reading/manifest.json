@@ -1,0 +1,362 @@
+{
+  "reading-desk": {
+    "poster": "reading-desk-poster.png",
+    "model": "reading-desk.glb",
+    "width": 1200,
+    "height": 800,
+    "camera": {
+      "type": "orthographic",
+      "position": [
+        7.0,
+        -10.0,
+        9.0
+      ],
+      "target": [
+        0,
+        0,
+        0.1
+      ],
+      "scale": 7.2,
+      "threePosition": [
+        7.0,
+        9.0,
+        10.0
+      ],
+      "threeTarget": [
+        0,
+        0.1,
+        0
+      ]
+    },
+    "lighting": [
+      {
+        "name": "Warm key softbox",
+        "position": [
+          -3,
+          -4,
+          8
+        ],
+        "energy": 900,
+        "color": [
+          1,
+          0.87,
+          0.66
+        ],
+        "size": 5,
+        "threePosition": [
+          -3,
+          8,
+          4
+        ]
+      },
+      {
+        "name": "Cool reflected fill",
+        "position": [
+          5,
+          -1,
+          5
+        ],
+        "energy": 430,
+        "color": [
+          0.72,
+          0.83,
+          1
+        ],
+        "size": 5,
+        "threePosition": [
+          5,
+          5,
+          1
+        ]
+      },
+      {
+        "name": "Gold rim softbox",
+        "position": [
+          1,
+          5,
+          6
+        ],
+        "energy": 760,
+        "color": [
+          1,
+          0.78,
+          0.48
+        ],
+        "size": 3.5,
+        "threePosition": [
+          1,
+          6,
+          -5
+        ]
+      }
+    ],
+    "ambient": {
+      "color": [
+        0.21,
+        0.25,
+        0.27
+      ],
+      "strength": 0.5
+    },
+    "renderer": {
+      "colorSpace": "srgb",
+      "viewTransform": "AgX",
+      "look": "medium-high-contrast",
+      "exposure": 0.15,
+      "threeExposureMultiplier": 1.109569472067845
+    },
+    "notes": "Original meshes. Constant Principled materials. PNG is the color-accurate offline rendering; realtime lights are an approximation.",
+    "validation": {
+      "modelBytes": 398752,
+      "posterBytes": 524748,
+      "transparentCornerAlpha": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meshObjects": 133
+    },
+    "coordinateSystem": "blender-z-up"
+  },
+  "archive-books": {
+    "poster": "archive-books-poster.png",
+    "model": "archive-books.glb",
+    "width": 1200,
+    "height": 800,
+    "camera": {
+      "type": "orthographic",
+      "position": [
+        7.0,
+        -10.0,
+        9.0
+      ],
+      "target": [
+        0,
+        0.0,
+        0.75
+      ],
+      "scale": 8.6,
+      "threePosition": [
+        7.0,
+        9.0,
+        10.0
+      ],
+      "threeTarget": [
+        0,
+        0.75,
+        -0.0
+      ]
+    },
+    "lighting": [
+      {
+        "name": "Warm key softbox",
+        "position": [
+          -3,
+          -4,
+          8
+        ],
+        "energy": 900,
+        "color": [
+          1,
+          0.87,
+          0.66
+        ],
+        "size": 5,
+        "threePosition": [
+          -3,
+          8,
+          4
+        ]
+      },
+      {
+        "name": "Cool reflected fill",
+        "position": [
+          5,
+          -1,
+          5
+        ],
+        "energy": 430,
+        "color": [
+          0.72,
+          0.83,
+          1
+        ],
+        "size": 5,
+        "threePosition": [
+          5,
+          5,
+          1
+        ]
+      },
+      {
+        "name": "Gold rim softbox",
+        "position": [
+          1,
+          5,
+          6
+        ],
+        "energy": 760,
+        "color": [
+          1,
+          0.78,
+          0.48
+        ],
+        "size": 3.5,
+        "threePosition": [
+          1,
+          6,
+          -5
+        ]
+      }
+    ],
+    "ambient": {
+      "color": [
+        0.21,
+        0.25,
+        0.27
+      ],
+      "strength": 0.5
+    },
+    "renderer": {
+      "colorSpace": "srgb",
+      "viewTransform": "AgX",
+      "look": "medium-high-contrast",
+      "exposure": 0.15,
+      "threeExposureMultiplier": 1.109569472067845
+    },
+    "notes": "Original meshes. Constant Principled materials. PNG is the color-accurate offline rendering; realtime lights are an approximation.",
+    "validation": {
+      "modelBytes": 346952,
+      "posterBytes": 541412,
+      "transparentCornerAlpha": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meshObjects": 122
+    },
+    "coordinateSystem": "blender-z-up"
+  },
+  "modern-archive": {
+    "poster": "modern-archive-poster.png",
+    "model": "modern-archive.glb",
+    "width": 1200,
+    "height": 800,
+    "camera": {
+      "type": "orthographic",
+      "position": [
+        7.0,
+        -10.0,
+        9.0
+      ],
+      "target": [
+        0,
+        0,
+        0.65
+      ],
+      "scale": 8.6,
+      "threePosition": [
+        7.0,
+        9.0,
+        10.0
+      ],
+      "threeTarget": [
+        0,
+        0.65,
+        0
+      ]
+    },
+    "lighting": [
+      {
+        "name": "Warm key softbox",
+        "position": [
+          -3,
+          -4,
+          8
+        ],
+        "energy": 900,
+        "color": [
+          1,
+          0.87,
+          0.66
+        ],
+        "size": 5,
+        "threePosition": [
+          -3,
+          8,
+          4
+        ]
+      },
+      {
+        "name": "Cool reflected fill",
+        "position": [
+          5,
+          -1,
+          5
+        ],
+        "energy": 430,
+        "color": [
+          0.72,
+          0.83,
+          1
+        ],
+        "size": 5,
+        "threePosition": [
+          5,
+          5,
+          1
+        ]
+      },
+      {
+        "name": "Gold rim softbox",
+        "position": [
+          1,
+          5,
+          6
+        ],
+        "energy": 760,
+        "color": [
+          1,
+          0.78,
+          0.48
+        ],
+        "size": 3.5,
+        "threePosition": [
+          1,
+          6,
+          -5
+        ]
+      }
+    ],
+    "ambient": {
+      "color": [
+        0.21,
+        0.25,
+        0.27
+      ],
+      "strength": 0.5
+    },
+    "renderer": {
+      "colorSpace": "srgb",
+      "viewTransform": "AgX",
+      "look": "medium-high-contrast",
+      "exposure": 0.15,
+      "threeExposureMultiplier": 1.109569472067845
+    },
+    "notes": "Original meshes. Constant Principled materials. PNG is the color-accurate offline rendering; realtime lights are an approximation.",
+    "validation": {
+      "modelBytes": 368044,
+      "posterBytes": 532840,
+      "transparentCornerAlpha": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meshObjects": 121
+    },
+    "coordinateSystem": "blender-z-up"
+  }
+}

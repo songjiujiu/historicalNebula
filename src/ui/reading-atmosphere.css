@@ -1,0 +1,17 @@
+.reading-atmosphere{position:relative;min-width:0;margin:0;width:100%;isolation:isolate}
+.reading-atmosphere:before{content:'';position:absolute;inset:20% 10% 12%;border-radius:50%;background:radial-gradient(ellipse,#c69b4324,transparent 69%);pointer-events:none;z-index:-1}
+.reading-model{position:relative;aspect-ratio:3/2;min-width:0;outline-offset:5px}
+.reading-model>img{width:100%;height:100%;display:block;object-fit:contain;filter:drop-shadow(0 16px 18px #0002)}
+.reading-model-canvas{position:absolute;inset:0;visibility:hidden}
+.reading-model-canvas canvas{display:block;width:100%;height:100%;touch-action:none}
+.reading-model.is-interactive>img{visibility:hidden}
+.reading-model.is-interactive .reading-model-canvas{visibility:visible}
+.reading-atmosphere figcaption{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:0 10% 0 12%;padding-top:11px;border-top:1px solid var(--heritage-line);font:11px/1.8 SimSun,serif;letter-spacing:1px;color:var(--heritage-muted)}
+html[data-theme] .reading-atmosphere figcaption button{background:none;border:0;border-radius:0;padding:2px 0;min-height:24px;color:var(--heritage-gold);font-size:10px;letter-spacing:0;white-space:nowrap}
+.reading-model-status{display:block;font-size:10px;text-align:right;color:var(--heritage-muted);padding:5px 10%;min-height:20px}
+.reading-atmosphere-compact{max-width:230px;margin:0 auto}
+.reading-atmosphere-compact .reading-model>img{filter:drop-shadow(0 9px 10px #0002)}
+html[data-theme='light'] .reading-atmosphere:before{background:radial-gradient(ellipse,#b68a4520,transparent 69%)}
+html[data-theme='light'] .reading-model>img{filter:drop-shadow(0 12px 14px #634b2522)}
+@media(max-width:760px){.reading-atmosphere{max-width:360px;margin:0 auto}.reading-atmosphere figcaption{margin:0 9%;justify-content:center;font-size:10px}.reading-atmosphere figcaption button,.reading-model-status{display:none}.reading-atmosphere-compact{display:none}}
+@media(prefers-reduced-data:reduce){.reading-atmosphere [data-reading-preview]{display:none}}

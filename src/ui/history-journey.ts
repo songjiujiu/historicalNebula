@@ -7,6 +7,7 @@ import './history-journey.css';
 import { historicalStage } from './historical-stage';
 import { mountScrollEntrance } from './scroll-entrance';
 import { mountBookOpening } from './book-opening';
+import { readingAtmosphere } from './reading-atmosphere';
 
 interface JourneyOptions {
   onSource: (event: JourneyEvent, source: JourneySource) => void;
@@ -117,6 +118,7 @@ export function createHistoryJourney(host: HTMLElement, options: JourneyOptions)
     host.innerHTML = `<main class="journey-shell journey-detail-shell"><div class="editorial-chronicle" aria-label="历史阅读范围"><span>一卷中国历史</span><div><b>上古 · 先秦</b><i>秦汉</i><i>魏晋南北朝</i><i>隋唐</i><i>宋元明清</i><b>近现代 · 当代</b></div><small>沿时间前行 · 在转折处停留</small></div><div class="journey-layout">${rail()}<article class="journey-main journey-detail"><div class="journey-detail-top"><button data-journey-action="home">← 返回历史主线</button><span>${scope === 'all' ? '全部关键节点' : '快速主线'} · ${index + 1} / ${items.length}</span></div><header class="journey-detail-heading"><span class="journey-overline">${era.title} · ${esc(event.year)}</span><h1 tabindex="-1">${esc(event.title)}</h1><p>${esc(event.summary)}</p></header>${readingEntry(event)}${eraMap(era)}<div class="journey-people"><span>先认清人物与机构</span>${event.people.map(person => `<span>${esc(person)}</span>`).join('')}</div><div class="journey-explanation">${[['之前是什么局面', event.before], ['到底发生了什么', event.happening], ['后来改变了什么', event.after]].map(([title, body], i) => `<section><span class="journey-step-number">0${i + 1}</span><div><h2>${title}</h2><p>${esc(body)}</p></div></section>`).join('')}</div><section class="journey-takeaway"><span>只记住这一点</span><p>${esc(event.remember)}</p></section>${event.caution ? `<p class="journey-caution"><strong>阅读时留意：</strong>${esc(event.caution)}</p>` : ''}
       ${sourceSection(event)}
       <div class="journey-complete"><button class="secondary-button" data-journey-action="complete" aria-pressed="${activeRead}">${activeRead ? '已读懂 ✓ · 点击取消' : '我读懂了，记下进度 ✓'}</button><span role="status" data-journey-progress>${read.size} / ${journeyEvents.length} 个节点已读懂</span></div><nav class="journey-neighbors" aria-label="前后事件">${prev ? `<button data-journey-event="${prev.id}"><small>← 回看前一件事 · ${esc(prev.year)}</small><strong>${esc(prev.title)}</strong><span>${esc(prev.summary)}</span></button>` : '<div class="journey-route-edge">你已来到这条路线的起点。</div>'}${next ? `<button class="journey-next" data-journey-event="${next.id}"><small>接着看 · ${esc(next.year)} →</small><strong>${esc(next.title)}</strong><span>${esc(next.summary)}</span></button>` : '<div class="journey-route-edge"><strong>已到这条路线的终点</strong><p>可以回到主线补读其他事件，或打开史书深入阅读。</p><button data-journey-action="home">返回主线 →</button></div>'}</nav><p class="journey-footnote">相邻卡片按阅读顺序衔接，可能跨越数十年；前后排列不代表唯一或直接的因果关系。</p></article></div></main>`;
+    host.querySelector('.journey-detail-heading')?.insertAdjacentHTML('beforeend', readingAtmosphere(modernChapter(event.id) ? 'modern' : 'desk', true));
     revealActiveEra();
   }
   function navigateQuestion(step = 0) {

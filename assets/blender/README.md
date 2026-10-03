@@ -25,3 +25,28 @@ camera and renders on resize or short book-hover transitions, not continuously.
 This implementation approximates the concept's composition; lighting, font
 metrics and the reconstructed book geometry differ from the concept. It should
 not be described as a pixel-identical or fully volumetric reconstruction.
+
+## Reading and archive still lifes
+
+`reading-desk.blend`, `archive-books.blend`, and `modern-archive.blend` are
+original, fully volumetric scenes. Their books, bowed paper sheets, bindings,
+calligraphy equipment, scrolls, document clips, seals, and wooden display trays
+are actual geometry. They do not use the homepage painting or camera-projected
+image planes. Chinese titles use the native KaiTi font and are exported as
+meshes; page rules are intentional ruled layouts rather than invented text.
+
+Regenerate all three scenes with:
+
+```powershell
+& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python scripts/blender/build_reading_models.py
+```
+
+To rebuild just one scene, append `-- reading-desk`, `-- archive-books`, or
+`-- modern-archive`. Outputs in `public/site/models/reading` include a GLB with
+its fixed orthographic camera and a 1200 × 800 RGBA poster per scene. The alpha
+channel outside the objects is transparent. `manifest.json` records the exact
+camera, ambient fill, softbox positions, material-compatible color settings, and
+render exposure. Constant Principled materials keep the GLBs independent of
+procedural textures. The posters use the full Cycles studio lighting and are
+the authoritative visual appearance; a realtime viewer's shadow and tone
+mapping may differ. Blender is only needed to regenerate these source assets.

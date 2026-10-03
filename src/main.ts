@@ -13,6 +13,8 @@ import './editorial.css';
 import './ui/historical-stage.css';
 import './ui/reading-light.css';
 import './ui/daylight-stage.css';
+import './ui/heritage-pages.css';
+import { attachReadingModelPreviews } from './ui/reading-atmosphere';
 
 type ReadingMode = 'journey' | 'guide' | 'histories' | 'library' | 'texts' | 'modern-guides';
 function normalizeLocation() {
@@ -302,4 +304,5 @@ window.addEventListener('popstate', () => {
   prepareNavigation(); normalizeLocation(); appMode = modeFromUrl(); render(); restoreBook();
 });
 window.addEventListener('hashchange', () => { restoreBook(); if (appMode === 'texts') modernTexts?.locateFromUrl(); });
+attachReadingModelPreviews(document.body);
 render(); restoreBook();

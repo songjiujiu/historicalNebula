@@ -1,6 +1,7 @@
 import { escapeHtml as esc } from './icons';
 import { historyBookNames, journeyEvent, journeySourceUrl } from '../domain/history-journey';
 import './featured-question.css';
+import { readingAtmosphere } from './reading-atmosphere';
 
 export const featuredQuestionId = 'western-jin';
 
@@ -47,7 +48,7 @@ export function renderFeaturedQuestion(stepIndex: number) {
   const source = event.sources[0];
   return `<main class="journey-shell question-shell">
     <div class="question-topline"><button data-journey-action="home">← 返回历史主线</button><span>一个问题，看懂一段历史 · 约 3 分钟</span></div>
-    <header class="question-heading"><span class="journey-overline">本期问题 · 三国与两晋</span><h1 tabindex="-1">西晋明明统一了，<br><em>为什么又分裂？</em></h1><p>跟着三个转折看局势怎样变化。点亮时间节点，再看史书究竟写了什么。</p></header>
+    <header class="question-heading"><span class="journey-overline">本期问题 · 三国与两晋</span><h1 tabindex="-1">西晋明明统一了，<br><em>为什么又分裂？</em></h1><p>跟着三个转折看局势怎样变化。点亮时间节点，再看史书究竟写了什么。</p>${readingAtmosphere('archive', true)}</header>
     <div class="question-workspace">
       <nav class="question-steps" aria-label="三个历史转折">${steps.map((item, index) => `<button data-question-step="${index}" aria-current="${index === stepIndex ? 'step' : 'false'}"><small>${item.year} · 0${index + 1}</small><strong>${esc(item.label)}</strong><span>${esc(item.title)}</span></button>`).join('')}</nav>
       <div class="question-content"><section class="question-map" aria-label="西晋至南北分立的政权变化"><div class="question-map-heading"><div><span class="journey-overline">同时看北方与南方</span><h2>同一时间，两边分别是谁？</h2></div><small>点上方时间节点切换</small></div><div class="question-map-grid"><div class="question-map-corner">地区 / 年代</div>${steps.map((item, index) => `<span class="question-map-year ${index === stepIndex ? 'active' : ''}">${item.year}</span>`).join('')}<b class="question-map-axis">北方</b>${steps.map((item, index) => `<span class="question-map-cell north ${index === stepIndex ? 'active' : ''}">${esc(item.north)}</span>`).join('')}<b class="question-map-axis">南方</b>${steps.map((item, index) => `<span class="question-map-cell south ${index === stepIndex ? 'active' : ''}">${esc(item.south)}</span>`).join('')}</div><p>${stepIndex === 0 ? '280 年南北同属西晋；这是后面分裂前的起点。' : '上下两行代表同一年代并存的局势，不是前后接班的朝代。'}</p></section>
