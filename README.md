@@ -40,6 +40,8 @@ python -m pytest backend/tests
 
 开发环境需要先启动 MySQL 与 Flask，设置 `HISTORY_DB_HOST`、`HISTORY_DB_PORT`、`HISTORY_DB_NAME`、`HISTORY_DB_USER`、`HISTORY_DB_PASSWORD`，再运行 Vite；详见 [后端与服务器部署说明](deploy/README.md)。生产构建输出到 `dist/`，其中只有网页资源，不包含 `public/data` 的 3,816 个 JSON 文件。数据从 `/api/v1/data/...` 获取；`/api/v1/health` 检查数据库是否有正在使用的数据版本。正文按卷加载，检索索引按书加载。
 
+只开发页面时，也可以复制 `.env.example` 为 `.env.local`，将 `HISTORICAL_API_TARGET` 设置为已有 Flask 服务或已部署网站的地址。Vite 开发服务和构建预览会通过同源 `/api` 转发请求，无需另外启动本机 MySQL；改回 `http://127.0.0.1:5000` 即可使用本地后端。导读和目录可独立显示，但正文需要接口可用，可先访问 `/api/v1/health` 确认。
+
 ## 《史记》全书接入
 
 - **全文**：130 卷，12 本纪、10 表、8 书、30 世家、70 列传；十表保留正文表格，非仅收录序言。共 730,220 字符，包含转录校勘及编者增补，不等同于古代原作字数。

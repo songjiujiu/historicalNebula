@@ -8,6 +8,8 @@ Build locally with `npm run build`, create a frontend archive from `dist`, and p
 
 For local development, install `backend/requirements-dev.txt`, configure `HISTORY_DB_HOST`, `HISTORY_DB_PORT`, `HISTORY_DB_NAME`, `HISTORY_DB_USER`, `HISTORY_DB_PASSWORD`, run `flask --app 'backend.app:create_app' run`, then `npm run dev`. Vite proxies `/api` to Flask at `127.0.0.1:5000` by default. Source data is not served by Vite.
 
+For frontend-only development with an existing Flask/MySQL service, copy `.env.example` to the ignored `.env.local` and set `HISTORICAL_API_TARGET` to that service's origin (for example, `http://82.157.197.102`). Both `npm run dev` and `npm run preview` read this setting; an explicit process environment value takes precedence. The browser still requests same-origin `/api` URLs, and the database stays behind Flask. Restart Vite after changing this setting. To use a local backend again, set the target back to `http://127.0.0.1:5000`. Verify `/api/v1/health` returns `ok: true` before opening a reader; the catalog and guide metadata can render even when the body API is unavailable.
+
 Background and source metadata remain bundled in the frontend for instant navigation; full book text, search indexes, modern prose, original documents, and Qing chapters are read from MySQL through Flask.
 
 ## Jenkins builds
