@@ -139,6 +139,8 @@ html[data-theme] .immersive-shell .journey-era-section h2 { font: 28px/1.7 SimSu
 html[data-theme] .immersive-shell .journey-footnote { margin: 0 6%; padding: 25px 0 40px; color: var(--ex-muted); border-color: var(--ex-line); }
 html[data-theme] .app-footer { height: auto; min-height: 60px; padding: 18px 6%; background: var(--ex-bg); border-color: var(--ex-line); color: var(--ex-muted); font-size: 10px; }
 html[data-theme] .app-footer button { color: var(--ex-accent); }
+/* Keep the collection artwork quiet; omit the optional rotation control. */
+html[data-theme] .reading-atmosphere [data-reading-preview] { display: none; }
 /* Era filters share the same treatment in the guide and source catalogs. */
 html[data-theme] :is(.mg-tools,.mt-catalog-tools) label:has(select) {
   position: relative;
