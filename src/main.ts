@@ -15,6 +15,7 @@ import './ui/reading-light.css';
 import './ui/daylight-stage.css';
 import './ui/heritage-pages.css';
 import { attachReadingModelPreviews } from './ui/reading-atmosphere';
+import './exhibition.css';
 
 type ReadingMode = 'journey' | 'guide' | 'histories' | 'library' | 'texts' | 'modern-guides';
 function normalizeLocation() {
@@ -52,6 +53,7 @@ type ColorTheme = 'dark' | 'light';
 const savedTheme: ColorTheme = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
+  <a class="skip-link" href="#journey-root">跳至主要内容</a>
   <header class="app-header">
     <a class="brand" href="${import.meta.env.BASE_URL}" aria-label="历史星云首页"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 2 37 25 53 11 40 28 62 32 40 37 53 53 36 40 32 62 27 40 11 53 24 36 2 32 25 27 11 11 28 24Z"/><path d="m32 2 0 60m-30-30h60M11 11l42 42M11 53l42-42"/><path d="m32 16 7 16-7 16-7-16Z"/></svg></span><span>历史星云<small>HISTORICAL NEBULA</small></span></a>
     <span class="brand-caption">让历史照亮当下<br>每一个普通人</span>
@@ -84,7 +86,7 @@ function toast(message: string) {
 }
 function setTheme(theme: ColorTheme) {
   document.documentElement.dataset.theme = theme;
-  document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#f3ede2' : '#0a0e18');
+  document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#f4f1e9' : '#111917');
   for (const option of ['dark', 'light'] as const) {
     $<HTMLButtonElement>(`[data-action="theme-${option}"]`).setAttribute('aria-pressed', String(option === theme));
   }
@@ -136,6 +138,9 @@ async function ensureHistoryGuides() {
   return guidesLoading;
 }
 function render(refresh = true) {
+  const contentRoot = { journey: 'journey-root', guide: 'reading-root', histories: 'history-guides-root', library: 'dynastic-root', texts: 'modern-texts-root', 'modern-guides': 'modern-guides-root' }[appMode];
+  $('.skip-link').setAttribute('href', `#${contentRoot}`);
+  $(`#${contentRoot}`).setAttribute('tabindex', '-1');
   for (const [mode, root, action] of [['journey', '#journey-root', 'history-journey'], ['guide', '#reading-root', 'reading-guides'], ['histories', '#history-guides-root', 'history-guides'], ['library', '#dynastic-root', 'dynastic-library'], ['texts', '#modern-texts-root', 'modern-texts'], ['modern-guides', '#modern-guides-root', 'modern-guides']]) {
     $(root).classList.toggle('hidden', appMode !== mode);
     const button = $(`[data-action="${action}"]`);

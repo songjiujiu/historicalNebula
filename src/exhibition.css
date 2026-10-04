@@ -1,0 +1,281 @@
+/* A shared exhibition system. Pigments stay intact in both reading environments. */
+:root, html[data-theme='dark'] {
+  --ex-bg: #111917; --ex-panel: #18221e; --ex-ink: #eeeadd;
+  --ex-muted: #acb4a7; --ex-accent: #d4ba80; --ex-line: #56614c;
+  --ex-wash: #bda87812; --ex-red: #c88168;
+}
+html[data-theme='light'] {
+  --ex-bg: #f4f1e9; --ex-panel: #eae7dc; --ex-ink: #242f27;
+  --ex-muted: #636b5d; --ex-accent: #766039; --ex-line: #c9cdbd;
+  --ex-wash: #6774540a; --ex-red: #98513d;
+}
+html[data-theme] {
+  --heritage-bg: var(--ex-bg); --heritage-panel: var(--ex-panel);
+  --heritage-ink: var(--ex-ink); --heritage-muted: var(--ex-muted);
+  --heritage-gold: var(--ex-accent); --heritage-line: var(--ex-line);
+  --heritage-paper: var(--ex-bg); --editorial-ink: var(--ex-ink);
+  --editorial-muted: var(--ex-muted); --editorial-accent: var(--ex-accent);
+  --editorial-rule: var(--ex-line); --editorial-surface: var(--ex-panel);
+  --paper: var(--ex-bg); --paper-surface: var(--ex-panel); --paper-ink: var(--ex-ink);
+  --paper-text: var(--ex-ink); --paper-muted: var(--ex-muted);
+  --paper-accent: var(--ex-accent); --paper-border: var(--ex-line);
+  --header: 90px; scroll-padding-top: 28px;
+  background: var(--ex-bg); color: var(--ex-ink);
+}
+html[data-theme] body { background: var(--ex-bg); }
+button, a, input { -webkit-tap-highlight-color: transparent; }
+html[data-theme] :focus-visible { outline: 2px solid var(--ex-accent); outline-offset: 5px; }
+::selection { background: #bfa36c66; }
+.skip-link { position: fixed; z-index: 100; left: 20px; top: -80px; padding: 15px 24px; background: var(--ex-ink); color: var(--ex-bg); }
+.skip-link:focus { top: 12px; }
+html[data-theme] .app-header { height: 90px; min-height: 90px; padding: 0 4.5%; gap: 28px; flex-wrap: nowrap; background: var(--ex-bg); border-bottom: 1px solid var(--ex-line); }
+html[data-theme] .app-header .brand { color: var(--ex-ink); gap: 11px; }
+html[data-theme] .app-header .brand-mark { width: 35px; height: 44px; }
+html[data-theme] .app-header .brand-mark svg { width: 35px; height: 44px; fill: none; stroke: var(--ex-accent); }
+html[data-theme] .app-header .brand>span:last-child { font-size: 23px; letter-spacing: 3px; }
+html[data-theme] .app-header .brand small { color: var(--ex-muted); font-size: 7px; letter-spacing: 1.6px; }
+.app-header .brand-caption { display: none; }
+html[data-theme] .app-header .main-nav { gap: clamp(16px,2.3vw,36px); margin: 0 auto; justify-content: center; width: auto; height: auto; flex-basis: auto; order: 0; }
+html[data-theme] .app-header .main-nav .nav-item { font: 13px/1.5 'Microsoft YaHei',sans-serif; color: var(--ex-muted); letter-spacing: 0; }
+html[data-theme] .app-header .main-nav .nav-item.active { color: var(--ex-ink); }
+html[data-theme] .app-header .main-nav .nav-item.active:after { bottom: 23px; background: var(--ex-accent); }
+html[data-theme] .app-header .theme-switch { margin: 0; padding: 4px; gap: 2px; background: var(--ex-panel); border: 1px solid var(--ex-line); border-radius: 30px; box-shadow: none; }
+html[data-theme] .app-header .theme-switch button { width: auto; min-height: 34px; padding: 0 11px; gap: 5px; color: var(--ex-muted); background: none; box-shadow: none; }
+html[data-theme] .app-header .theme-switch button[aria-pressed='true'] { background: var(--ex-ink); color: var(--ex-bg); }
+html[data-theme] .app-header .theme-switch span { position: static; width: auto; height: auto; clip-path: none; overflow: visible; font-size: 11px; }
+html[data-theme] .app-header .theme-switch .icon { width: 14px; height: 14px; }
+html[data-theme] .source-menu { width: auto; padding-left: 20px; border-color: var(--ex-line); }
+.source-menu summary>span { display: none; }
+html[data-theme] .source-menu summary { display: flex; align-items: center; justify-content: center; min-height: 28px; }
+html[data-theme] .source-menu summary>b { display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: var(--ex-ink); font: 12px/1 'Microsoft YaHei',sans-serif; white-space: nowrap; }
+html[data-theme] .source-menu summary i { display: block; flex: none; width: 6px; height: 6px; margin: -3px 2px 0 0; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; font-size: 0; transform: rotate(45deg); }
+html[data-theme] .source-menu nav { top: 35px; background: var(--ex-panel); border-color: var(--ex-line); }
+html[data-theme] .source-menu nav button { color: var(--ex-ink); }
+html[data-theme] :is(#journey-root,.immersive-shell.journey-shell) { background: var(--ex-bg); color: var(--ex-ink); }
+html[data-theme] .immersive-shell.journey-shell { padding: 0; max-width: none; }
+html[data-theme] .immersive-hero.journey-hero { position: relative; display: block; height: 730px; min-height: 0; max-height: none; padding: 0 6%; background: radial-gradient(ellipse at 76% 40%,var(--ex-wash),transparent 58%),var(--ex-bg); border: 0; overflow: hidden; }
+.exhibition-topline { display: flex; justify-content: space-between; padding-top: 27px; color: var(--ex-muted); font-size: 10px; letter-spacing: 2px; }
+.exhibition-topline>span:last-child { font-size: 9px; letter-spacing: 1.8px; }
+html[data-theme] .immersive-hero .stage-copy { position: relative; width: 49%; max-width: none; padding: 71px 0 0; z-index: 4; }
+html[data-theme] .stage-copy .journey-overline { color: var(--ex-muted); font: 11px/1.5 'Microsoft YaHei',sans-serif; letter-spacing: 3px; display: flex; align-items: center; gap: 10px; }
+.stage-copy .journey-overline i { width: 5px; height: 5px; border-radius: 50%; background: var(--ex-accent); box-shadow: 0 0 0 4px var(--ex-wash); }
+html[data-theme] .immersive-hero .stage-copy h1 { margin: 26px 0 24px; font: 400 clamp(64px,6.2vw,100px)/1.22 'Noto Serif SC',SimSun,serif !important; letter-spacing: -.045em; color: var(--ex-ink); text-shadow: none; }
+.stage-copy h1>span { color: var(--ex-accent); }
+html[data-theme] .immersive-hero .stage-copy p { font: 14px/2.1 'Microsoft YaHei',sans-serif !important; color: var(--ex-muted); letter-spacing: 1px; white-space: normal; max-width: none; }
+html[data-theme] .immersive-hero .stage-actions { position: static; display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; width: auto; max-width: none; margin: 30px 0 0; gap: 12px; }
+html[data-theme] .immersive-shell .stage-actions button { height: 48px; min-height: 48px; padding: 0 25px; font: 13px 'Microsoft YaHei',sans-serif; letter-spacing: 1px; border-radius: 0; box-shadow: none; transition: transform .2s,background .2s; }
+html[data-theme] .stage-actions .primary-button { background: var(--ex-ink); color: var(--ex-bg); border: 1px solid var(--ex-ink); }
+html[data-theme] .immersive-shell .stage-actions .secondary-button { background: transparent; color: var(--ex-ink); border: 1px solid var(--ex-line); }
+.stage-actions button:hover { transform: translateY(-3px); }
+.exhibition-caption { display: flex; gap: 22px; align-items: center; margin-top: 44px; color: var(--ex-muted); font-size: 10px; letter-spacing: 1px; }
+.exhibition-caption>span:first-child { color: var(--ex-accent); }
+.chronicle-orbit { position: absolute; width: 490px; height: 490px; top: 68px; right: 7%; border: 1px solid var(--ex-line); border-radius: 50%; opacity: .72; }
+.chronicle-orbit:before,.chronicle-orbit:after { content: ''; position: absolute; left: -30px; right: -30px; top: 50%; height: 1px; background: var(--ex-line); opacity: .4; }
+.chronicle-orbit:after { transform: rotate(90deg); }
+.orbit-inner { position: absolute; inset: 23px; border: 1px dashed var(--ex-line); border-radius: 50%; }
+.orbit-inner:after { content: ''; position: absolute; inset: 44px; border: 1px solid var(--ex-line); border-radius: 50%; opacity: .4; }
+.orbit-north,.orbit-south { position: absolute; left: calc(50% - 13px); padding: 0 8px; background: var(--ex-bg); font: 16px SimSun,serif; }
+.orbit-north { top: -10px; } .orbit-south { bottom: -10px; }
+.orbit-label { position: absolute; top: 59px; left: 0; right: 0; text-align: center; font: 9px Georgia,serif; letter-spacing: 5px; }
+.orbit-seal { position: absolute; bottom: 47px; right: 100px; padding: 8px 5px; border: 1px solid var(--ex-red); color: var(--ex-red); font: 17px/1.2 SimSun,serif; }
+html[data-theme] .immersive-hero .scroll-stage { position: absolute; left: 40%; top: 155px; width: 66%; aspect-ratio: 1256/364; z-index: 2; transform: rotate(-8deg); filter: drop-shadow(0 28px 20px #0003); }
+html[data-theme] .scroll-art { position: relative; width: 100%; height: 100%; mask-image: none; }
+html[data-theme] .scroll-art>img { width: 100%; height: 100%; object-fit: contain; filter: none; }
+.stage-canvas { position: absolute; inset: 0; pointer-events: none; }
+.stage-canvas canvas { display: block; width: 100%; height: 100%; }
+html[data-theme] .immersive-hero .stage-event { left: auto; right: 8%; bottom: 147px; width: 264px; min-width: 0; padding: 13px 0; border: 0; border-top: 1px solid var(--ex-line); border-bottom: 1px solid var(--ex-line); border-radius: 0; background: var(--ex-bg); box-shadow: none; gap: 17px; z-index: 3; }
+html[data-theme] .stage-event .event-seal { width: 45px; height: 60px; min-width: 0; min-height: 0; border-radius: 0; }
+html[data-theme] .stage-event strong { color: var(--ex-ink); font: 17px SimSun,serif; }
+html[data-theme] .stage-event small { color: var(--ex-muted); margin: 5px 0; font-size: 10px; }
+html[data-theme] .stage-event b { color: var(--ex-accent); padding: 0; border: 0; font-size: 10px; font-weight: 400; }
+html[data-theme] .immersive-hero .scroll-eras { position: absolute; inset: auto 6% 0; height: 93px; display: grid; grid-template-columns: 1.65fr repeat(7,1fr); border-top: 1px solid var(--ex-line); border-bottom: 1px solid var(--ex-line); align-items: center; pointer-events: auto; }
+.era-index { font: 13px SimSun,serif; color: var(--ex-ink); }
+.era-index small { display: block; font: 8px/2.5 Georgia,serif; color: var(--ex-muted); letter-spacing: 1px; }
+html[data-theme] .immersive-hero .scroll-eras button { position: static; transform: none; text-shadow: none; opacity: 1; display: grid; grid-template-columns: 1fr auto; gap: 7px; padding: 10px 14px; color: var(--ex-ink); font: 15px SimSun,serif; text-align: left; border-left: 1px solid var(--ex-line); transition: background .2s; }
+html[data-theme] .immersive-hero .scroll-eras button i { display: block; position: static; grid-column: 1/-1; width: auto; height: auto; border: 0; border-radius: 0; box-shadow: none; background: none; color: var(--ex-muted); font: 9px Georgia,serif; }
+.scroll-eras button>span { color: var(--ex-accent); font-size: 13px; }
+html[data-theme] .scroll-eras button:hover { background: var(--ex-panel); }
+html[data-theme] .history-shelf { display: grid; grid-template-columns: 27% minmax(0,1fr); gap: 5%; height: auto; min-height: 0; max-height: none; margin: 0 6%; padding: 72px 0 34px; background: none; border: 0; border-bottom: 1px solid var(--ex-line); overflow: visible; }
+html[data-theme] .history-shelf:before,html[data-theme] .history-shelf:after { content: none; }
+html[data-theme] .shelf-copy { position: static; display: block; width: auto; padding-top: 10px; }
+html[data-theme] .shelf-copy .journey-overline { color: var(--ex-accent); font: 11px 'Microsoft YaHei',sans-serif; letter-spacing: 2px; }
+html[data-theme] .shelf-copy .journey-overline small { color: var(--ex-muted); font-size: 8px; letter-spacing: 2px; margin-top: 10px; }
+html[data-theme] .shelf-copy h2 { color: var(--ex-ink); font: 400 clamp(26px,2.6vw,42px)/1.45 SimSun,serif; white-space: normal; margin: 28px 0 18px; }
+html[data-theme] .shelf-copy p { color: var(--ex-muted); font: 12px/2 'Microsoft YaHei',sans-serif; white-space: normal; letter-spacing: 0; }
+html[data-theme] .shelf-copy>small { color: var(--ex-muted); font: 11px/2 'Microsoft YaHei',sans-serif; letter-spacing: 0; margin-top: 20px; }
+html[data-theme] .shelf-display { position: relative; inset: auto; margin: 0; width: auto; aspect-ratio: auto; align-self: center; }
+.books-stage { position: relative; aspect-ratio: 1026/334; }
+.books-stage>img { display: block; width: 100%; height: 100%; object-fit: contain; }
+html[data-theme] .shelf-links { position: static; display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); margin: 0 5%; gap: 14px; padding: 0; }
+html[data-theme] .history-shelf .shelf-links a { display: flex; flex-direction: column; width: 100%; height: auto; min-width: 0; gap: 9px; color: var(--ex-ink); text-align: left; padding: 14px 0; border: 0; border-top: 1px solid var(--ex-line); border-radius: 0; box-shadow: none; background: none; }
+html[data-theme] .shelf-links a>span { color: var(--ex-muted); font: 9px 'Microsoft YaHei',sans-serif; }
+.shelf-links a>b { font: 18px SimSun,serif; }
+html[data-theme] .shelf-links a>strong { color: var(--ex-accent); font: 10px 'Microsoft YaHei',sans-serif; padding: 0; background: none; border: 0; }
+.shelf-links a:hover { transform: translateY(-4px); }
+html[data-theme] .shelf-note { position: static; width: auto; grid-column: 1/-1; display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 22px 0 0; margin: 0; border-top: 1px solid var(--ex-line); background: none; color: var(--ex-muted); font: 11px 'Microsoft YaHei',sans-serif; }
+html[data-theme] .shelf-note>span { color: var(--ex-muted); font-size: 11px; border: 0; }
+html[data-theme] .shelf-note b { color: var(--ex-accent); }
+.shelf-note p { display: none; }
+html[data-theme] .shelf-note>button { color: var(--ex-accent); margin: 0; font-size: 11px; border: 0; background: none; }
+html[data-theme] .stage-secondary-entry { margin: 0 6%; padding: 25px 0; justify-content: flex-end; gap: 32px; border: 0; background: none; }
+html[data-theme] .stage-secondary-entry button { color: var(--ex-muted); font-size: 12px; }
+html[data-theme] .immersive-shell>.journey-layout { max-width: none; margin: 0 6%; padding: 52px 0; grid-template-columns: 180px minmax(0,1fr); gap: 6%; border-top: 1px solid var(--ex-line); }
+html[data-theme] .immersive-shell :is(.journey-main,.journey-rail,.journey-controls,.journey-era-section,.journey-event-card) { background: none; color: var(--ex-ink); }
+html[data-theme] .immersive-shell .journey-main { padding: 0; border: 0; box-shadow: none; }
+html[data-theme] .immersive-shell :is(.journey-controls h2,.journey-era-section h2,.journey-card-body strong) { color: var(--ex-ink); }
+html[data-theme] .immersive-shell :is(.journey-overline,.journey-event-year,.journey-card-arrow) { color: var(--ex-accent); }
+html[data-theme] .immersive-shell :is(.journey-controls p,.journey-era-section header p,.journey-card-body>span,.journey-card-body small,.journey-result-count,.journey-era-section h2 small,.journey-rail nav small,.journey-rail nav b) { color: var(--ex-muted); }
+html[data-theme] .immersive-shell :is(.journey-scope,.journey-search,.journey-era-map,.journey-rail-note) { color: var(--ex-muted); background: var(--ex-panel); border-color: var(--ex-line); border-radius: 0; }
+html[data-theme] .immersive-shell .journey-search input { color: var(--ex-ink); background: transparent; }
+html[data-theme] .immersive-shell .journey-search input::placeholder { color: var(--ex-muted); }
+html[data-theme] .immersive-shell .journey-scope button { color: var(--ex-muted); }
+html[data-theme] .immersive-shell .journey-scope button[aria-pressed='true'] { color: var(--ex-bg); background: var(--ex-ink); border-radius: 0; }
+html[data-theme] .immersive-shell .journey-rail nav button { color: var(--ex-muted); border-radius: 0; }
+html[data-theme] .immersive-shell .journey-rail nav button[aria-current='page'] { color: var(--ex-ink); background: var(--ex-panel); border-color: var(--ex-line); }
+html[data-theme] .immersive-shell .journey-event-card { border: 0; border-bottom: 1px solid var(--ex-line); border-radius: 0; padding: 26px 8px; transition: background .2s,padding .2s; }
+html[data-theme] .immersive-shell .journey-event-card:hover { background: var(--ex-panel); padding-left: 16px; }
+html[data-theme] .immersive-shell .journey-era-section { border: 0; padding: 0; margin-bottom: 50px; }
+html[data-theme] .immersive-shell .journey-era-section h2 { font: 28px/1.7 SimSun,serif; }
+html[data-theme] .immersive-shell .journey-footnote { margin: 0 6%; padding: 25px 0 40px; color: var(--ex-muted); border-color: var(--ex-line); }
+html[data-theme] .app-footer { height: auto; min-height: 60px; padding: 18px 6%; background: var(--ex-bg); border-color: var(--ex-line); color: var(--ex-muted); font-size: 10px; }
+html[data-theme] .app-footer button { color: var(--ex-accent); }
+/* Era filters share the same treatment in the guide and source catalogs. */
+html[data-theme] :is(.mg-tools,.mt-catalog-tools) label:has(select) {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 260px;
+  min-width: 0;
+  gap: 10px;
+  color: var(--ex-muted);
+  font: 11px/1.5 'Microsoft YaHei',sans-serif;
+  letter-spacing: 1px;
+}
+html[data-theme] :is(.mg-tools,.mt-catalog-tools) label:has(select)::after {
+  content: '';
+  position: absolute;
+  right: 19px;
+  bottom: 22px;
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid var(--ex-accent);
+  border-bottom: 1.5px solid var(--ex-accent);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+html[data-theme] :is(.mg-tools,.mt-catalog-tools) label select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 50px;
+  min-height: 50px;
+  margin: 0;
+  padding: 0 48px 0 17px;
+  border: 1px solid var(--ex-line);
+  border-radius: 6px;
+  background: var(--ex-panel);
+  color: var(--ex-ink);
+  font: 14px/1.5 'Microsoft YaHei',sans-serif;
+  letter-spacing: .5px;
+  box-shadow: none;
+  cursor: pointer;
+  transition: border-color .2s,box-shadow .2s;
+}
+html[data-theme] :is(.mg-tools,.mt-catalog-tools) label select:hover { border-color: var(--ex-accent); }
+html[data-theme] :is(.mg-tools,.mt-catalog-tools) label select:focus-visible {
+  border-color: var(--ex-accent);
+  outline: 2px solid var(--ex-accent);
+  outline-offset: 3px;
+}
+html[data-theme] :is(.mg-tools,.mt-catalog-tools) select option { background: var(--ex-panel); color: var(--ex-ink); }
+@media(max-width:760px) {
+  html[data-theme] :is(.mg-tools,.mt-catalog-tools) { flex-direction: column; align-items: stretch; }
+  html[data-theme] :is(.mg-tools,.mt-catalog-tools) label:has(select) { flex: none; width: 100%; }
+  html[data-theme] :is(.mg-tools,.mt-catalog-tools) label select { font-size: 16px; }
+}
+@media(min-width:1700px) {
+  html[data-theme] .immersive-hero.journey-hero { height: 830px; }
+  .chronicle-orbit { width: 590px; height: 590px; }
+  html[data-theme] .immersive-hero .stage-copy { padding-top: 100px; }
+  html[data-theme] .immersive-hero .scroll-stage { top: 180px; }
+}
+@media(max-width:1100px) {
+  html[data-theme] .app-header { gap: 18px; padding: 0 4%; }
+  html[data-theme] .app-header .brand>span:last-child { font-size: 20px; }
+  html[data-theme] .source-menu { padding-left: 12px; }
+  html[data-theme] .app-header .main-nav { gap: 15px; }
+  html[data-theme] .app-header .main-nav .nav-item { font-size: 11px; }
+  html[data-theme] .app-header .theme-switch span { display: none; }
+  html[data-theme] .immersive-hero.journey-hero { height: 685px; }
+  .chronicle-orbit { right: 3%; width: 410px; height: 410px; top: 95px; }
+  html[data-theme] .immersive-hero .stage-copy h1 { font-size: 70px !important; }
+  .exhibition-caption { flex-direction: column; align-items: flex-start; gap: 10px; }
+  html[data-theme] .immersive-hero .stage-event { right: 6%; bottom: 125px; }
+  html[data-theme] .immersive-hero .scroll-eras { grid-template-columns: 1.4fr repeat(7,1fr); }
+  html[data-theme] .immersive-hero .scroll-eras button { padding: 10px; font-size: 13px; }
+  .era-index small { font-size: 6px; }
+}
+@media(max-width:760px) {
+  html[data-theme] { --header: 114px; }
+  html[data-theme] .app-header { display: grid; grid-template-columns: 1fr auto auto; height: 114px; min-height: 114px; padding: 12px 5% 0; gap: 0 12px; }
+  html[data-theme] .app-header .brand { margin: 0; }
+  html[data-theme] .app-header .brand-mark,html[data-theme] .app-header .brand-mark svg { width: 27px; height: 34px; }
+  html[data-theme] .app-header .brand>span:last-child { font-size: 19px; letter-spacing: 2px; }
+  html[data-theme] .app-header .brand small { font-size: 6px; letter-spacing: 1px; }
+  html[data-theme] .app-header .theme-switch { grid-column: 2; grid-row: 1; padding: 3px; }
+  html[data-theme] .app-header .theme-switch button { padding: 0 8px; min-height: 32px; }
+  html[data-theme] .app-header .source-menu { grid-column: 3; grid-row: 1; padding-left: 0; border: 0; }
+  html[data-theme] .source-menu summary>b { font-size: 10px; }
+  html[data-theme] .app-header .main-nav { grid-column: 1/-1; grid-row: 2; width: 100%; margin: 0; gap: 0; justify-content: space-between; height: 47px; align-items: stretch; }
+  html[data-theme] .app-header .main-nav .nav-item { display: flex; font-size: 11px !important; }
+  html[data-theme] .app-header .main-nav .nav-item.active:after { bottom: 0; }
+  html[data-theme] .immersive-hero.journey-hero { height: 865px; padding: 0 6%; }
+  .exhibition-topline { padding-top: 23px; font-size: 9px; letter-spacing: 1px; }
+  .exhibition-topline>span:last-child { display: none; }
+  html[data-theme] .immersive-hero .stage-copy { width: 100%; padding-top: 40px; }
+  html[data-theme] .immersive-hero .stage-copy h1 { font-size: clamp(58px,14vw,85px) !important; margin: 18px 0; }
+  html[data-theme] .immersive-hero .stage-copy p { font-size: 12px !important; }
+  html[data-theme] .immersive-hero .stage-actions { margin-top: 21px; }
+  html[data-theme] .immersive-shell .stage-actions button { min-height: 44px; height: 44px; padding: 0 22px; font-size: 12px; }
+  .exhibition-caption { display: none; }
+  .chronicle-orbit { width: 285px; height: 285px; right: calc(50% - 143px); top: 452px; }
+  .orbit-inner { inset: 17px; }
+  .orbit-label { top: 35px; font-size: 7px; letter-spacing: 3px; }
+  .orbit-seal { right: 46px; bottom: 31px; font-size: 12px; padding: 5px; }
+  html[data-theme] .immersive-hero .scroll-stage { width: 115%; left: -6%; top: 498px; }
+  html[data-theme] .immersive-hero .stage-event { right: auto; left: 6%; bottom: 137px; width: auto; padding: 8px 0; gap: 9px; }
+  html[data-theme] .stage-event .event-seal { width: 26px; height: 37px; }
+  html[data-theme] .stage-event strong { font-size: 13px; }
+  html[data-theme] .stage-event small { font-size: 8px; }
+  html[data-theme] .stage-event b { display: none; }
+  html[data-theme] .immersive-hero .scroll-eras { height: 105px; grid-template-columns: repeat(7,minmax(0,1fr)); gap: 0; }
+  .era-index { grid-column: 1/-1; font-size: 10px; padding-top: 10px; }
+  .era-index small { display: inline; margin-left: 12px; font-size: 7px; }
+  html[data-theme] .immersive-hero .scroll-eras button { padding: 9px 5px; font-size: 12px; gap: 6px; min-height: 48px; }
+  .scroll-eras button>span { display: none; }
+  html[data-theme] .history-shelf { grid-template-columns: 1fr; gap: 25px; padding-top: 43px; }
+  html[data-theme] .shelf-copy h2 { font-size: 32px; margin: 18px 0 12px; }
+  .shelf-copy h2 br { display: none; }
+  html[data-theme] .shelf-copy>small { display: none; }
+  html[data-theme] .shelf-links { gap: 7px; margin: 0 2%; }
+  html[data-theme] .shelf-links a { gap: 8px; }
+  html[data-theme] .shelf-links a>span { font-size: 8px; }
+  .shelf-links a>b { font-size: 15px; }
+  html[data-theme] .shelf-links a>strong { font-size: 8px; }
+  html[data-theme] .stage-secondary-entry { justify-content: space-between; gap: 12px; }
+  html[data-theme] .stage-secondary-entry button { font-size: 11px; }
+  html[data-theme] .immersive-shell>.journey-layout { display: block; margin: 0 6%; padding-top: 24px; }
+  html[data-theme] .immersive-shell .journey-rail { position: static; max-height: none; margin-bottom: 26px; }
+  html[data-theme] .immersive-shell .journey-rail nav { display: flex; overflow-x: auto; gap: 7px; padding: 4px 0 12px; }
+  html[data-theme] .immersive-shell .journey-rail nav button { flex: 0 0 auto; min-height: 50px; padding: 8px 11px; }
+  .immersive-shell .journey-rail-note { display: none; }
+  html[data-theme] .immersive-shell .journey-controls { display: flex; flex-direction: column; align-items: stretch; gap: 17px; }
+  .journey-scope { align-self: flex-start; max-width: 100%; }
+  html[data-theme] .immersive-shell .journey-scope button { font-size: 10px; padding: 9px; }
+  html[data-theme] .immersive-shell .journey-era-section h2 { font-size: 25px; }
+  html[data-theme] .app-footer { padding: 20px 6%; }
+}
+@media(prefers-reduced-motion:reduce) {
+  html { scroll-behavior: auto; }
+  *,*::before,*::after { animation: none !important; transition: none !important; }
+}
