@@ -228,8 +228,8 @@ html[data-theme] :is(.mg-tools,.mt-catalog-tools) select option { background: va
   html[data-theme] .app-header .theme-switch button { padding: 0 8px; min-height: 32px; }
   html[data-theme] .app-header .source-menu { grid-column: 3; grid-row: 1; padding-left: 0; border: 0; }
   html[data-theme] .source-menu summary>b { font-size: 10px; }
-  html[data-theme] .app-header .main-nav { grid-column: 1/-1; grid-row: 2; width: 100%; margin: 0; gap: 0; justify-content: space-between; height: 47px; align-items: stretch; }
-  html[data-theme] .app-header .main-nav .nav-item { display: flex; font-size: 11px !important; }
+  html[data-theme] .app-header .main-nav { grid-column: 1/-1; grid-row: 2; width: 100%; margin: 0; gap: 20px; justify-content: flex-start; height: 47px; align-items: stretch; }
+  html[data-theme] .app-header .main-nav .nav-item { display: flex; flex-shrink: 0; white-space: nowrap; font-size: 11px !important; }
   html[data-theme] .app-header .main-nav .nav-item.active:after { bottom: 0; }
   html[data-theme] .immersive-hero.journey-hero { height: 865px; padding: 0 6%; }
   .exhibition-topline { padding-top: 23px; font-size: 9px; letter-spacing: 1px; }
