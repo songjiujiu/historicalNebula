@@ -1,5 +1,6 @@
 import './style.css';
 import './theme.css';
+import { version } from '../package.json';
 import { icon } from './ui/icons';
 import { parseBookLocation } from './domain/shiji-book';
 import { createReadingGuide } from './ui/reading-guide';
@@ -72,7 +73,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div id="modern-texts-root"></div>
   <div id="modern-guides-root"></div>
   <div id="comparison-root"></div>
-  <footer class="app-footer"><span>${icon('star')}二十四史 3,213 卷可阅读卷次，少数历法表缺录。</span><span>原文整理 · 待审校<button data-action="about-data">关于数据 ${icon('info')}</button></span></footer>
+  <footer class="app-footer"><span>${icon('star')}二十四史 3,213 卷可阅读卷次，少数历法表缺录。</span><span><a href="https://github.com/songjiujiu/historicalNebula/releases/tag/v${version}" target="_blank" rel="noopener noreferrer">v${version}</a> · <a href="https://github.com/songjiujiu/historicalNebula/blob/main/THIRD_PARTY_NOTICES.md" target="_blank" rel="noopener noreferrer">源码与许可</a><button data-action="about-data">关于数据 ${icon('info')}</button></span></footer>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <dialog id="dialog" class="app-dialog" aria-label="关于内容与来源"></dialog>
 `;

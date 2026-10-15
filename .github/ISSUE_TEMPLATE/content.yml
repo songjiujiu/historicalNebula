@@ -1,0 +1,22 @@
+name: 史料或导读纠错
+description: 附具体出处提交内容纠错
+body:
+  - type: input
+    id: location
+    attributes:
+      label: 事件、卷次、段落或站内链接
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: 原文、问题与建议修改
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: 可靠出处与不确定性
+      description: 附书名、版本、页码或资料链接，区分转录错误与史学争议。
+    validations:
+      required: true

@@ -1,5 +1,34 @@
 # 历史星云 · Historical Nebula
 
+历史星云面向历史入门与跨文明对照学习，当前提供中国历史主线、二十四史阅读，以及 12 个时段、22 个世界事件的中外历史对照。世界史仍为入门选读，不代表完整的全球历史覆盖。
+
+[在线演示](https://songjiujiu.github.io/historicalNebula/) · [中外历史对照](https://songjiujiu.github.io/historicalNebula/?compare=) · [版本下载](https://github.com/songjiujiu/historicalNebula/releases) · [参与贡献](CONTRIBUTING.md) · [许可范围](docs/licensing.md)
+
+## 快速体验
+
+- 静态演示无需账号、API 密钥或数据库。书签、主题与阅读进度保存在当前浏览器；不提供跨设备同步。
+- 建议先打开“读懂历史”，再进入“中外历史对照”，最后从事件中的出处跳到史料原文。
+- 既有 Flask/MySQL 演示入口：[历史主线](http://82.157.197.102/?journey=)。此服务独立部署，页面与数据版本不一定与 GitHub 最新发布同步。
+- 反馈内容错误时，请附具体事件或卷次、段落链接和可靠资料；反馈程序问题时，请附复现步骤。[提交反馈](https://github.com/songjiujiu/historicalNebula/issues/new/choose)。
+
+## 本地静态演示
+
+```bash
+npm ci
+npm run build:demo
+npm run preview:demo
+```
+
+静态构建输出 `dist-demo/`，附带阅读所需的 JSON 文件和来源说明，运行时不连接 Flask/MySQL。自托管、预览和 GitHub Pages 部署步骤见 [演示部署说明](docs/demo.md)。常规 `npm run build` 仍输出不含语料的 `dist/`，供已有 API 服务部署。
+
+## 版本与许可
+
+首个正式版本为 **v0.1.0**；功能范围与已知限制见 [CHANGELOG](CHANGELOG.md)，发布与校验步骤见 [发布说明](docs/releasing.md)。版本号仍处于 0.x，接口和数据格式可能随后续版本调整。
+
+项目自有程序代码采用 [MIT License](LICENSE)。**史料转录、第三方图谱、图片、模型及依赖不因代码许可而改为 MIT**；具体来源、原许可和待核实项见 [第三方说明](THIRD_PARTY_NOTICES.md) 与 [许可范围](docs/licensing.md)。
+
+## 功能概览
+
 以 TypeScript、Vite、Flask 和 MySQL 构建的历史入门与二十四史阅读网站，历史主线从上古延伸到当代（本版节点选至2024年）。《史记》130 卷有逐卷入门导读；新增 23 部史书、3,083 个可阅读卷次，可沿历史主线、书目与卷次阅读，并在单部史书内检索已收录转录。少数历法表仍缺录。原文、白话正文和检索文件由后端接口从 MySQL 返回。
 
 ## 第一次阅读
@@ -82,7 +111,7 @@ npm run import:shiji
 
 历史主线与全书导读分别保存最近位置和已读记录；原文的最近位置、段落书签及显示偏好也保存在当前浏览器，无账号或跨设备同步。公开链接可定位事件、导读分段或原文卷次/段落，不会携带本机阅读记录。导读的“继续上次”保留在简介下方。
 
-现代浏览器需支持原生 dialog。当前阅读页面不需要 WebGL，也不加载 Three.js、星图数据或故事场景。阅读器支持手机布局，年表可横向滚动。
+现代浏览器需支持原生 dialog。文字阅读无需 WebGL，部分装饰性模型按需加载；当前页面不再提供旧版星图或故事场景入口。阅读器支持手机布局，年表可横向滚动。
 
 ## 主要代码
 
