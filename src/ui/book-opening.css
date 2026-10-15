@@ -1,0 +1,14 @@
+/* Only the chosen book leaves the photographic shelf. All open pages are GLB geometry. */
+.books-stage[data-opening-book] > img{visibility:visible;mask-image:var(--book-shelf-mask);mask-size:100% 100%;mask-repeat:no-repeat}
+.books-stage[data-opening-book] .stage-canvas{visibility:hidden}
+.book-hotspots a{cursor:pointer}
+.book-opening-overlay{position:fixed;inset:0;z-index:100;isolation:isolate;pointer-events:none;visibility:hidden;--book-backdrop:0}
+.book-opening-overlay.is-ready{visibility:visible;pointer-events:auto}
+.book-opening-overlay:before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 46%,#24332cb8,#071016ed);opacity:var(--book-backdrop)}
+.book-opening-scene,.book-opening-source{position:absolute;pointer-events:none;will-change:transform,opacity;contain:layout style}
+.book-opening-scene{filter:drop-shadow(0 18px 25px #0005)}
+.book-opening-scene canvas{display:block;width:100%;height:100%}
+.book-opening-source svg{display:block;width:100%;height:100%;overflow:visible}
+html[data-theme='light'] .book-opening-overlay:before{background:radial-gradient(ellipse at 50% 43%,#f5ecd8d4,#c4b294ed)}
+html[data-theme='light'] .book-opening-scene{filter:drop-shadow(0 18px 24px #61482140)}
+@media(prefers-reduced-motion:reduce){.book-opening-overlay{display:none}}

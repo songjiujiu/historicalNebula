@@ -1,0 +1,20 @@
+name: 程序问题
+description: 提交可以复现的阅读或程序错误
+body:
+  - type: input
+    id: version
+    attributes:
+      label: 版本或演示网址
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤、预期行为与实际结果
+      description: 请提供浏览器版本及具体页面链接，不要上传凭据或私人数据。
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 截图或已去除敏感信息的错误日志

@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "books": {
+    "shiji": {
+      "model": "shiji.glb",
+      "animation": "BookOpen",
+      "durationSeconds": 3,
+      "sourceText": "shiji/001.json",
+      "editableSource": "assets/blender/opening-shiji.blend",
+      "construction": "real volume; four articulated paper leaves with curl morphs; textured sewn covers",
+      "bytes": 1142828
+    },
+    "hanshu": {
+      "model": "hanshu.glb",
+      "animation": "BookOpen",
+      "durationSeconds": 3,
+      "sourceText": "histories/hanshu/001.json",
+      "editableSource": "assets/blender/opening-hanshu.blend",
+      "construction": "real volume; four articulated paper leaves with curl morphs; textured sewn covers",
+      "bytes": 1148544
+    },
+    "sanguozhi": {
+      "model": "sanguozhi.glb",
+      "animation": "BookOpen",
+      "durationSeconds": 3,
+      "sourceText": "histories/sanguozhi/001.json",
+      "editableSource": "assets/blender/opening-sanguozhi.blend",
+      "construction": "real volume; four articulated paper leaves with curl morphs; textured sewn covers",
+      "bytes": 1141088
+    },
+    "jiutangshu": {
+      "model": "jiutangshu.glb",
+      "animation": "BookOpen",
+      "durationSeconds": 3,
+      "sourceText": "histories/jiutangshu/001.json",
+      "editableSource": "assets/blender/opening-jiutangshu.blend",
+      "construction": "real volume; four articulated paper leaves with curl morphs; textured sewn covers",
+      "bytes": 1142812
+    },
+    "qingshigao": {
+      "model": "qingshigao.glb",
+      "animation": "BookOpen",
+      "durationSeconds": 3,
+      "sourceText": "modern/qingshigao/1.json",
+      "editableSource": "assets/blender/opening-qingshigao.blend",
+      "construction": "real volume; four articulated paper leaves with curl morphs; textured sewn covers",
+      "bytes": 1146108
+    }
+  }
+}

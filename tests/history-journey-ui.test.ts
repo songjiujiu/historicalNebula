@@ -30,6 +30,28 @@ it('starts small, includes every era, and lets readers find all events by era or
   search.value = '赤壁'; search.dispatchEvent(new Event('input', { bubbles: true }));
   expect(document.querySelector('[data-journey-event="red-cliffs"]')).toBeTruthy();
 });
+it('connects the rendered scroll and bookshelf to real eras, events and book guides', () => {
+  const host = document.createElement('div'); document.body.append(host);
+  const onGuide = vi.fn();
+  createHistoryJourney(host, {onSource: vi.fn(), onLibrary: vi.fn(), onGuide}).showFromUrl();
+  expect(host.querySelectorAll('[data-history-model]')).toHaveLength(2);
+  expect(host.querySelectorAll('.book-hotspots a')).toHaveLength(5);
+  for (const button of host.querySelectorAll<HTMLElement>('[data-stage-era]')) {
+    expect(journeyEras.some(era => era.id === button.dataset.stageEra)).toBe(true);
+  }
+  const book = host.querySelector<HTMLAnchorElement>('.book-hotspots [data-stage-book="hanshu"]')!;
+  const event = new MouseEvent('click', {bubbles: true, cancelable: true});
+  book.dispatchEvent(event);
+  expect(event.defaultPrevented).toBe(true);
+  expect(onGuide).toHaveBeenCalledWith('hanshu');
+  expect(book.href).toContain('histories=hanshu');
+  click('[data-stage-era="suitang"]');
+  expect(location.search).toContain('era=suitang');
+  expect(host.querySelector('.journey-results')!.textContent).toContain('安史之乱');
+  click('.stage-event');
+  expect(location.search).toContain('journey=qin-unifies');
+  expect(host.querySelector('[data-journey-source]')!.getAttribute('href')).toContain('#shiji/6/p21');
+});
 it('opens exact sources, preserves reading order and only marks progress on request', () => {
   history.replaceState(null, '', '/?journey=sui-unifies');
   const { onSource, reader } = setup();
@@ -84,7 +106,7 @@ it('provides contemporary deep links and clearly separates external references f
 it('finds new events by era, title and people, and exposes a Qing continuation from the homepage', () => {
   setup();
   expect(document.querySelector('.journey-hero')!.textContent).toContain('从上古读到当代');
-  click('.journey-hero [data-journey-event="qing-founded"]');
+  click('.stage-secondary-entry [data-journey-event="qing-founded"]');
   expect(document.querySelector('h1')!.textContent).toContain('清朝建立');
   click('[data-journey-action="home"]');
   click('[data-journey-era="reform"]');
@@ -97,6 +119,24 @@ it('finds new events by era, title and people, and exposes a Qing continuation f
   expect(document.querySelector('[data-journey-event="macao-return"]')).toBeTruthy();
   click('[data-journey-era="contemporary"]');
   expect(document.querySelector('.journey-results')!.textContent).toContain('最新选至2024年');
+});
+it('walks a beginner through one question with simultaneous north and south, exact evidence and shareable steps', () => {
+  const { reader, onSource } = setup();
+  click('.stage-secondary-entry [data-journey-action="question"]');
+  expect(location.search).toContain('question=western-jin');
+  expect(document.querySelectorAll('.question-map-cell')).toHaveLength(6);
+  expect(document.querySelector('.question-scene')!.textContent).toContain('三国结束了');
+  click('.question-actions [data-question-step="1"]');
+  expect(location.search).toContain('step=2');
+  expect(document.querySelector('.question-map-cell.north.active')!.textContent).toContain('多个政权');
+  expect(document.querySelector('.question-map-cell.south.active')!.textContent).toContain('东晋');
+  click('[data-question-source="eastern-jin"]');
+  expect(onSource).toHaveBeenCalledWith(journeyEvent('eastern-jin'), journeyEvent('eastern-jin')!.sources[0]);
+  history.replaceState(null, '', '/?question=western-jin&step=3'); reader.showFromUrl();
+  expect(document.querySelector('.question-scene')!.textContent).toContain('南方又换朝');
+  click('.question-actions [data-journey-event="liu-song"]');
+  expect(location.search).toContain('journey=liu-song');
+  expect(document.querySelector('.journey-detail-heading')!.textContent).toContain('刘裕建宋');
 });
 it('switches eras and reading scope in place, keeping the selected control focused instead of jumping to the hero', () => {
   const { reader } = setup();

@@ -1,4 +1,5 @@
 import manifest from './generated/shiji-manifest.json';
+import { corpusApiUrl } from './corpus-api';
 
 export const shijiBook = manifest;
 export const shijiChapters = manifest.chapters;
@@ -29,7 +30,7 @@ const cache = new Map<number, Promise<ChapterText>>();
 export function loadChapter(volume: number): Promise<ChapterText> {
   if (!chapterByVolume(volume)) return Promise.reject(new Error('卷号不存在'));
   if (!cache.has(volume)) {
-    const promise = fetch(`${import.meta.env.BASE_URL}data/shiji/${String(volume).padStart(3, '0')}.json`)
+    const promise = fetch(corpusApiUrl(`shiji/${String(volume).padStart(3, '0')}.json`))
       .then(async response => {
         if (!response.ok) throw new Error('原文加载失败，请重试');
         const data = await response.json() as ChapterText;
@@ -43,7 +44,7 @@ export function loadChapter(volume: number): Promise<ChapterText> {
 
 let searchCache: Promise<SearchChapter[]> | undefined;
 export function loadBookSearch(): Promise<SearchChapter[]> {
-  searchCache ??= fetch(`${import.meta.env.BASE_URL}data/shiji/search.json`).then(async response => {
+  searchCache ??= fetch(corpusApiUrl('shiji/search.json')).then(async response => {
     if (!response.ok) throw new Error('全文索引加载失败，请重试');
     const data = await response.json() as SearchChapter[];
     if (!Array.isArray(data) || data.length !== 130) throw new Error('全文索引不完整');

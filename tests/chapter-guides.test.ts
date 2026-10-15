@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { chapterGuides, readingRoutes } from '../src/domain/chapter-guides';
 import { shijiChapters, type ChapterText } from '../src/domain/shiji-book';
-import { guideLocation, guideUrl } from '../src/exploration/reading';
+import { guideHomeUrl, guideLocation, guideUrl } from '../src/exploration/reading';
 
 describe('full-book beginner guides', () => {
   it('covers every volume with a distinct guide and three valid original-text anchors', () => {
@@ -44,6 +44,7 @@ describe('full-book beginner guides', () => {
     const base = 'https://reader:secret@example.com/read?token=secret&story=hongmen#shiji/7/p19';
     const url = guideUrl({ volume: 130, section: 2, route: 'complete' }, base);
     expect(url).toBe('https://example.com/read?route=complete&reading=130&section=2');
+    expect(guideHomeUrl(url)).toBe('https://example.com/read?guide=');
     expect(guideLocation(url)).toEqual({ volume: 130, section: 2, route: 'complete' });
     expect(guideLocation('https://example.com/?reading=131&route=missing')).toEqual({ volume: null, section: 0, route: 'first-stories' });
     for (const section of ['-5', '999', '1.5', 'NaN']) {

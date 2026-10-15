@@ -24,30 +24,58 @@ beforeEach(() => {
 afterEach(() => vi.restoreAllMocks());
 
 describe('full-book guided reading interaction', () => {
-  it('filters all 130 guides by route, category and search, and pages the full directory', () => {
+  it('opens a separate route page with its own searchable, paged directory', () => {
     setup();
     expect(document.querySelectorAll('.reading-route-cards button')).toHaveLength(8);
-    expect(document.querySelectorAll('[data-reading-volume]')).toHaveLength(8);
+    expect(document.querySelector('.reading-directory')).toBeNull();
     expect(document.querySelector('.reading-start')).toBeNull();
     expect(document.querySelector('[data-reading-action="stories"]')).toBeNull();
     click('[data-reading-route="complete"]');
+    expect(text('.reading-route-page h1')).toContain('按原书顺序');
+    expect(document.querySelector('.reading-route-cards')).toBeNull();
+    expect(vi.mocked(history.pushState).mock.lastCall?.[2]).toContain('?route=complete');
     expect(text('.reading-results-caption')).toContain('130 卷');
-    expect(document.querySelectorAll('[data-reading-volume]')).toHaveLength(24);
-    click('[data-reading-action="more"]'); expect(document.querySelectorAll('[data-reading-volume]')).toHaveLength(48);
+    expect(document.querySelectorAll('.reading-chapter-cards [data-reading-volume]')).toHaveLength(24);
+    click('[data-reading-action="more"]'); expect(document.querySelectorAll('.reading-chapter-cards [data-reading-volume]')).toHaveLength(48);
     click('[data-reading-category="表"]');
-    expect(document.querySelectorAll('[data-reading-volume]')).toHaveLength(10);
+    expect(document.querySelectorAll('.reading-chapter-cards [data-reading-volume]')).toHaveLength(10);
     expect(text('.reading-category-explanation')).toContain('同一时期');
     click('[data-reading-category=""]');
     const query = document.querySelector<HTMLInputElement>('#reading-query')!;
     query.value = '孔子'; query.dispatchEvent(new Event('input', { bubbles: true }));
     expect(document.querySelector('[data-reading-volume="47"]')).toBeTruthy();
-    expect(text('.reading-results-caption')).toContain('全书搜索');
+    expect(text('.reading-results-caption')).toContain('搜索结果');
     query.value = '不存在的名字xyz'; query.dispatchEvent(new Event('input', { bubbles: true }));
     expect(text('.reading-empty')).toContain('没有找到');
   });
 
+  it('keeps each route separate and restores home or route pages from their URLs', () => {
+    const { reader } = setup();
+    click('[data-reading-route="first-stories"]');
+    expect(text('.reading-route-page h1')).toContain('第一次读');
+    expect(document.querySelectorAll('.reading-chapter-cards [data-reading-volume]')).toHaveLength(8);
+    const query = document.querySelector<HTMLInputElement>('#reading-query')!;
+    query.value = '孔子'; query.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(document.querySelector('[data-reading-volume="47"]')).toBeTruthy();
+    expect(document.querySelector('[data-reading-volume="61"]')).toBeNull();
+    click('[data-reading-volume="48"]');
+    expect(text('.reading-detail h1')).toBe('陈涉世家');
+    click('[data-reading-action="catalog"]');
+    expect(text('.reading-route-page h1')).toContain('第一次读');
+    click('[data-reading-action="home"]');
+    expect(document.querySelector('.reading-directory')).toBeNull();
+    expect(vi.mocked(history.pushState).mock.lastCall?.[2]).toContain('?guide=');
+
+    history.replaceState(null, '', '/?route=states'); reader.showFromUrl();
+    expect(text('.reading-route-page h1')).toContain('诸侯之间');
+    expect(document.querySelectorAll('.reading-chapter-cards [data-reading-volume]')).toHaveLength(16);
+    history.replaceState(null, '', '/?guide='); reader.showFromUrl();
+    expect(document.querySelectorAll('.reading-route-cards button')).toHaveLength(8);
+  });
+
   it('moves through guides, preserves progress and opens exact original paragraphs', async () => {
     const { reader, onBook } = setup();
+    click('[data-reading-route="first-stories"]');
     click('[data-reading-volume="48"]');
     expect(text('h1')).toBe('陈涉世家');
     click('[data-reading-action="next"]');
@@ -64,7 +92,7 @@ describe('full-book guided reading interaction', () => {
     expect(JSON.parse(localStorage.getItem(KEY)!).completed).toEqual([48]);
     click('[data-reading-action="prev"]');
     expect(text('.story-current-step h2')).toBe(chapterGuide(48)!.sections[2].title);
-    click('[data-reading-action="catalog"]'); click('[data-reading-action="resume"]');
+    click('[data-reading-action="catalog"]'); click('[data-reading-action="home"]'); click('[data-reading-action="resume"]');
     expect(reader.readingUrl).toContain('reading=48&section=2');
     await vi.waitFor(() => expect(text('.reading-source-preview')).toContain('这是对应的原文内容'));
   });

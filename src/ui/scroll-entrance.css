@@ -1,0 +1,51 @@
+.scroll-art { position: absolute; inset: 0; }
+.scroll-art > img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.scroll-stage.model-ready .scroll-art > img { visibility: hidden; }
+.scroll-turn { display: none; }
+
+/* The artwork stays at its final size; only the rolled sheet's front advances. */
+.immersive-hero:is([data-scroll-state='waiting'], [data-scroll-state='opening']) .scroll-art {
+  clip-path: inset(0 calc(100% - var(--scroll-front, 14%)) 0 0);
+  mask-image: linear-gradient(to right, #000 0, #000 calc(var(--scroll-front, 14%) - 14px), transparent var(--scroll-front, 14%));
+  will-change: clip-path;
+}
+.immersive-hero:is([data-scroll-state='waiting'], [data-scroll-state='opening']) .scroll-turn {
+  display: block; position: absolute; z-index: 2; pointer-events: none;
+  left: var(--scroll-front, 14%); top: var(--roll-top, 17%);
+  width: clamp(18px, 4.3%, 60px); height: var(--roll-height, 63%);
+  opacity: var(--roll-opacity, 1);
+  transform: translateX(-76%) skewX(-7deg);
+  border-radius: 48% / 4%;
+  background-image:
+    linear-gradient(90deg, #392712e6 0%, #785535ad 9%, #e2be8466 23%, #fff0c1c9 39%, #b9935a77 60%, #5e4125dd 84%, #25190c 100%),
+    url('/models/history/scroll-art.png');
+  background-size: 100% 100%, 2200% 220%;
+  background-position: center, var(--roll-grain, 14%) 15%;
+  box-shadow: -8px 2px 18px #02060955, inset 2px 0 2px #efcf9866, 3px 1px 4px #02060980;
+  will-change: left, height, top;
+}
+.scroll-turn:before, .scroll-turn:after {
+  content: ''; position: absolute; left: -1%; width: 102%; height: 5%;
+  border-radius: 50%; border: 1px solid #5e4328;
+  background: radial-gradient(ellipse, #d2ad72 0 22%, #87613b 28% 45%, #ddb57b 50% 63%, #51341f 68%);
+  box-shadow: 0 1px 3px #24170b77;
+}
+.scroll-turn:before { top: -1.8%; }
+.scroll-turn:after { bottom: -1.7%; background: radial-gradient(ellipse, #4a2e18 0 22%, #ba8c51 28% 45%, #4f331c 50% 63%, #9a723f 68%); }
+.immersive-hero:is([data-scroll-state='waiting'], [data-scroll-state='opening']) .scroll-eras button {
+  opacity: 0; pointer-events: none; transition: opacity .45s ease;
+}
+.immersive-hero:is([data-scroll-state='waiting'], [data-scroll-state='opening']) .scroll-eras button.scroll-era-visible {
+  opacity: 1; pointer-events: auto;
+}
+html[data-theme='light'] .scroll-turn { box-shadow: -7px 2px 14px #5b3c2736, inset 2px 0 2px #fff1c788, 2px 1px 3px #70512b66; }
+@media (max-width: 760px) {
+  .immersive-hero:is([data-scroll-state='waiting'], [data-scroll-state='opening']) .scroll-art {
+    mask-image: linear-gradient(to right, #000 0, #000 calc(var(--scroll-front, 14%) - 8px), transparent var(--scroll-front, 14%));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .immersive-hero:is([data-scroll-state='waiting'], [data-scroll-state='opening']) .scroll-art { clip-path: none; mask-image: none; will-change: auto; }
+  .immersive-hero:is([data-scroll-state='waiting'], [data-scroll-state='opening']) .scroll-turn { display: none; }
+  .immersive-hero:is([data-scroll-state='waiting'], [data-scroll-state='opening']) .scroll-eras button { opacity: 1; pointer-events: auto; transition: none; }
+}

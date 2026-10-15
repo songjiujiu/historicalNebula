@@ -1,0 +1,472 @@
+/* Guide rooms share the material palette of the historical stage. The 3D
+   exhibits frame the entry; native headings and controls carry the reading. */
+html[data-theme] .guide-gallery {
+  --guide-panel: var(--heritage-panel, #14211f);
+  --guide-ink: var(--heritage-ink, #eee7d8);
+  --guide-muted: var(--heritage-muted, #a9b2a5);
+  --guide-gold: var(--heritage-gold, #c9a869);
+  --guide-line: var(--heritage-line, #8c89643d);
+  color: var(--guide-ink);
+}
+html[data-theme] :is(.reading-home,.hg-home,.mg-shell).guide-gallery {
+  max-width: 1440px;
+  padding: 48px 56px 76px;
+  background: transparent;
+}
+html[data-theme] .guide-gallery .guide-gallery-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0,1.2fr) minmax(300px,430px);
+  align-items: center;
+  gap: 42px;
+  width: 100%;
+  max-width: none;
+  min-height: 376px;
+  padding: 24px 0 42px;
+  margin: 0;
+  border: 0;
+  border-bottom: 1px solid var(--guide-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+html[data-theme] .guide-gallery .guide-hero-copy { min-width: 0; grid-column: 1; grid-row: 1; }
+html[data-theme] .guide-gallery .guide-gallery-hero h1 {
+  color: var(--guide-ink);
+  font: 500 clamp(38px,4.2vw,60px)/1.35 "Noto Serif SC","Songti SC",SimSun,serif;
+  letter-spacing: .07em;
+  margin: 18px 0 22px;
+}
+html[data-theme] .guide-gallery .guide-gallery-hero .guide-hero-lead {
+  color: var(--guide-muted);
+  font-size: 16px;
+  line-height: 1.95;
+  margin: 0;
+  max-width: 660px;
+}
+html[data-theme] .guide-gallery :is(.story-kicker,.mg-overline) {
+  color: var(--guide-gold);
+  font-size: 12px;
+  letter-spacing: .12em;
+}
+html[data-theme] .guide-gallery .guide-reading-method {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  list-style: none;
+  padding: 18px 0 0;
+  margin: 20px 0 15px;
+  border-top: 1px solid var(--guide-line);
+}
+html[data-theme] .guide-gallery .guide-reading-method li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--guide-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+html[data-theme] .guide-gallery .guide-reading-method li span {
+  color: var(--guide-gold);
+  font: 13px Georgia,serif;
+}
+html[data-theme] .guide-gallery .guide-gallery-hero :is(.reading-scope,.hg-scope,.mg-progress-line) {
+  color: var(--guide-muted);
+  font-size: 12px;
+  line-height: 1.9;
+  max-width: 650px;
+  margin: 16px 0 0;
+}
+html[data-theme] .guide-gallery .guide-gallery-hero .reading-resume { margin-top: 14px; font-size: 12px; }
+html[data-theme] .guide-gallery .guide-model-exhibit {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1;
+  width: 100%;
+  min-width: 0;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--guide-line);
+}
+html[data-theme] .guide-gallery .guide-model-exhibit .reading-atmosphere { width: 100%; margin: 0; }
+html[data-theme] .guide-gallery .guide-model-exhibit .reading-atmosphere figcaption {
+  justify-content: flex-end;
+  border: 0;
+  margin: 0 12px;
+  padding: 0;
+}
+html[data-theme] .guide-gallery .guide-model-exhibit .reading-atmosphere figcaption>span { display: none; }
+html[data-theme] .guide-gallery .guide-model-exhibit .reading-model-status:empty { display: none; }
+html[data-theme] .guide-gallery .guide-exhibit-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 5px 12px;
+  margin: 6px 0 0;
+  padding: 0 12px;
+}
+html[data-theme] .guide-gallery .guide-exhibit-label span {
+  color: var(--guide-gold);
+  font: 15px "Noto Serif SC",SimSun,serif;
+  letter-spacing: .07em;
+}
+html[data-theme] .guide-gallery .guide-exhibit-label small { color: var(--guide-muted); font-size: 10px; line-height: 1.8; }
+
+/* A route card reads like a labelled volume, with one clear next action. */
+html[data-theme] .guide-gallery :is(.reading-routes,.reading-directory,.hg-directory) { margin-top: 36px; }
+html[data-theme] .guide-gallery :is(.reading-section-title,.hg-section-head) { margin-bottom: 24px; }
+html[data-theme] .guide-gallery :is(.reading-section-title h2,.hg-section-head h2,.mg-section-heading h2) {
+  color: var(--guide-ink);
+  font: 500 25px/1.5 "Noto Serif SC",SimSun,serif;
+  letter-spacing: .04em;
+}
+html[data-theme] .guide-gallery :is(.reading-section-title>span,.hg-section-head>span,.mg-section-heading p) { color: var(--guide-muted); font-size: 12px; }
+html[data-theme] .guide-gallery .reading-route-cards { gap: 18px; }
+html[data-theme] .guide-gallery :is(.reading-route-cards>button,.hg-card,.mg-era-grid article) {
+  position: relative;
+  border: 1px solid var(--guide-line);
+  border-radius: 3px;
+  background: var(--guide-panel);
+  box-shadow: var(--heritage-shadow,0 7px 18px #0002);
+  overflow: hidden;
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+}
+html[data-theme] .guide-gallery :is(.reading-route-cards>button,.hg-card)::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 7px;
+  width: 2px;
+  background: color-mix(in srgb,var(--guide-gold) 40%,transparent);
+  border-right: 1px solid color-mix(in srgb,var(--guide-gold) 12%,transparent);
+}
+html[data-theme] .guide-gallery :is(.reading-route-cards>button,.hg-card) { padding: 26px 24px 22px 29px; }
+html[data-theme] .guide-gallery .reading-route-cards>button { min-height: 252px; }
+html[data-theme] .guide-gallery .reading-route-cards>button>strong {
+  max-width: none;
+  color: var(--guide-ink);
+  font: 500 22px/1.65 "Noto Serif SC",SimSun,serif;
+  margin: 17px 0 11px;
+}
+html[data-theme] .guide-gallery .reading-route-cards>button>p { font-size: 13px; line-height: 1.9; color: var(--guide-muted); }
+html[data-theme] .guide-gallery .reading-route-cards>button>span:not(.route-index) { color: var(--guide-muted); font-size: 11px; }
+html[data-theme] .guide-gallery .reading-route-cards>button>.reading-route-cta { color: var(--guide-gold); margin-top: 22px; font-size: 12px; }
+html[data-theme] .guide-gallery .reading-route-cards .route-index { right: 12px; top: 1px; color: color-mix(in srgb,var(--guide-gold) 10%,transparent); }
+html[data-theme] .guide-gallery :is(.reading-route-cards>button:hover,.hg-card:hover) {
+  transform: translateY(-3px);
+  border-color: var(--guide-gold);
+  background: var(--guide-panel);
+  box-shadow: var(--heritage-shadow,0 11px 27px #0003);
+}
+html[data-theme] .guide-gallery :is(.reading-route-cards>button,.hg-card,.reading-chapter-cards>button):focus-visible { outline: 2px solid var(--guide-gold); outline-offset: 4px; }
+html[data-theme] .guide-gallery .reading-route-hero { min-height: 300px; padding: 22px 0 32px; }
+html[data-theme] .guide-gallery .reading-route-hero h1 { font-size: clamp(30px,3vw,42px); letter-spacing: .04em; }
+html[data-theme] .guide-gallery .reading-route-hero .guide-model-exhibit { max-width: 350px; justify-self: end; }
+html[data-theme] .guide-gallery .reading-route-hero .guide-hero-copy>p { color: var(--guide-muted); font-size: 15px; }
+html[data-theme] .guide-gallery :is(.reading-search,.hg-side select,.mg-tools input,.mg-tools select) {
+  background: var(--guide-panel);
+  color: var(--guide-ink);
+  border-color: var(--guide-line);
+  border-radius: 3px;
+}
+html[data-theme] .guide-gallery :is(.reading-search input,.mg-tools input) { color: var(--guide-ink); }
+html[data-theme] .guide-gallery :is(.reading-search input,.mg-tools input)::placeholder { color: var(--guide-muted); }
+html[data-theme] .guide-gallery .reading-category-tabs button { border-radius: 2px; border-color: var(--guide-line); color: var(--guide-muted); }
+html[data-theme] .guide-gallery .reading-category-tabs button[aria-pressed=true] { color: var(--guide-gold); border-color: var(--guide-gold); background: color-mix(in srgb,var(--guide-gold) 10%,transparent); }
+html[data-theme] .guide-gallery .reading-chapter-cards>button { background: var(--guide-panel); border-color: var(--guide-line); border-radius: 3px; }
+html[data-theme] .guide-gallery .reading-chapter-cards strong { color: var(--guide-ink); }
+html[data-theme] .guide-gallery .reading-chapter-cards :is(small,p) { color: var(--guide-muted); }
+html[data-theme] .guide-gallery :is(.reading-card-number,.reading-card-cta) { color: var(--guide-gold); }
+
+/* The book room keeps the connection between histories visible. */
+html[data-theme] .guide-gallery .guide-first-route {
+  background: var(--guide-panel);
+  border: 1px solid var(--guide-line);
+  border-left: 3px solid var(--guide-gold);
+  border-radius: 3px;
+  margin: 32px 0 42px;
+  padding: 26px 30px;
+}
+html[data-theme] .guide-gallery .guide-first-route h2 { color: var(--guide-ink); font-size: 24px; }
+html[data-theme] .guide-gallery .guide-first-route p { color: var(--guide-muted); font-size: 14px; }
+html[data-theme] .guide-gallery .hg-cards { gap: 18px; }
+html[data-theme] .guide-gallery .hg-card h3 { color: var(--guide-ink); font-size: 28px; margin: 13px 0; }
+html[data-theme] .guide-gallery .hg-card p { color: var(--guide-muted); font-size: 14px; line-height: 1.85; }
+html[data-theme] .guide-gallery .hg-card :is(span,small) { color: var(--guide-muted); }
+html[data-theme] .guide-gallery .hg-card b { color: var(--guide-gold); font-size: 12px; }
+html[data-theme] .guide-gallery :is(.hg-footnote,.reading-home-foot,.reading-results-caption,.reading-category-explanation) { color: var(--guide-muted); border-color: var(--guide-line); }
+
+/* The guide details own their layout. They do not depend on the retired
+   interactive story reader or its application-wide header rules. */
+html[data-theme] .guide-gallery.reading-detail {
+  max-width: 1540px;
+  margin: 0 auto;
+  padding: 40px 44px 54px;
+  background: transparent;
+  color: var(--guide-ink);
+}
+html[data-theme] .guide-gallery.reading-detail .reading-detail-top {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--guide-line);
+  color: var(--guide-muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+html[data-theme] .guide-gallery.reading-detail :is(.story-layout,.hg-layout) {
+  display: grid;
+  grid-template-columns: 180px minmax(0,1fr) 300px;
+  align-items: start;
+  gap: 30px;
+}
+html[data-theme] .guide-gallery.reading-detail :is(.reading-volume-route,.hg-side) {
+  position: sticky;
+  top: 24px;
+  min-width: 0;
+  padding-right: 18px;
+  border-right: 1px solid var(--guide-line);
+}
+html[data-theme] .guide-gallery.reading-detail .story-route-title {
+  padding: 4px 0 18px;
+  font: 500 15px/1.8 "Noto Serif SC",SimSun,serif;
+  color: var(--guide-ink);
+}
+html[data-theme] .guide-gallery.reading-detail .story-route-title small { display: block; margin-top: 6px; font-family: inherit; font-size: 11px; line-height: 1.8; color: var(--guide-muted); }
+html[data-theme] .guide-gallery.reading-detail .reading-volume-route ol {
+  list-style: none;
+  padding: 0 3px 3px 0;
+  margin: 0;
+  max-height: calc(100dvh - 180px);
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--guide-line) transparent;
+}
+html[data-theme] .guide-gallery.reading-detail .reading-volume-route li { position: relative; list-style: none; }
+html[data-theme] .guide-gallery.reading-detail .reading-volume-route li:after { display: none; }
+html[data-theme] .guide-gallery.reading-detail .reading-volume-route li>button {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  padding: 12px 8px;
+  margin-bottom: 6px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: var(--guide-muted);
+  text-align: left;
+}
+html[data-theme] .guide-gallery.reading-detail .story-route-number {
+  display: grid;
+  place-items: center;
+  flex: 0 0 25px;
+  height: 25px;
+  border: 1px solid var(--guide-line);
+  border-radius: 2px;
+  background: var(--guide-panel);
+  color: var(--guide-gold);
+  font: 12px/1 Georgia,serif;
+}
+html[data-theme] .guide-gallery.reading-detail .reading-volume-route strong { display: block; font: 500 13px/1.8 "Noto Serif SC",SimSun,serif; color: inherit; }
+html[data-theme] .guide-gallery.reading-detail .reading-volume-route small { display: block; margin-top: 5px; font-size: 10px; line-height: 1.8; color: var(--guide-muted); }
+html[data-theme] .guide-gallery.reading-detail .reading-volume-route [aria-current=step] {
+  background: color-mix(in srgb,var(--guide-gold) 10%,transparent);
+  border-color: var(--guide-line);
+  color: var(--guide-gold);
+}
+html[data-theme] .guide-gallery.reading-detail .reading-volume-route [aria-current=step] .story-route-number { background: var(--guide-gold); color: var(--heritage-bg); border-color: var(--guide-gold); }
+html[data-theme] .guide-gallery.reading-detail .reading-volume-route button:hover { border-color: var(--guide-line); background: var(--guide-panel); }
+html[data-theme] .guide-gallery.reading-detail .story-reading {
+  min-width: 0;
+  padding: 30px;
+  border: 1px solid var(--guide-line);
+  border-radius: 3px;
+  background: var(--guide-panel);
+  box-shadow: var(--heritage-shadow);
+  scroll-margin-top: 24px;
+}
+html[data-theme] .guide-gallery.reading-detail .story-chapter-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; font-size: 11px; line-height: 1.8; }
+html[data-theme] .guide-gallery.reading-detail .story-chapter-meta>span:first-child { color: var(--guide-gold); padding: 3px 8px; border: 1px solid var(--guide-line); border-radius: 2px; }
+html[data-theme] .guide-gallery.reading-detail .story-chapter-heading h1 { font: 500 36px/1.5 "Noto Serif SC",SimSun,serif; margin: 17px 0 12px; overflow-wrap: anywhere; }
+html[data-theme] .guide-gallery.reading-detail .story-question { font-size: 17px; line-height: 1.85; margin: 0; }
+html[data-theme] .guide-gallery.reading-detail .story-reading>section { margin-top: 30px; }
+html[data-theme] .guide-gallery.reading-detail .story-reading h3 { display: flex; align-items: baseline; gap: 10px; font: 500 18px/1.75 "Noto Serif SC",SimSun,serif; margin: 0 0 16px; }
+html[data-theme] .guide-gallery.reading-detail .story-reading h3>span { flex: none; font: 13px/1 Georgia,serif; }
+html[data-theme] .guide-gallery.reading-detail .story-step-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+html[data-theme] .guide-gallery.reading-detail .story-step-tabs button { display: flex; align-items: center; gap: 7px; padding: 9px 11px; border: 1px solid var(--guide-line); font-size: 12px; line-height: 1.65; text-align: left; }
+html[data-theme] .guide-gallery.reading-detail .story-step-tabs button span { flex: none; font: 12px Georgia,serif; color: var(--guide-gold); }
+html[data-theme] .guide-gallery.reading-detail .story-current-step { padding: 25px; border: 1px solid var(--guide-line); border-left: 3px solid var(--guide-gold); background: var(--heritage-paper); }
+html[data-theme] .guide-gallery.reading-detail .story-current-step>h2 { font: 500 26px/1.65 "Noto Serif SC",SimSun,serif; margin: 12px 0 18px; color: var(--guide-ink); }
+html[data-theme] .guide-gallery.reading-detail .story-current-step>p { white-space: pre-line; overflow-wrap: anywhere; }
+html[data-theme] .guide-gallery.reading-detail .story-takeaway { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--guide-line); }
+html[data-theme] .guide-gallery.reading-detail .story-takeaway>span { font-size: 11px; color: var(--guide-gold); }
+html[data-theme] .guide-gallery.reading-detail .story-takeaway>p { font: 500 16px/1.95 "Noto Serif SC",SimSun,serif; color: var(--guide-ink); margin-top: 9px; }
+html[data-theme] .guide-gallery.reading-detail .story-outcome { padding-left: 20px; border-left: 3px solid var(--guide-gold); }
+html[data-theme] .guide-gallery.reading-detail .story-outcome>.text-button { margin-top: 15px; }
+html[data-theme] .guide-gallery.reading-detail .story-terms { margin-top: 28px; border-top: 1px solid var(--guide-line); border-bottom: 1px solid var(--guide-line); }
+html[data-theme] .guide-gallery.reading-detail .story-terms summary { cursor: pointer; padding: 17px 0; color: var(--guide-ink); font-size: 13px; line-height: 1.8; }
+html[data-theme] .guide-gallery.reading-detail .story-terms summary>span { float: right; margin-left: 10px; color: var(--guide-muted); font-size: 11px; }
+html[data-theme] .guide-gallery.reading-detail .story-terms dl { margin: 0 0 17px; }
+html[data-theme] .guide-gallery.reading-detail .story-terms dl>div { display: grid; grid-template-columns: 84px minmax(0,1fr); gap: 14px; padding: 8px 0; font-size: 13px; line-height: 1.95; }
+html[data-theme] .guide-gallery.reading-detail .story-terms dt { color: var(--guide-gold); }
+html[data-theme] .guide-gallery.reading-detail .story-terms dd { margin: 0; }
+html[data-theme] .guide-gallery.reading-detail .story-next-bar { display: flex; flex-wrap: wrap; align-items: stretch; justify-content: space-between; gap: 12px; margin-top: 28px; }
+html[data-theme] .guide-gallery.reading-detail .story-next-bar button { height: auto; min-height: 43px; padding: 11px 16px; font-size: 13px; line-height: 1.75; white-space: normal; }
+html[data-theme] .guide-gallery.reading-detail .story-next-bar .primary-button { flex: 1; max-width: 420px; }
+html[data-theme] .guide-gallery.reading-detail .story-next-bar button:disabled { opacity: .45; }
+html[data-theme] .guide-gallery.reading-detail .reading-companion { position: sticky; top: 24px; min-width: 0; overflow: hidden; }
+html[data-theme] .guide-gallery.reading-detail .story-page-note { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 10px 24px; margin-top: 32px; padding-top: 19px; border-top: 1px solid var(--guide-line); color: var(--guide-muted); font-size: 11px; line-height: 1.9; }
+html[data-theme] .guide-gallery.reading-detail .story-page-note button { float: none; color: var(--guide-gold); padding: 0; font-size: 12px; }
+html[data-theme] .guide-gallery.reading-detail :is(.story-route button,.story-step-tabs button,.story-terms summary,.story-next-bar button):focus-visible { outline: 2px solid var(--guide-gold); outline-offset: 3px; }
+
+/* A quiet margin exhibit accompanies the explanation, without covering it. */
+html[data-theme] .guide-gallery .reading-companion {
+  border-radius: 3px;
+  border-color: var(--guide-line);
+  background: var(--guide-panel);
+  box-shadow: var(--heritage-shadow,0 8px 28px #0002);
+}
+html[data-theme] .guide-gallery .guide-source-exhibit>.reading-atmosphere {
+  height: 135px;
+  width: calc(100% - 26px);
+  max-width: 280px;
+  margin: 12px auto -5px;
+}
+html[data-theme] .guide-gallery .guide-source-exhibit>.reading-atmosphere .reading-model { height: 135px; aspect-ratio: auto; }
+html[data-theme] .guide-gallery .reading-companion-heading { border-color: var(--guide-line); padding-top: 14px; }
+html[data-theme] .guide-gallery .reading-companion h2 { color: var(--guide-ink); font: 500 19px/1.6 "Noto Serif SC",SimSun,serif; }
+html[data-theme] .guide-gallery .reading-companion :is(p,.reading-source-preview,.reading-source-preview blockquote) { color: var(--guide-muted); }
+html[data-theme] .guide-gallery .reading-source-preview>span { color: var(--guide-gold); }
+html[data-theme] .guide-gallery .story-chapter-heading {
+  position: relative;
+  padding: 15px 0 26px;
+  border-top: 2px solid var(--guide-gold);
+  border-bottom: 1px solid var(--guide-line);
+  margin-bottom: 25px;
+}
+html[data-theme] .guide-gallery .story-chapter-heading h1 { color: var(--guide-ink); letter-spacing: .05em; }
+html[data-theme] .guide-gallery .story-question { color: var(--guide-muted); font-family: "Noto Serif SC",SimSun,serif; }
+html[data-theme] .guide-gallery :is(.reading-cast>div,.story-current-step,.hg-chapters) { background: var(--guide-panel); border-color: var(--guide-line); border-radius: 3px; }
+html[data-theme] .guide-gallery .reading-cast strong { color: var(--guide-gold); }
+html[data-theme] .guide-gallery .reading-cast p { color: var(--guide-muted); }
+html[data-theme] .guide-gallery .story-current-step { border-left: 3px solid var(--guide-gold); }
+html[data-theme] .guide-gallery :is(.story-current-step>h2,.story-reading h3) { color: var(--guide-ink); }
+html[data-theme] .guide-gallery :is(.story-background>p,.story-current-step>p,.story-outcome>p,.hg-explanation p) {
+  color: var(--guide-ink);
+  font-size: 16px;
+  line-height: 2.1;
+}
+html[data-theme] .guide-gallery :is(.story-reading h3>span,.hg-explanation h4,.hg-connection strong) { color: var(--guide-gold); }
+html[data-theme] .guide-gallery :is(.story-route-title,.hg-side strong) { color: var(--guide-ink); }
+html[data-theme] .guide-gallery :is(.story-route-title small,.story-chapter-meta,.hg-side small,.hg-side>p,.story-terms dd) { color: var(--guide-muted); }
+html[data-theme] .guide-gallery .story-step-tabs button { border-radius: 2px; color: var(--guide-muted); border-color: var(--guide-line); }
+html[data-theme] .guide-gallery .story-step-tabs button[aria-current=step] { color: var(--guide-gold); border-color: var(--guide-gold); background: color-mix(in srgb,var(--guide-gold) 11%,transparent); }
+html[data-theme] .guide-gallery .hg-connection { background: var(--heritage-paper); border-color: var(--guide-gold); }
+html[data-theme] .guide-gallery .hg-connection p { color: var(--guide-ink); }
+html[data-theme] .guide-gallery .reading-volume-route { padding-right: 18px; border-right: 1px solid var(--guide-line); }
+html[data-theme] .guide-gallery .hg-side { border-right: 1px solid var(--guide-line); padding-right: 18px; }
+
+/* The modern room turns the six eras into a numbered sequence of dossiers. */
+html[data-theme] .guide-gallery .mg-hero h1 { font-size: clamp(35px,3.6vw,48px); letter-spacing: .04em; }
+html[data-theme] .guide-gallery .mg-era-grid { gap: 18px; }
+html[data-theme] .guide-gallery .mg-era-grid article { padding: 27px; border-top: 2px solid var(--guide-gold); }
+html[data-theme] .guide-gallery .mg-era-number { font: 28px Georgia,serif; color: var(--guide-gold); }
+html[data-theme] .guide-gallery .mg-era-grid h3 a { color: var(--guide-ink); font: 500 25px/1.5 "Noto Serif SC",SimSun,serif; }
+html[data-theme] .guide-gallery .mg-era-grid :is(p,small,article>span:last-child) { color: var(--guide-muted); }
+html[data-theme] .guide-gallery :is(.mg-route,.mg-catalog,.mg-question-list article,.mg-era-intro,.mg-neighbors) { border-color: var(--guide-line); }
+html[data-theme] .guide-gallery .mg-question-list h3 a { color: var(--guide-ink); font-family: "Noto Serif SC",SimSun,serif; }
+html[data-theme] .guide-gallery .mg-question-list :is(p,small) { color: var(--guide-muted); }
+html[data-theme] .guide-gallery .mg-sidebar { border-right: 1px solid var(--guide-line); padding-right: 20px; }
+html[data-theme] .guide-gallery .guide-modern-exhibit>.reading-atmosphere { width: 100%; height: 128px; margin: 0 0 18px; }
+html[data-theme] .guide-gallery .guide-modern-exhibit>.reading-atmosphere .reading-model { height: 128px; aspect-ratio: auto; }
+html[data-theme] .guide-gallery .mg-era-intro { border-top: 2px solid var(--guide-gold); padding-top: 17px; }
+html[data-theme] .guide-gallery :is(.mg-era-intro h1,.mg-lesson h2,.mg-sections h4) { color: var(--guide-ink); font-family: "Noto Serif SC",SimSun,serif; }
+html[data-theme] .guide-gallery .mg-sections li { border-radius: 3px; background: var(--guide-panel); border-color: var(--guide-line); border-left: 3px solid var(--guide-gold); }
+html[data-theme] .guide-gallery .mg-sections p { color: var(--guide-muted); }
+html[data-theme] .guide-gallery :is(.mg-era-intro>p,.mg-lesson header>p,.mg-background p,.mg-background ul,.mg-connection p) { color: var(--guide-ink); }
+html[data-theme] .guide-gallery :is(.mg-era-intro details,.mg-sources article p,.mg-source-note,.mg-top,.mg-tools label) { color: var(--guide-muted); }
+html[data-theme] .guide-gallery :is(.mg-connection,.mg-note) { background: var(--heritage-paper); border-color: var(--guide-gold); color: var(--guide-muted); border-radius: 2px; }
+html[data-theme] .guide-gallery .mg-takeaway { background: var(--heritage-paper); border-color: var(--guide-line); border-radius: 3px; }
+html[data-theme] .guide-gallery .mg-takeaway p { color: var(--guide-ink); }
+html[data-theme] .guide-gallery .mg-takeaway small { color: var(--guide-muted); }
+
+@media(max-width:1150px) {
+  html[data-theme] :is(.reading-home,.hg-home,.mg-shell).guide-gallery { padding: 36px 30px 60px; }
+  html[data-theme] .guide-gallery .guide-gallery-hero { gap: 24px; grid-template-columns: minmax(0,1fr) minmax(280px,350px); }
+  html[data-theme] .guide-gallery .guide-gallery-hero h1 { font-size: 43px; }
+  html[data-theme] .guide-gallery .guide-reading-method { gap: 9px 14px; }
+  html[data-theme] .guide-gallery .reading-route-cards>button { min-height: 240px; }
+  html[data-theme] .guide-gallery.reading-detail { padding: 32px 28px 46px; }
+  html[data-theme] .guide-gallery.reading-detail :is(.story-layout,.hg-layout) { grid-template-columns: 155px minmax(0,1fr) 250px; gap: 20px; }
+  html[data-theme] .guide-gallery.reading-detail .story-reading { padding: 24px; }
+  html[data-theme] .guide-gallery.reading-detail .story-chapter-heading h1 { font-size: 32px; }
+}
+@media(max-width:1000px) {
+  html[data-theme] .guide-gallery :is(.reading-volume-route,.hg-side) { border-right: 0; padding-right: 0; }
+  html[data-theme] .guide-gallery.reading-detail :is(.story-layout,.hg-layout) { grid-template-columns: minmax(0,1fr) 270px; gap: 24px; }
+  html[data-theme] .guide-gallery.reading-detail :is(.reading-volume-route,.hg-side) { position: static; grid-column: 1/-1; padding-right: 0; border-right: 0; }
+  html[data-theme] .guide-gallery.reading-detail .story-route-title { display: flex; align-items: baseline; justify-content: space-between; gap: 15px; padding-bottom: 13px; }
+  html[data-theme] .guide-gallery.reading-detail .story-route-title small { margin-top: 0; }
+  html[data-theme] .guide-gallery.reading-detail .reading-volume-route ol { display: flex; gap: 9px; max-height: none; overflow-x: auto; overflow-y: hidden; padding: 3px 3px 12px; }
+  html[data-theme] .guide-gallery.reading-detail .reading-volume-route li { flex: 0 0 184px; }
+  html[data-theme] .guide-gallery.reading-detail .reading-volume-route li>button { height: 100%; margin: 0; border-color: var(--guide-line); padding: 11px; }
+  html[data-theme] .guide-gallery.reading-detail .hg-side ol { display: flex; gap: 9px; overflow-x: auto; padding: 3px 3px 12px; }
+  html[data-theme] .guide-gallery.reading-detail .hg-side li { flex: 0 0 200px; }
+}
+@media(max-width:760px) {
+  html[data-theme] :is(.reading-home,.hg-home,.mg-shell).guide-gallery { padding: 28px 20px 52px; }
+  html[data-theme] .guide-gallery .guide-gallery-hero { grid-template-columns: minmax(0,1fr); gap: 10px; min-height: 0; padding: 7px 0 25px; }
+  html[data-theme] .guide-gallery .guide-gallery-hero h1 { font-size: 37px; letter-spacing: .035em; margin: 15px 0 18px; }
+  html[data-theme] .guide-gallery .guide-gallery-hero .guide-hero-lead { font-size: 14px; }
+  html[data-theme] .guide-gallery .guide-model-exhibit { grid-column: 1; grid-row: 2; max-width: 390px; justify-self: center; padding-bottom: 9px; margin-top: 12px; }
+  html[data-theme] .guide-gallery .guide-model-exhibit .reading-atmosphere .reading-model { height: 203px; aspect-ratio: auto; }
+  html[data-theme] .guide-gallery .guide-model-exhibit .reading-atmosphere figcaption { display: none; }
+  html[data-theme] .guide-gallery .guide-exhibit-label { justify-content: center; }
+  html[data-theme] .guide-gallery .guide-exhibit-label small { display: none; }
+  html[data-theme] .guide-gallery .guide-reading-method { gap: 10px 18px; }
+  html[data-theme] .guide-gallery .guide-reading-method li { font-size: 11px; }
+  html[data-theme] .guide-gallery .reading-route-cards { grid-template-columns: 1fr; gap: 14px; }
+  html[data-theme] .guide-gallery .reading-route-cards>button { min-height: 0; padding: 23px 22px 21px 28px; }
+  html[data-theme] .guide-gallery .reading-route-cards>button>strong { font-size: 21px; margin: 11px 0 7px; }
+  html[data-theme] .guide-gallery .reading-route-cards>button>.reading-route-cta { margin-top: 15px; }
+  html[data-theme] .guide-gallery :is(.reading-section-title h2,.hg-section-head h2,.mg-section-heading h2) { font-size: 23px; }
+  html[data-theme] .guide-gallery .reading-section-title>span { display: block; font-size: 11px; }
+  html[data-theme] .guide-gallery .reading-route-hero h1 { font-size: 30px; }
+  html[data-theme] .guide-gallery .reading-route-hero .guide-model-exhibit { max-width: 300px; justify-self: center; }
+  html[data-theme] .guide-gallery .guide-first-route { padding: 23px; margin: 25px 0 32px; }
+  html[data-theme] .guide-gallery .guide-first-route h2 { font-size: 21px; }
+  html[data-theme] .guide-gallery :is(.guide-source-exhibit,.guide-modern-exhibit)>.reading-atmosphere { display: none; }
+  html[data-theme] .guide-gallery .reading-companion-heading { padding-top: 20px; }
+  html[data-theme] .guide-gallery .mg-sidebar { padding-right: 0; border-right: 0; }
+  html[data-theme] .guide-gallery .mg-era-grid article { padding: 24px; }
+  html[data-theme] .guide-gallery .mg-hero h1 { font-size: 33px; }
+  html[data-theme] .guide-gallery.reading-detail { padding: 26px 18px 40px; }
+  html[data-theme] .guide-gallery.reading-detail :is(.story-layout,.hg-layout) { grid-template-columns: minmax(0,1fr); gap: 24px; }
+  html[data-theme] .guide-gallery.reading-detail .reading-detail-top { gap: 9px 15px; margin-bottom: 23px; padding-bottom: 16px; }
+  html[data-theme] .guide-gallery.reading-detail .reading-detail-top>span { order: 3; flex-basis: 100%; }
+  html[data-theme] .guide-gallery.reading-detail .reading-detail-top .text-button { font-size: 11px; }
+  html[data-theme] .guide-gallery.reading-detail :is(.reading-volume-route,.hg-side) { grid-column: auto; }
+  html[data-theme] .guide-gallery.reading-detail .story-route-title { font-size: 13px; }
+  html[data-theme] .guide-gallery.reading-detail .reading-volume-route li { flex-basis: 166px; }
+  html[data-theme] .guide-gallery.reading-detail .story-reading { padding: 22px 18px; }
+  html[data-theme] .guide-gallery.reading-detail .story-chapter-heading { padding: 14px 0 23px; }
+  html[data-theme] .guide-gallery.reading-detail .story-chapter-heading h1 { font-size: 29px; }
+  html[data-theme] .guide-gallery.reading-detail .story-question { font-size: 16px; }
+  html[data-theme] .guide-gallery.reading-detail .story-reading h3 { font-size: 17px; }
+  html[data-theme] .guide-gallery.reading-detail .story-current-step { padding: 21px 16px; }
+  html[data-theme] .guide-gallery.reading-detail .story-current-step>h2 { font-size: 23px; }
+  html[data-theme] .guide-gallery.reading-detail .story-terms dl>div { grid-template-columns: 65px minmax(0,1fr); gap: 12px; }
+  html[data-theme] .guide-gallery.reading-detail .story-next-bar { gap: 9px; }
+  html[data-theme] .guide-gallery.reading-detail .story-next-bar button { padding: 10px 12px; font-size: 12px; }
+  html[data-theme] .guide-gallery.reading-detail .story-next-bar .primary-button { max-width: none; }
+  html[data-theme] .guide-gallery.reading-detail .reading-companion { position: static; }
+  html[data-theme] .guide-gallery.reading-detail .story-page-note { display: block; }
+  html[data-theme] .guide-gallery.reading-detail .story-page-note button { display: block; margin-top: 13px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  html[data-theme] .guide-gallery :is(.reading-route-cards>button,.hg-card,.mg-era-grid article) { transition: none; }
+  html[data-theme] .guide-gallery :is(.reading-route-cards>button:hover,.hg-card:hover) { transform: none; }
+}

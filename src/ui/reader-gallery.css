@@ -1,0 +1,381 @@
+/* The original text lives on a reading surface; the scenery stays at the edges. */
+html[data-theme] :is(.mt-shell,.dynasty-shell,.book-dialog){color:var(--heritage-ink,#e8dfcd)}
+html[data-theme] :is(.mt-shell,.dynasty-shell) :is(h1,h2,h3){color:var(--heritage-ink,#e8dfcd);font-family:'Noto Serif SC','Songti SC',SimSun,serif}
+html[data-theme] :is(.mt-shell,.dynasty-shell,.book-dialog) :is(.book-kicker,.journey-overline){color:var(--heritage-gold,#c6a575);letter-spacing:.18em}
+html[data-theme] :is(.mt-shell,.dynasty-shell,.book-dialog) :is(.secondary-button,.mt-paging button){color:var(--heritage-gold,#c6a575);border-color:var(--heritage-line,#655039);background:var(--heritage-panel,#182024);border-radius:3px}
+html[data-theme] :is(.mt-shell,.dynasty-shell,.book-dialog) :is(.primary-button){border-radius:3px}
+html[data-theme] :is(.mt-shell,.dynasty-shell,.book-dialog) :is(input[type=search],select,.book-search,.dynasty-search){color:var(--heritage-ink,#e8dfcd);background:var(--heritage-paper,#192023);border-color:var(--heritage-line,#655039);border-radius:3px;box-shadow:none}
+html[data-theme] :is(.mt-shell,.dynasty-shell,.book-dialog) :is(input[type=search],select)::placeholder{color:var(--heritage-muted,#aaa395)}
+html[data-theme] :is(.mt-shell,.dynasty-shell,.book-dialog) :is(a,button,input,select):focus-visible{outline:2px solid var(--heritage-gold,#c6a575);outline-offset:4px}
+html[data-theme] :is(.mt-shell,.dynasty-shell,.book-dialog) :is(.book-kicker,.reader-index-kicker){font-size:10px}
+html[data-theme] :is(.mt-shell,.dynasty-shell,.book-dialog) .reader-index-kicker{display:block;color:var(--heritage-gold,#c6a575);letter-spacing:.15em;margin:0 0 18px;font-family:Georgia,serif}
+html[data-theme] :is(.mt-shell,.book-dialog) .reader-hero-index{display:flex;gap:28px;margin-top:27px;padding-top:20px;border-top:1px solid var(--heritage-line,#655039);max-width:480px}
+html[data-theme] :is(.mt-shell,.book-dialog) .reader-hero-index>span{display:flex;flex-direction:column;gap:4px;color:var(--heritage-muted,#aaa395);font-size:11px;line-height:1.7}
+html[data-theme] :is(.mt-shell,.book-dialog) .reader-hero-index b{color:var(--heritage-gold,#c6a575);font:24px/1.3 Georgia,'Noto Serif SC',serif;font-weight:400}
+
+/* Qing-to-contemporary catalog: an editorial cover, followed by a dated index. */
+html[data-theme] .mt-shell{max-width:1450px;padding:54px clamp(22px,4vw,68px) 90px}
+html[data-theme] .mt-shell .mt-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.13fr);align-items:center;gap:18px 30px;min-height:380px;border-bottom:1px solid var(--heritage-line,#655039)}
+html[data-theme] .mt-shell .mt-hero-copy{position:relative;z-index:1;max-width:600px;padding:10px 0 24px}
+html[data-theme] .mt-shell .mt-hero h1{font-size:clamp(32px,3.4vw,54px);line-height:1.45;letter-spacing:.055em;margin:20px 0 22px;font-weight:400}
+html[data-theme] .mt-shell .mt-hero-copy>p{font-size:15px;line-height:2;color:var(--heritage-muted,#aaa395);max-width:460px}
+html[data-theme] .mt-shell .mt-hero>.reading-atmosphere{min-width:0;width:100%;align-self:center;max-height:370px}
+html[data-theme] .mt-shell .mt-tabs{grid-column:1/-1;margin:0;gap:0;border-top:1px solid var(--heritage-line,#655039);padding-top:0;align-self:end}
+html[data-theme] .mt-shell .mt-tabs a{display:block;position:relative;border:0;border-radius:0;padding:20px 26px;background:transparent;color:var(--heritage-muted,#aaa395);font-size:14px;letter-spacing:.04em}
+html[data-theme] .mt-shell .mt-tabs a[aria-current=page]{background:var(--heritage-panel,#182024);color:var(--heritage-gold,#c6a575)}
+html[data-theme] .mt-shell .mt-tabs a[aria-current=page]::after{content:'';height:2px;position:absolute;bottom:-1px;left:26px;right:26px;background:var(--heritage-gold,#c6a575)}
+html[data-theme] .mt-shell .mt-guide-entry{border:0;border-left:2px solid var(--heritage-gold,#c6a575);border-radius:0;background:var(--heritage-panel,#182024);padding:20px 25px;margin:28px 0 32px}
+html[data-theme] .mt-shell .mt-guide-entry strong{color:var(--heritage-ink,#e8dfcd);font:18px 'Noto Serif SC',serif}
+html[data-theme] .mt-shell .mt-guide-entry p{color:var(--heritage-muted,#aaa395);font-size:13px}
+html[data-theme] .mt-shell a{color:var(--heritage-gold,#c6a575)}
+html[data-theme] .mt-shell .mt-guide-entry>a{border-bottom:1px solid var(--heritage-gold,#c6a575);padding-bottom:6px}
+html[data-theme] .mt-shell .mt-catalog-tools{margin:30px 0 22px;gap:24px}
+html[data-theme] .mt-shell label{color:var(--heritage-muted,#aaa395);font-size:12px;letter-spacing:.025em}
+html[data-theme] .mt-shell .mt-note{border-color:var(--heritage-line,#655039);background:var(--heritage-panel,#182024);color:var(--heritage-muted,#aaa395);font-size:12px;line-height:1.9;padding:15px 20px}
+html[data-theme] .mt-shell [data-text-results]>p{font-size:12px;color:var(--heritage-muted,#aaa395);letter-spacing:.04em}
+html[data-theme] .mt-shell .mt-era{margin-top:42px}
+html[data-theme] .mt-shell .mt-era h2{font-size:25px;display:flex;align-items:center;gap:20px;border-bottom:1px solid var(--heritage-line,#655039);padding-bottom:16px}
+html[data-theme] .mt-shell .mt-era h2 small{font-size:11px;color:var(--heritage-muted,#aaa395);margin:0}
+html[data-theme] .mt-shell .mt-grid{gap:13px 20px}
+html[data-theme] .mt-shell .mt-card-wrap{display:flex;gap:20px;align-items:flex-start;padding:24px 22px;border:1px solid var(--heritage-line,#655039);border-radius:3px;background:var(--heritage-paper,#192023);transition:transform .2s,border-color .2s,box-shadow .2s}
+html[data-theme] .mt-shell .mt-card-wrap:hover{transform:translateY(-3px);border-color:var(--heritage-gold,#c6a575);box-shadow:var(--heritage-shadow,0 8px 22px #0002)}
+html[data-theme] .mt-shell .mt-card-number{display:block;flex-shrink:0;font:32px/1.2 Georgia,serif;color:var(--heritage-gold,#c6a575);opacity:.65;border-bottom:1px solid var(--heritage-line,#655039);padding-bottom:9px}
+html[data-theme] .mt-shell .mt-card-copy{min-width:0;flex:1}
+html[data-theme] .mt-shell .mt-card-date{display:block;color:var(--heritage-muted,#aaa395);font-size:10px;letter-spacing:.06em;margin-bottom:9px}
+html[data-theme] .mt-shell .mt-card{color:var(--heritage-ink,#e8dfcd);font:19px/1.6 'Noto Serif SC',serif}
+html[data-theme] .mt-shell .mt-card-meta{color:var(--heritage-muted,#aaa395);font-size:11px}
+html[data-theme] .mt-shell .mt-doc-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+html[data-theme] .mt-shell .mt-doc-list article{position:relative;border:1px solid var(--heritage-line,#655039);padding:26px 28px;background:var(--heritage-paper,#192023);box-shadow:3px 4px 0 var(--heritage-panel,#182024)}
+html[data-theme] .mt-shell .mt-doc-list article>a{color:var(--heritage-ink,#e8dfcd);font:20px/1.65 'Noto Serif SC',serif}
+html[data-theme] .mt-shell .mt-doc-list :is(small,p){color:var(--heritage-muted,#aaa395);font-size:12px}
+html[data-theme] .mt-shell .mt-volume{border:1px solid var(--heritage-line,#655039);border-left:3px solid var(--heritage-gold,#c6a575);background:var(--heritage-paper,#192023);border-radius:2px;color:var(--heritage-ink,#e8dfcd);font-size:14px;padding:20px 18px}
+html[data-theme] .mt-shell .mt-volume:hover{background:var(--heritage-panel,#182024);border-color:var(--heritage-gold,#c6a575)}
+
+/* A paper reading desk: wide margins, quiet ink, and visible source locations. */
+html[data-theme] .mt-reading .mt-reading-top{top:0;background:var(--heritage-bg,#11181d);border-color:var(--heritage-line,#655039);font-size:12px;padding:14px 0}
+html[data-theme] .mt-reading .mt-tabs{border-top:0;margin:16px 0 32px;border-bottom:1px solid var(--heritage-line,#655039)}
+html[data-theme] .mt-reading .mt-tabs a{padding:13px 22px;font-size:12px}
+html[data-theme] .mt-reading .mt-heading{padding-bottom:25px;border-bottom:1px solid var(--heritage-line,#655039);max-width:1160px}
+html[data-theme] .mt-reading .mt-heading h1{font-size:clamp(30px,3.5vw,46px);line-height:1.6;letter-spacing:.05em;margin:12px 0 14px}
+html[data-theme] .mt-reading .mt-heading>p{color:var(--heritage-muted,#aaa395);font-size:12px}
+html[data-theme] .mt-reading .mt-reader-layout{grid-template-columns:220px minmax(0,1fr);gap:38px;margin-top:35px}
+html[data-theme] .mt-reading .mt-reader-aside{padding:0 12px 20px 0;top:70px;max-height:calc(100dvh - 90px);border-color:var(--heritage-line,#655039)}
+html[data-theme] .mt-reading .mt-reader-aside>.reading-atmosphere{width:100%;max-height:120px;margin:0 0 16px;flex-shrink:0}
+html[data-theme] .mt-reading .mt-reader-aside>strong{color:var(--heritage-ink,#e8dfcd);font:21px 'Noto Serif SC',serif}
+html[data-theme] .mt-reading .mt-reader-aside nav{gap:0;margin-top:20px;border-top:1px solid var(--heritage-line,#655039)}
+html[data-theme] .mt-reading .mt-reader-aside nav a{display:block;border-bottom:1px solid var(--heritage-line,#655039);padding:12px 0;color:var(--heritage-muted,#aaa395);font-size:12px;line-height:1.9}
+html[data-theme] .mt-reading .mt-reader-aside nav a:hover{color:var(--heritage-gold,#c6a575)}
+html[data-theme] .mt-reading .mt-reader-aside button{color:var(--heritage-gold,#c6a575);background:var(--heritage-panel,#182024);border-color:var(--heritage-line,#655039);font-size:12px}
+html[data-theme] .mt-reading .mt-reading-main{padding:clamp(20px,3.5vw,50px);border:1px solid var(--heritage-line,#655039);background:var(--heritage-paper,#192023);box-shadow:var(--heritage-shadow,0 15px 45px #0002);max-width:950px}
+html[data-theme] .mt-reading .mt-reading-main>.mt-note{font-size:12px;border-left-color:var(--heritage-gold,#c6a575);padding:15px 18px;margin-bottom:30px}
+html[data-theme] .mt-reading .mt-block{padding:9px 12px 14px;margin-bottom:20px;color:var(--heritage-ink,#e8dfcd)}
+html[data-theme] .mt-reading .mt-block :is(p,li,dd){font:18px/2.25 'Noto Serif SC','Songti SC',SimSun,serif;letter-spacing:.025em;color:var(--heritage-ink,#e8dfcd)}
+html[data-theme] .mt-reading .mt-block :is(h2,h3){font-size:25px;padding-bottom:12px;border-bottom:1px solid var(--heritage-line,#655039);margin-top:32px}
+html[data-theme] .mt-reading .mt-paragraph{color:var(--heritage-muted,#aaa395)!important;font:10px/1.6 Georgia,serif;letter-spacing:.12em;opacity:.85;margin-bottom:7px}
+html[data-theme] .mt-reading .mt-block.mt-highlight{border-left-color:var(--heritage-gold,#c6a575);background:color-mix(in srgb,var(--heritage-gold,#c6a575) 12%,transparent)}
+html[data-theme] .mt-reading :is(.mt-related,.mt-references,.mt-provenance,.mt-neighbors){border-color:var(--heritage-line,#655039)}
+html[data-theme] .mt-reading :is(.mt-related small,.mt-references small,.mt-references p,.mt-provenance p){color:var(--heritage-muted,#aaa395);font-size:12px}
+html[data-theme] .mt-reading .mt-neighbors{font-size:13px}
+html[data-theme] .mt-reading .mt-warning{background:var(--heritage-panel,#182024);border-color:var(--heritage-gold,#c6a575);color:var(--heritage-gold,#c6a575);font-size:13px}
+html[data-theme] .mt-reading .mt-block :is(td,th){border-color:var(--heritage-line,#655039)}
+html[data-theme] .mt-reading .mt-block th{color:var(--heritage-ink,#e8dfcd);background:var(--heritage-panel,#182024)}
+
+/* The histories library uses cloth bindings, rather than dashboard cards. */
+html[data-theme] #dynastic-root{background:var(--heritage-bg,#11181d)}
+html[data-theme] .dynasty-shell{max-width:1540px;padding:52px clamp(24px,4.5vw,72px) 80px}
+html[data-theme] .dynasty-gallery-shell .dynasty-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:45px;align-items:center;min-height:365px;padding-bottom:40px}
+html[data-theme] .dynasty-shell .dynasty-top{border-color:var(--heritage-line,#655039)}
+html[data-theme] .dynasty-gallery-shell .dynasty-top h1{font-size:clamp(34px,3.7vw,58px);font-weight:400;letter-spacing:.05em;margin:24px 0}
+html[data-theme] .dynasty-shell .dynasty-top p{color:var(--heritage-muted,#aaa395);line-height:2;font-size:13px;max-width:460px}
+html[data-theme] .dynasty-shell .dynasty-top-actions{margin-top:24px;gap:14px}
+html[data-theme] .dynasty-gallery-shell .dynasty-top>.reading-atmosphere{max-height:340px;min-width:0}
+html[data-theme] .dynasty-shell .dynasty-status{color:var(--heritage-muted,#aaa395);font-size:10px;padding-top:14px;min-height:33px;letter-spacing:.04em}
+html[data-theme] .dynasty-shell .dynasty-welcome{background:var(--heritage-panel,#182024);border:0;border-left:2px solid var(--heritage-gold,#c6a575);border-radius:0;margin:16px 0 40px;padding:30px 34px}
+html[data-theme] .dynasty-shell .dynasty-welcome h2{font-size:27px;font-weight:400}
+html[data-theme] .dynasty-shell .dynasty-welcome p{color:var(--heritage-muted,#aaa395);font-size:13px;max-width:760px}
+html[data-theme] .dynasty-shell .dynasty-welcome-stats{border-left:1px solid var(--heritage-line,#655039);padding-left:30px;min-width:140px;color:var(--heritage-muted,#aaa395)}
+html[data-theme] .dynasty-shell .dynasty-welcome-stats b{color:var(--heritage-gold,#c6a575);font-size:32px}
+html[data-theme] .dynasty-shell .dynasty-route{margin-bottom:52px}
+html[data-theme] .dynasty-shell .dynasty-route h2{font:24px 'Noto Serif SC',serif;margin-bottom:22px}
+html[data-theme] .dynasty-shell .dynasty-route ol{gap:0;border-block:1px solid var(--heritage-line,#655039)}
+html[data-theme] .dynasty-shell .dynasty-route li{display:block;min-height:180px;background:transparent;border:0;border-right:1px solid var(--heritage-line,#655039);border-radius:0;padding:22px}
+html[data-theme] .dynasty-shell .dynasty-route li:last-child{border-right:0}
+html[data-theme] .dynasty-shell .dynasty-route li>span{width:auto;height:auto;display:block;border-radius:0;background:transparent;color:var(--heritage-gold,#c6a575);font:28px Georgia,serif;margin-bottom:12px}
+html[data-theme] .dynasty-shell .dynasty-route strong{font-size:14px;color:var(--heritage-ink,#e8dfcd)}
+html[data-theme] .dynasty-shell .dynasty-route p{color:var(--heritage-muted,#aaa395);font-size:11px;line-height:1.9;min-height:42px}
+html[data-theme] .dynasty-shell .dynasty-route li div div button{color:var(--heritage-gold,#c6a575);border-color:var(--heritage-line,#655039);border-radius:2px}
+html[data-theme] .dynasty-shell .dynasty-catalog-heading{margin-bottom:30px}
+html[data-theme] .dynasty-shell .dynasty-catalog-heading h2{font:28px 'Noto Serif SC',serif}
+html[data-theme] .dynasty-shell .dynasty-catalog-heading label{color:var(--heritage-muted,#aaa395)}
+html[data-theme] .dynasty-shell .dynasty-era{margin-bottom:45px}
+html[data-theme] .dynasty-shell .dynasty-era-heading{border-color:var(--heritage-line,#655039);padding-bottom:16px;margin-bottom:20px;gap:21px}
+html[data-theme] .dynasty-shell .dynasty-era-heading>span{font-size:35px;color:var(--heritage-gold,#c6a575)}
+html[data-theme] .dynasty-shell .dynasty-era-heading h2{font-size:24px}
+html[data-theme] .dynasty-shell .dynasty-era-heading p{color:var(--heritage-muted,#aaa395);font-size:11px;margin-top:7px}
+html[data-theme] .dynasty-shell .dynasty-book-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+html[data-theme] .dynasty-shell .dynasty-book-card{display:flex;flex-direction:row;gap:24px;min-height:196px;padding:24px;background:var(--heritage-paper,#192023);border:1px solid var(--heritage-line,#655039);border-radius:3px;text-align:left;transition:transform .2s,border-color .2s,box-shadow .2s}
+html[data-theme] .dynasty-shell .dynasty-book-card[hidden]{display:none}
+html[data-theme] .dynasty-shell .dynasty-book-card:hover{transform:translateY(-4px);border-color:var(--heritage-gold,#c6a575);background:var(--heritage-paper,#192023);box-shadow:var(--heritage-shadow,0 12px 30px #0002)}
+html[data-theme] .dynasty-shell .dynasty-card-binding{--binding:#315451;--binding-label:#d1c9a9;position:relative;display:flex;align-items:center;justify-content:center;flex:0 0 72px;min-height:133px;border-radius:2px 3px 3px 2px;background:repeating-linear-gradient(0deg,#fff1 0 1px,transparent 1px 4px),linear-gradient(90deg,#0006 0 7px,#fff2 8px 9px,var(--binding) 12px 100%);box-shadow:4px 6px 0 #0002,8px 10px 16px #0002;border:1px solid #ab925358;transform:rotate(-3deg);color:var(--binding-label)}
+html[data-theme] .dynasty-shell [data-reader-era='1'] .dynasty-card-binding{--binding:#714337;--binding-label:#ead0a0}
+html[data-theme] .dynasty-shell [data-reader-era='2'] .dynasty-card-binding{--binding:#475568;--binding-label:#ded3b3}
+html[data-theme] .dynasty-shell [data-reader-era='3'] .dynasty-card-binding{--binding:#957142;--binding-label:#f4e8c8}
+html[data-theme] .dynasty-shell [data-reader-era='4'] .dynasty-card-binding{--binding:#4d5650;--binding-label:#e4d4b0}
+html[data-theme] .dynasty-shell .dynasty-card-binding::before{content:'';position:absolute;inset:7px 6px 7px 14px;border:1px solid #e6d39a6b}
+html[data-theme] .dynasty-shell .dynasty-card-binding b{writing-mode:vertical-rl;font:22px/1.2 'Noto Serif SC',SimSun,serif;font-weight:500;letter-spacing:.16em;color:inherit}
+html[data-theme] .dynasty-shell .dynasty-card-binding i{position:absolute;right:12px;bottom:13px;border:1px solid #c8866799;color:#dcaa8d;font:9px/12px 'Noto Serif SC',serif;font-style:normal;padding:1px}
+html[data-theme] .dynasty-shell .dynasty-card-copy{display:flex;flex-direction:column;flex:1;min-width:0}
+html[data-theme] .dynasty-shell .dynasty-card-copy>span{font-size:10px;color:var(--heritage-muted,#aaa395)}
+html[data-theme] .dynasty-shell .dynasty-card-copy>strong{font-size:21px;font-weight:400;line-height:1.5;color:var(--heritage-ink,#e8dfcd);margin:9px 0 12px}
+html[data-theme] .dynasty-shell .dynasty-card-copy>p{font-size:11px;line-height:1.9;color:var(--heritage-muted,#aaa395)}
+html[data-theme] .dynasty-shell .dynasty-card-copy>small{display:flex;justify-content:space-between;font-size:10px;color:var(--heritage-gold,#c6a575);margin-top:auto;padding-top:16px}
+html[data-theme] .dynasty-shell .dynasty-card-copy>small b{font-size:18px;font-weight:400}
+html[data-theme] .dynasty-shell .dynasty-disclaimer{color:var(--heritage-muted,#aaa395)}
+
+/* Compact catalog and single-volume surfaces. */
+html[data-theme] .dynasty-reading-shell{padding-top:34px}
+html[data-theme] .dynasty-reading-shell .dynasty-top{padding-bottom:25px}
+html[data-theme] .dynasty-reading-shell .dynasty-top h1{font-size:29px;letter-spacing:.04em;font-weight:400}
+html[data-theme] .dynasty-reading-shell .dynasty-top p{max-width:none;font-size:11px}
+html[data-theme] .dynasty-reading-shell .dynasty-top-actions{position:absolute;right:0;bottom:25px;margin-top:0}
+html[data-theme] .dynasty-reading-shell .dynasty-top{position:relative;padding-right:210px}
+html[data-theme] .dynasty-shell .dynasty-layout:has(.dynasty-side){grid-template-columns:260px minmax(0,1fr);gap:35px}
+html[data-theme] .dynasty-shell .dynasty-side{top:18px;height:min(840px,calc(100dvh - var(--header) - 32px));background:var(--heritage-panel,#182024);border-color:var(--heritage-line,#655039);border-radius:3px;padding:20px 13px}
+html[data-theme] .dynasty-shell .dynasty-side>.reading-atmosphere{max-height:100px;width:100%;margin:10px 0 0;flex-shrink:0}
+html[data-theme] .dynasty-shell .dynasty-side-head{border-color:var(--heritage-line,#655039)}
+html[data-theme] .dynasty-shell .dynasty-side-head h2{font-size:25px;letter-spacing:.04em;color:var(--heritage-ink,#e8dfcd)}
+html[data-theme] .dynasty-shell :is(.dynasty-side-head p,.dynasty-search-label,.dynasty-catalog-pages,.dynasty-volume span,.dynasty-volume small){color:var(--heritage-muted,#aaa395)}
+html[data-theme] .dynasty-shell :is(.dynasty-side-head button,.dynasty-side-actions button,.dynasty-catalog-pages button,.dynasty-search button){color:var(--heritage-gold,#c6a575)}
+html[data-theme] .dynasty-shell .dynasty-search button{white-space:nowrap;flex-shrink:0;padding:8px 10px}
+html[data-theme] .dynasty-shell .dynasty-catalog-pages{border-color:var(--heritage-line,#655039);font-size:10px}
+html[data-theme] .dynasty-shell .dynasty-volume{border-radius:2px;border-bottom:1px solid color-mix(in srgb,var(--heritage-line,#655039) 50%,transparent);padding:12px 8px}
+html[data-theme] .dynasty-shell .dynasty-volume strong{color:var(--heritage-ink,#e8dfcd);font-family:'Noto Serif SC',SimSun,serif}
+html[data-theme] .dynasty-shell .dynasty-volume:is(.active,:hover){background:color-mix(in srgb,var(--heritage-gold,#c6a575) 13%,transparent);color:var(--heritage-gold,#c6a575)}
+html[data-theme] .dynasty-shell :is(.dynasty-book-intro,.dynasty-reader,.dynasty-results){padding:clamp(22px,3vw,42px);border:1px solid var(--heritage-line,#655039);background:var(--heritage-paper,#192023);box-shadow:var(--heritage-shadow,0 12px 30px #0002);border-radius:2px;margin-top:16px}
+html[data-theme] .dynasty-shell .dynasty-book-intro>h2{font-size:35px;font-weight:400}
+html[data-theme] .dynasty-shell .dynasty-book-intro p{color:var(--heritage-muted,#aaa395);line-height:2}
+html[data-theme] .dynasty-shell .dynasty-book-intro .dynasty-lead{font-size:18px;color:var(--heritage-ink,#e8dfcd)}
+html[data-theme] .dynasty-shell :is(.dynasty-question,.dynasty-guide-intro,.dynasty-genre-grid>div,.dynasty-reading-note){background:var(--heritage-panel,#182024);border-color:var(--heritage-line,#655039);border-radius:2px}
+html[data-theme] .dynasty-shell :is(.dynasty-guide-intro strong,.dynasty-genre-grid strong,.dynasty-question strong,.dynasty-book-intro h3,.dynasty-breadcrumb button){color:var(--heritage-gold,#c6a575)}
+html[data-theme] .dynasty-shell :is(.dynasty-genre-grid span,.dynasty-neighbors span,.dynasty-breadcrumb,.dynasty-reader-heading p,.dynasty-reading-note small){color:var(--heritage-muted,#aaa395)}
+html[data-theme] .dynasty-shell .dynasty-neighbors button{border-color:var(--heritage-line,#655039);border-radius:2px;color:var(--heritage-gold,#c6a575)}
+html[data-theme] .dynasty-shell .dynasty-reader-heading{border-color:var(--heritage-line,#655039)}
+html[data-theme] .dynasty-shell .dynasty-reader-heading h2{font-size:clamp(29px,3vw,42px);letter-spacing:.055em;font-weight:400}
+html[data-theme] .dynasty-shell .dynasty-reading-note{padding:22px 25px;margin:28px 0}
+html[data-theme] .dynasty-shell .dynasty-reading-note p{color:var(--heritage-muted,#aaa395);font-size:13px;line-height:2}
+html[data-theme] .dynasty-shell .dynasty-reading-note strong{color:var(--heritage-ink,#e8dfcd)}
+html[data-theme] .dynasty-shell .dynasty-reading-note .dynasty-incomplete{color:var(--heritage-gold,#c6a575);border-color:var(--heritage-gold,#c6a575)}
+html[data-theme] .dynasty-shell .dynasty-reading-actions{gap:8px;flex-wrap:wrap;padding-bottom:18px;border-bottom:1px solid var(--heritage-line,#655039)}
+html[data-theme] .dynasty-shell .dynasty-reading-actions button{border-color:var(--heritage-line,#655039);border-radius:2px;color:var(--heritage-gold,#c6a575);font-size:11px}
+html[data-theme] .dynasty-shell .dynasty-event-return{background:var(--heritage-panel,#182024);border-color:var(--heritage-gold,#c6a575);border-radius:2px;box-shadow:var(--heritage-shadow,0 6px 15px #0002)}
+html[data-theme] .dynasty-shell .dynasty-event-return strong{color:var(--heritage-ink,#e8dfcd)}
+html[data-theme] .dynasty-shell .dynasty-event-return small{color:var(--heritage-muted,#aaa395)}
+
+/* Shiji opens as a dedicated reading room. */
+html[data-theme] .book-dialog{width:min(1510px,96vw);height:94dvh;max-height:94dvh;border-radius:6px;border-color:var(--heritage-line,#655039);background:var(--heritage-bg,#11181d);color:var(--heritage-ink,#e8dfcd);box-shadow:0 30px 100px #0005}
+html[data-theme] .book-dialog .book-top{height:96px;padding:20px 32px;border-color:var(--heritage-line,#655039);background:var(--heritage-panel,#182024)}
+html[data-theme] .book-dialog .book-top h1{font-size:29px;letter-spacing:.16em;color:var(--heritage-ink,#e8dfcd)}
+html[data-theme] .book-dialog .book-top h1 span{letter-spacing:.05em;color:var(--heritage-muted,#aaa395)}
+html[data-theme] .book-dialog .book-layout{grid-template-columns:270px minmax(0,1fr);height:calc(100% - 96px)}
+html[data-theme] .book-dialog .book-sidebar{background:var(--heritage-panel,#182024);border-color:var(--heritage-line,#655039);padding:26px 17px 16px}
+html[data-theme] .book-dialog .book-sidebar label{color:var(--heritage-muted,#aaa395);font-size:11px}
+html[data-theme] .book-dialog .book-search input{color:var(--heritage-ink,#e8dfcd)}
+html[data-theme] .book-dialog :is(.book-search button,.book-categories button.active,.book-library-actions){color:var(--heritage-gold,#c6a575)}
+html[data-theme] .book-dialog .book-categories button{color:var(--heritage-muted,#aaa395);border-color:var(--heritage-line,#655039);border-radius:2px}
+html[data-theme] .book-dialog .book-categories button.active{color:var(--heritage-gold,#c6a575);background:color-mix(in srgb,var(--heritage-gold,#c6a575) 12%,transparent)}
+html[data-theme] .book-dialog :is(.book-category-hint,.book-edition,.book-status){color:var(--heritage-muted,#aaa395)}
+html[data-theme] .book-dialog .book-chapter{border-radius:2px;border-bottom:1px solid color-mix(in srgb,var(--heritage-line,#655039) 50%,transparent);padding:13px 8px}
+html[data-theme] .book-dialog .book-chapter strong{font-family:'Noto Serif SC',SimSun,serif;color:var(--heritage-ink,#e8dfcd);font-size:12px}
+html[data-theme] .book-dialog .book-chapter :is(span,small){color:var(--heritage-muted,#aaa395)}
+html[data-theme] .book-dialog .book-chapter:is(:hover,.active){background:color-mix(in srgb,var(--heritage-gold,#c6a575) 13%,transparent)}
+html[data-theme] .book-dialog .book-chapter.active strong{color:var(--heritage-gold,#c6a575)}
+html[data-theme] .book-dialog .book-main{padding:22px 40px 50px;background:var(--heritage-bg,#11181d)}
+html[data-theme] .book-dialog .book-main h2{font-weight:400;color:var(--heritage-ink,#e8dfcd);letter-spacing:.03em}
+html[data-theme] .book-dialog .book-status{padding-bottom:14px;border-bottom:1px solid var(--heritage-line,#655039);margin-bottom:25px;font-size:10px;line-height:1.8}
+html[data-theme] .book-dialog .book-overview{max-width:1000px;margin:20px auto}
+html[data-theme] .book-dialog .book-overview-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);align-items:center;gap:22px;padding:20px 0 28px;border-bottom:1px solid var(--heritage-line,#655039)}
+html[data-theme] .book-dialog .book-overview-copy>h2{font-size:clamp(26px,2.6vw,38px);line-height:1.65;margin:18px 0}
+html[data-theme] .book-dialog .book-overview-copy>p{font-size:12px;line-height:2;color:var(--heritage-muted,#aaa395)}
+html[data-theme] .book-dialog .book-overview-hero>.reading-atmosphere{max-height:295px;min-width:0}
+html[data-theme] .book-dialog .reader-hero-index{gap:25px;margin-top:19px;padding-top:16px}
+html[data-theme] .book-dialog .reader-hero-index b{font-size:26px}
+html[data-theme] .book-dialog :is(.book-reading-route>h3,.book-format-guide>h3){font:24px 'Noto Serif SC',serif;color:var(--heritage-ink,#e8dfcd);margin-bottom:13px}
+html[data-theme] .book-dialog .book-reading-route>p{color:var(--heritage-muted,#aaa395);font-size:12px}
+html[data-theme] .book-dialog .book-featured{gap:15px}
+html[data-theme] .book-dialog .book-featured button{padding:24px 22px;gap:12px;background:var(--heritage-paper,#192023);border:1px solid var(--heritage-line,#655039);border-left:3px solid var(--heritage-gold,#c6a575);border-radius:2px;box-shadow:3px 4px 0 var(--heritage-panel,#182024)}
+html[data-theme] .book-dialog .book-featured button:hover{border-color:var(--heritage-gold,#c6a575)}
+html[data-theme] .book-dialog .book-featured strong{color:var(--heritage-ink,#e8dfcd);font-size:21px;font-weight:400}
+html[data-theme] .book-dialog .book-featured :is(small,span){color:var(--heritage-muted,#aaa395);font-size:11px}
+html[data-theme] .book-dialog .book-featured b{color:var(--heritage-gold,#c6a575);margin-top:12px}
+html[data-theme] .book-dialog .book-format-guide dl>div{padding:18px 20px;border-color:var(--heritage-line,#655039);border-radius:2px;background:var(--heritage-paper,#192023)}
+html[data-theme] .book-dialog .book-format-guide dt{font:20px 'Noto Serif SC',serif;color:var(--heritage-gold,#c6a575)}
+html[data-theme] .book-dialog .book-format-guide :is(dd,dt small){color:var(--heritage-muted,#aaa395);font-size:11px}
+html[data-theme] .book-dialog .book-article{max-width:890px;margin:0 auto;padding:clamp(22px,3.5vw,46px);border:1px solid var(--heritage-line,#655039);background:var(--heritage-paper,#192023);box-shadow:var(--heritage-shadow,0 15px 45px #0002)}
+html[data-theme] .book-dialog .book-article>h2{font-size:36px;line-height:1.7;letter-spacing:.08em}
+html[data-theme] .book-dialog :is(.book-muted,.book-subtitle){color:var(--heritage-muted,#aaa395)}
+html[data-theme] .book-dialog .book-intro{background:var(--heritage-panel,#182024);border-color:var(--heritage-line,#655039);border-radius:2px;padding:25px}
+html[data-theme] .book-dialog .book-intro h3{font-size:22px;color:var(--heritage-ink,#e8dfcd);font-weight:400}
+html[data-theme] .book-dialog .book-intro p{font-size:13px;line-height:2;color:var(--heritage-muted,#aaa395)}
+html[data-theme] .book-dialog .book-intro :is(strong,.book-intro-note,.book-format summary){color:var(--heritage-gold,#c6a575)}
+html[data-theme] .book-dialog .book-intro :is(.book-intro-note,.book-format){border-color:var(--heritage-line,#655039)}
+html[data-theme] .book-dialog .book-intro .book-intro-boundary{color:var(--heritage-muted,#aaa395);font-size:10px}
+html[data-theme] :is(.book-dialog,.dynasty-shell) .book-text{max-width:760px;margin:30px auto 0}
+html[data-theme] :is(.book-dialog,.dynasty-shell) .book-block{padding:8px 12px 12px;margin-bottom:22px}
+html[data-theme] :is(.book-dialog,.dynasty-shell) .book-block-content{font:18px/2.25 'Noto Serif SC','Songti SC',SimSun,serif;letter-spacing:.025em;color:var(--heritage-ink,#e8dfcd)}
+html[data-theme] :is(.book-dialog,.dynasty-shell) .book-block-content:has(table){max-width:100%;overflow-x:auto}
+html[data-theme] :is(.book-dialog,.dynasty-shell) .book-block-tools{gap:15px;color:var(--heritage-muted,#aaa395);font-size:10px;padding:3px 0 9px}
+html[data-theme] :is(.book-dialog,.dynasty-shell) .book-block-tools a{color:var(--heritage-muted,#aaa395);letter-spacing:.1em}
+html[data-theme] :is(.book-dialog,.dynasty-shell) .book-block-tools button[aria-pressed=true]{color:var(--heritage-gold,#c6a575)}
+html[data-theme] :is(.book-dialog,.dynasty-shell) .book-block-content a{color:var(--heritage-gold,#c6a575);text-decoration-color:var(--heritage-line,#655039)}
+html[data-theme] :is(.book-dialog,.dynasty-shell) .book-block :is(th,td){border-color:var(--heritage-line,#655039)}
+html[data-theme] :is(.book-dialog,.dynasty-shell) .book-block th{background:var(--heritage-panel,#182024);color:var(--heritage-ink,#e8dfcd)}
+html[data-theme] :is(.book-dialog,.dynasty-shell) .book-block tr:nth-child(even){background:var(--heritage-panel,#182024)}
+html[data-theme] :is(.book-dialog,.dynasty-shell) .book-target{border-left-color:var(--heritage-gold,#c6a575);background:color-mix(in srgb,var(--heritage-gold,#c6a575) 12%,transparent)}
+html[data-theme] :is(.book-dialog,.dynasty-shell) :is(.book-block mark,.book-hit mark,.journey-source-match){background:#dfc17e;color:#33291b;padding:1px 3px}
+html[data-theme] :is(.book-dialog,.dynasty-shell) .book-provenance{color:var(--heritage-muted,#aaa395);border-color:var(--heritage-line,#655039);font-size:11px}
+html[data-theme] :is(.book-dialog,.dynasty-shell) .book-provenance a{color:var(--heritage-gold,#c6a575)}
+html[data-theme] :is(.book-dialog,.dynasty-shell) :is(.book-hit,.book-next-reading){border-color:var(--heritage-line,#655039)}
+html[data-theme] :is(.book-dialog,.dynasty-shell) .book-hit strong{color:var(--heritage-ink,#e8dfcd);font:17px 'Noto Serif SC',serif}
+html[data-theme] :is(.book-dialog,.dynasty-shell) :is(.book-hit span,.book-hit small,.book-results>p,.book-empty,.book-loading,.dynasty-loading,.dynasty-error){color:var(--heritage-muted,#aaa395)}
+html[data-theme] :is(.book-dialog,.dynasty-shell) .book-next-reading{border-radius:2px;background:var(--heritage-panel,#182024)}
+html[data-theme] :is(.book-dialog,.dynasty-shell) .book-bottom-nav{border-top:1px solid var(--heritage-line,#655039);padding-top:25px;margin-top:32px}
+
+@media(max-width:1150px){
+  html[data-theme] .dynasty-shell .dynasty-book-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  html[data-theme] .dynasty-shell .dynasty-route ol{grid-template-columns:repeat(3,minmax(0,1fr))}
+  html[data-theme] .dynasty-shell .dynasty-route li{border-bottom:1px solid var(--heritage-line,#655039)}
+  html[data-theme] .dynasty-shell .dynasty-route li:nth-child(3){border-right:0}
+  html[data-theme] .book-dialog .book-overview-hero{grid-template-columns:minmax(0,1fr)}
+  html[data-theme] .book-dialog .book-overview-hero>.reading-atmosphere{max-height:210px;margin:0 auto;width:min(500px,100%)}
+  html[data-theme] .book-dialog .book-overview-copy>h2{font-size:32px}
+}
+@media(max-width:850px){
+  html[data-theme] .mt-shell{padding:32px 24px 65px}
+  html[data-theme] .mt-shell .mt-hero{gap:15px;min-height:0;grid-template-columns:minmax(0,1fr)}
+  html[data-theme] .mt-shell .mt-hero-copy{padding-bottom:0;max-width:none}
+  html[data-theme] .mt-shell .mt-hero h1{font-size:36px;margin:18px 0}
+  html[data-theme] .mt-shell .mt-hero>.reading-atmosphere{max-height:245px;width:min(650px,100%);margin:auto}
+  html[data-theme] .mt-shell .mt-tabs a{padding:17px 20px;font-size:12px}
+  html[data-theme] .mt-reading .mt-reader-layout{grid-template-columns:minmax(0,1fr);gap:24px}
+  html[data-theme] .mt-reading .mt-reader-aside{position:static;max-height:none;display:grid;grid-template-columns:1fr 1fr;gap:0 20px;padding-right:0}
+  html[data-theme] .mt-reading .mt-reader-aside>.reading-atmosphere{display:none}
+  html[data-theme] .mt-reading .mt-reader-aside>.reader-index-kicker{grid-column:1/-1;margin-bottom:10px}
+  html[data-theme] .mt-reading .mt-reader-aside>strong{grid-column:1/-1}
+  html[data-theme] .mt-reading .mt-reader-aside nav{grid-column:1/-1;display:flex;overflow-x:auto;gap:16px}
+  html[data-theme] .mt-reading .mt-reader-aside nav a{flex:0 0 145px;border-left:0}
+  html[data-theme] .mt-reading .mt-reader-aside nav p{font-size:12px;color:var(--heritage-muted,#aaa395)}
+  html[data-theme] .mt-reading .mt-find-results{grid-column:1/-1}
+  html[data-theme] .mt-reading .mt-script{align-self:start;margin-top:25px}
+  html[data-theme] .dynasty-gallery-shell .dynasty-top{grid-template-columns:minmax(0,1fr);gap:20px;min-height:0;padding-bottom:25px}
+  html[data-theme] .dynasty-gallery-shell .dynasty-top>.reading-atmosphere{max-height:260px;width:min(650px,100%);margin:auto}
+  html[data-theme] .dynasty-gallery-shell .dynasty-top h1{font-size:42px;margin:20px 0}
+  html[data-theme] .dynasty-shell .dynasty-layout:has(.dynasty-side){grid-template-columns:minmax(0,1fr);gap:10px}
+  html[data-theme] .dynasty-shell .dynasty-side{position:static;height:auto;min-height:0}
+  html[data-theme] .dynasty-shell .dynasty-side>.reading-atmosphere{display:none}
+  html[data-theme] .dynasty-shell .dynasty-volume-list{display:flex;overflow-x:auto;max-height:60px}
+  html[data-theme] .dynasty-shell .dynasty-volume{flex:0 0 auto;width:auto;max-width:180px}
+  html[data-theme] .dynasty-shell .dynasty-volume small{display:none}
+  html[data-theme] .book-dialog .book-main{padding:20px 24px 35px}
+}
+@media(max-width:760px){
+  html[data-theme] .book-dialog{width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;border:0;border-radius:0}
+  html[data-theme] .book-dialog .book-top{height:74px;padding:14px 18px}
+  html[data-theme] .book-dialog .book-top h1{font-size:23px}
+  html[data-theme] .book-dialog .book-top h1 span{font-size:10px;margin-left:12px}
+  html[data-theme] .book-dialog .book-layout{display:flex;height:calc(100% - 74px)}
+  html[data-theme] .book-dialog .book-sidebar{padding:12px 18px}
+  html[data-theme] .book-dialog .book-sidebar>.reader-index-kicker{display:none}
+  html[data-theme] .book-dialog .book-chapter{padding:10px 8px}
+  html[data-theme] .book-dialog .book-main{padding:15px 18px 35px}
+  html[data-theme] .book-dialog .book-overview-hero{padding:8px 0 20px;gap:15px}
+  html[data-theme] .book-dialog .book-overview-copy>h2{font-size:28px}
+  html[data-theme] .book-dialog .book-overview-hero>.reading-atmosphere{max-height:195px}
+  html[data-theme] .book-dialog .book-article{padding:22px 15px}
+  html[data-theme] .book-dialog .book-article>h2{font-size:28px;letter-spacing:.05em}
+  html[data-theme] .book-dialog .book-intro{padding:18px}
+  html[data-theme] .book-dialog .book-intro h3{font-size:19px}
+  html[data-theme] .book-dialog .book-featured{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  html[data-theme] .book-dialog .book-featured button{padding:18px 14px;gap:10px}
+  html[data-theme] .book-dialog .book-featured strong{font-size:18px}
+  html[data-theme] .book-dialog .book-status{margin-bottom:18px}
+  html[data-theme] :is(.book-dialog,.dynasty-shell) .book-block-content{font-size:17px;line-height:2.2}
+}
+@media(max-width:600px){
+  html[data-theme] .mt-shell{padding:28px 17px 60px}
+  html[data-theme] .mt-shell .mt-hero h1{font-size:32px;line-height:1.55}
+  html[data-theme] .mt-shell .mt-hero-copy>p{font-size:13px}
+  html[data-theme] .mt-shell .reader-hero-index{gap:27px;margin-top:22px}
+  html[data-theme] .mt-shell .mt-tabs{flex-wrap:nowrap;overflow-x:auto;gap:0}
+  html[data-theme] .mt-shell .mt-tabs a{padding:15px 12px;white-space:nowrap;font-size:11px}
+  html[data-theme] .mt-shell .mt-tabs a[aria-current=page]::after{left:12px;right:12px}
+  html[data-theme] .mt-shell .mt-guide-entry{padding:20px;gap:15px;align-items:flex-start;flex-direction:column}
+  html[data-theme] .mt-shell .mt-guide-entry strong{font-size:18px}
+  html[data-theme] .mt-shell .mt-guide-entry>a{font-size:13px}
+  html[data-theme] .mt-shell .mt-catalog-tools{flex-direction:column;gap:17px}
+  html[data-theme] .mt-shell :is(.mt-grid,.mt-doc-list){grid-template-columns:minmax(0,1fr)}
+  html[data-theme] .mt-shell .mt-card-wrap{padding:22px 20px}
+  html[data-theme] .mt-shell .mt-era h2{display:block;font-size:23px}
+  html[data-theme] .mt-shell .mt-era h2 small{display:block;margin-top:8px}
+  html[data-theme] .mt-reading .mt-heading h1{font-size:28px}
+  html[data-theme] .mt-reading .mt-reading-main{padding:20px 13px}
+  html[data-theme] .mt-reading .mt-block{padding:8px 9px 12px}
+  html[data-theme] .mt-reading .mt-block :is(p,li,dd){font-size:17px;line-height:2.2}
+  html[data-theme] .mt-reading .mt-block :is(h2,h3){font-size:22px}
+  html[data-theme] .mt-reading .mt-reading-top{gap:12px;font-size:11px}
+  html[data-theme] .mt-reading .mt-reader-aside{grid-template-columns:minmax(0,1fr)}
+  html[data-theme] .mt-reading .mt-script{margin-top:18px}
+  html[data-theme] .dynasty-shell{padding:30px 17px 65px}
+  html[data-theme] .dynasty-gallery-shell .dynasty-top h1{font-size:35px;line-height:1.5}
+  html[data-theme] .dynasty-shell .dynasty-top p{font-size:12px}
+  html[data-theme] .dynasty-shell .dynasty-welcome{padding:24px 22px}
+  html[data-theme] .dynasty-shell .dynasty-welcome h2{font-size:24px}
+  html[data-theme] .dynasty-shell .dynasty-welcome-stats{display:none}
+  html[data-theme] .dynasty-shell .dynasty-route ol{grid-template-columns:minmax(0,1fr)}
+  html[data-theme] .dynasty-shell .dynasty-route li{display:flex;gap:20px;min-height:0;border-right:0;padding:22px 0}
+  html[data-theme] .dynasty-shell .dynasty-route li>span{flex:0 0 25px;margin:0}
+  html[data-theme] .dynasty-shell .dynasty-route p{min-height:0}
+  html[data-theme] .dynasty-shell .dynasty-catalog-heading{display:block}
+  html[data-theme] .dynasty-shell .dynasty-book-grid{grid-template-columns:minmax(0,1fr);gap:14px}
+  html[data-theme] .dynasty-shell .dynasty-book-card{min-height:174px;padding:22px;gap:24px}
+  html[data-theme] .dynasty-shell .dynasty-card-binding{min-height:128px}
+  html[data-theme] .dynasty-shell .dynasty-era-heading h2{font-size:22px}
+  html[data-theme] .dynasty-shell .dynasty-era-heading{gap:16px}
+  html[data-theme] .dynasty-shell .dynasty-era-heading>span{font-size:29px}
+  html[data-theme] .dynasty-reading-shell .dynasty-top{padding-right:0;padding-bottom:22px}
+  html[data-theme] .dynasty-reading-shell .dynasty-top h1{font-size:25px}
+  html[data-theme] .dynasty-reading-shell .dynasty-top-actions{position:static;margin-top:15px}
+  html[data-theme] .dynasty-shell :is(.dynasty-book-intro,.dynasty-reader,.dynasty-results){padding:24px 16px}
+  html[data-theme] .dynasty-shell .dynasty-book-intro>h2{font-size:29px}
+  html[data-theme] .dynasty-shell .dynasty-reader-heading h2{font-size:28px}
+  html[data-theme] .dynasty-shell .dynasty-reading-note{padding:18px}
+  html[data-theme] .dynasty-shell .dynasty-genre-grid{grid-template-columns:minmax(0,1fr)}
+  html[data-theme] :is(.book-dialog,.dynasty-shell) .book-block{padding:8px 5px 12px}
+  html[data-theme] :is(.book-dialog,.dynasty-shell) .book-block-tools{gap:12px;font-size:9px}
+  html[data-theme] .dynasty-shell .dynasty-event-return{padding:13px;gap:10px;align-items:flex-start}
+}
+@media(prefers-reduced-motion:reduce){
+  html[data-theme] :is(.dynasty-shell .dynasty-book-card,.mt-shell .mt-card-wrap){transition:none}
+  html[data-theme] :is(.dynasty-shell .dynasty-book-card:hover,.mt-shell .mt-card-wrap:hover){transform:none}
+}
+
+/* Keep the complete model, caption and controls inside their allotted space. */
+html[data-theme] .mt-shell .mt-hero>.reading-atmosphere,
+html[data-theme] .dynasty-gallery-shell .dynasty-top>.reading-atmosphere,
+html[data-theme] .book-dialog .book-overview-hero>.reading-atmosphere{max-height:none}
+html[data-theme] .mt-shell .mt-hero>.reading-atmosphere .reading-model,
+html[data-theme] .dynasty-gallery-shell .dynasty-top>.reading-atmosphere .reading-model{height:clamp(240px,22vw,330px);aspect-ratio:auto}
+html[data-theme] .book-dialog .book-overview-hero>.reading-atmosphere .reading-model{height:260px;aspect-ratio:auto}
+html[data-theme] .mt-reading .mt-reader-aside>.reading-atmosphere .reading-model{height:110px;aspect-ratio:auto}
+html[data-theme] .dynasty-shell .dynasty-side>.reading-atmosphere .reading-model{height:95px;aspect-ratio:auto}
+@media(max-width:1150px){
+  html[data-theme] .book-dialog .book-overview-hero>.reading-atmosphere .reading-model{height:195px}
+}
+@media(max-width:850px){
+  html[data-theme] .mt-shell .mt-hero>.reading-atmosphere .reading-model,
+  html[data-theme] .dynasty-gallery-shell .dynasty-top>.reading-atmosphere .reading-model{height:220px}
+}
+@media(max-width:600px){
+  html[data-theme] .mt-shell .mt-hero>.reading-atmosphere .reading-model,
+  html[data-theme] .dynasty-gallery-shell .dynasty-top>.reading-atmosphere .reading-model{height:195px}
+  html[data-theme] .book-dialog .book-overview-hero>.reading-atmosphere .reading-model{height:175px}
+}

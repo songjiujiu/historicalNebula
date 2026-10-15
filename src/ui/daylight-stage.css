@@ -1,0 +1,137 @@
+/* Daylight uses real paper/ink colors. Art keeps its original pigments. */
+html[data-theme='light'] .app-header {
+  background: linear-gradient(110deg, #fcf8ef, #f0e7d7);
+  border-bottom: 1px solid #cabc9f80;
+}
+html[data-theme='light'] .app-header .brand { color: #352d23; }
+html[data-theme='light'] .app-header .brand small { color: #77674e; }
+html[data-theme='light'] .app-header .brand-mark svg { fill: #b58c4330; stroke: #927039; }
+html[data-theme='light'] :is(.brand-caption, .source-menu) { color: #766b59; border-color: #c9b99c; }
+html[data-theme='light'] .source-menu summary>b { color: #514331; }
+html[data-theme='light'] .source-menu nav {
+  background: #fffbf3;
+  border-color: #d2c5ae;
+  box-shadow: 0 14px 35px #5b422324;
+}
+html[data-theme='light'] .source-menu nav button { color: #514331; }
+html[data-theme='light'] .source-menu nav button:is(:hover, .active) { color: #79531c; background: #eee2ca; }
+html[data-theme='light'] .app-header .main-nav .nav-item { color: #6f6556; }
+html[data-theme='light'] .app-header .main-nav .nav-item.active { color: #805721; }
+html[data-theme='light'] .app-header .main-nav .nav-item.active:after { background: #a17b3e; }
+html[data-theme='light'] .app-header .theme-switch { background: #e8ddc9; border-color: #c4b390; box-shadow: inset 0 1px 3px #7a5b2010; }
+html[data-theme='light'] .app-header .theme-switch button { color: #73664f; }
+html[data-theme='light'] .app-header .theme-switch button[data-action='theme-light'] { color: #fff8e7; background: #977039; box-shadow: 0 1px 4px #6b471d26; }
+html[data-theme='light'] .app-header .theme-switch button[data-action='theme-dark'] { color: #73664f; }
+
+html[data-theme='light'] .immersive-shell.journey-shell { background: var(--paper, #f3ede2); }
+html[data-theme='light'] .immersive-hero.journey-hero {
+  background: radial-gradient(ellipse at 75% 30%, #fffdf6 0, #f6eddf 52%, #eee2cf 100%);
+  border-bottom: 1px solid #cbbb9d88;
+}
+html[data-theme='light'] .immersive-hero:after {
+  content: '';
+  position: absolute;
+  left: 37%; right: 3%; top: 64%; height: 8%;
+  background: radial-gradient(ellipse, #8766392b, transparent 68%);
+  pointer-events: none; z-index: 0;
+}
+html[data-theme='light'] .stage-copy { width: 27vw; }
+html[data-theme='light'] .stage-copy .journey-overline { color: #92703b; }
+html[data-theme='light'] .stage-copy h1 { color: #392e20; text-shadow: none; }
+html[data-theme='light'] .immersive-hero .stage-copy p { color: #756651; }
+html[data-theme='light'] .stage-copy blockquote {
+  color: #766750;
+  border-left: 1px solid #b99b6780;
+  padding-left: 14px;
+}
+html[data-theme='light'] .stage-copy cite { color: #7c6b55; margin-left: 0; }
+html[data-theme='light'] .stage-actions .primary-button {
+  color: #fff8e6; background: linear-gradient(125deg, #ac8346, #87622f);
+  border-color: #977139; box-shadow: 0 5px 16px #74502120;
+}
+html[data-theme='light'] .immersive-shell .stage-actions .secondary-button { color: #796039; background: #fffaf066; border-color: #b69c73; }
+html[data-theme='light'] .stage-actions button:hover { box-shadow: 0 5px 18px #74502136; }
+html[data-theme='light'] .scroll-stage {
+  left: 26%; width: 76%; top: 1.1vw;
+  background: transparent;
+  mask: url('/models/history/scroll-day-mask.svg') center / 100% 100% no-repeat;
+  mask-mode: alpha;
+  filter: brightness(1.09) saturate(.84);
+}
+html[data-theme='light'] .scroll-eras {
+  left: 36%; right: 3%; top: 23.3vw; height: auto;
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+html[data-theme='light'] .scroll-eras button:nth-child(n) {
+  position: static; transform: none; color: #866333;
+  text-shadow: none; padding: 4px 7px; font-size: 15px;
+}
+html[data-theme='light'] .scroll-eras i {
+  display: block; width: 4px; height: 4px; margin: 0 auto 7px;
+  background: #b8945d; border-radius: 50%;
+}
+html[data-theme='light'] .scroll-eras button:hover { color: #493419; background: #b3976520; border-radius: 4px; }
+html[data-theme='light'] .stage-event {
+  bottom: 1.5vw; padding: 10px 12px; gap: 13px;
+  background: linear-gradient(110deg, #fffdf4f5, #eee4d1f2);
+  border-color: #c5b393; box-shadow: 0 6px 20px #88663c14;
+}
+html[data-theme='light'] .stage-event .event-seal { min-height: 70px; height: 4.5vw; min-width: 53px; width: 3.5vw; filter: none; }
+html[data-theme='light'] .stage-event strong { color: #483820; font-size: 16px; }
+html[data-theme='light'] .stage-event small { color: #7f725f; margin: 6px 0 8px; }
+html[data-theme='light'] .stage-event b { color: #936b30; border: 0; padding: 0; font-size: 12px; }
+
+html[data-theme='light'] .history-shelf {
+  background: radial-gradient(ellipse at 57% 18%, #fffdf5, transparent 70%), #eee4d4;
+  border-top-color: #c4b392;
+}
+html[data-theme='light'] .history-shelf:before { display: none; }
+html[data-theme='light'] .history-shelf:after { filter: brightness(1.16) saturate(.8); }
+html[data-theme='light'] .books-stage { filter: brightness(1.08) saturate(.85); }
+html[data-theme='light'] .shelf-copy>.journey-overline { color: #987645; }
+html[data-theme='light'] .shelf-copy .journey-overline small { color: #a08c6d; }
+html[data-theme='light'] .shelf-copy h2 { color: #3f3425; }
+html[data-theme='light'] .shelf-copy p { color: #79694f; }
+html[data-theme='light'] .shelf-copy>small { color: #796c58; }
+html[data-theme='light'] .shelf-note { color: #79684f; }
+html[data-theme='light'] .shelf-note>span { border-color: #c4b08a80; }
+html[data-theme='light'] .shelf-note>span b { color: #8c632b; }
+html[data-theme='light'] .shelf-note>button { color: #795a2d; background: #fff9ecb3; border-color: #baa276; }
+html[data-theme='light'] .shelf-note>button:hover { background: #fffaf0; }
+/* These labels sit on real dark walnut; their ivory lettering stays legible. */
+html[data-theme='light'] .shelf-links a { background: #221b13de; border-color: #ad895680; }
+html[data-theme='light'] .shelf-links a:first-child { background: #5c4424ed; border-color: #d3b377; }
+html[data-theme='light'] .shelf-links :is(span, strong) { color: #eed9b0; }
+html[data-theme='light'] .stage-secondary-entry { color: #8b724b; }
+html[data-theme='light'] .stage-secondary-entry button:hover { color: #5b3e17; }
+
+@media (max-width: 1300px) and (min-width: 761px) {
+  html[data-theme='light'] .stage-copy h1 { font-size: 3.95vw!important; }
+  html[data-theme='light'] .immersive-hero .stage-copy p { font-size: 1.18vw!important; letter-spacing: .5px; }
+  html[data-theme='light'] .stage-actions { gap: 10px; }
+  html[data-theme='light'] .immersive-shell .stage-actions button { padding: 0 16px; }
+  html[data-theme='light'] .stage-event { bottom: 20px; }
+}
+@media (max-width: 1100px) and (min-width: 761px) {
+  html[data-theme='light'] .immersive-hero.journey-hero { min-height: 450px; }
+  html[data-theme='light'] .scroll-stage { left: 28%; width: 80%; top: 34px; }
+  html[data-theme='light'] .scroll-eras { top: calc(23.2vw + 45px); left: 34%; right: 3%; }
+  html[data-theme='light'] .scroll-eras button:nth-child(n) { font-size: 13px; }
+  html[data-theme='light'] .stage-copy { width: 29vw; }
+  html[data-theme='light'] .stage-copy h1 { font-size: 4.1vw!important; }
+  html[data-theme='light'] .stage-actions { flex-wrap: wrap; max-width: 220px; }
+}
+@media (max-width: 760px) {
+  html[data-theme='light'] .immersive-hero.journey-hero { height: 620px; }
+  html[data-theme='light'] .stage-copy { width: auto; }
+  html[data-theme='light'] .scroll-stage { left: -16%; width: 143%; top: 266px; }
+  html[data-theme='light'] .immersive-hero:after { left: 10%; right: 4%; top: 64%; height: 8%; }
+  html[data-theme='light'] .scroll-eras { left: 14px; right: 14px; top: 437px; gap: 0; }
+  html[data-theme='light'] .scroll-eras button:nth-child(n) { font-size: 13px; padding: 4px 4px; }
+  html[data-theme='light'] .scroll-eras i { margin-bottom: 6px; width: 3px; height: 3px; }
+  html[data-theme='light'] .stage-event { left: 20px; right: 20px; bottom: 23px; padding: 11px 13px; }
+  html[data-theme='light'] .stage-event .event-seal { width: 53px; height: 70px; min-width: 0; }
+  html[data-theme='light'] .shelf-links a { background: #f7efdf; border-color: #c4ae86; box-shadow: none; }
+  html[data-theme='light'] .shelf-links a:first-child { background: #ead9b7; border-color: #b69358; }
+  html[data-theme='light'] .shelf-links :is(span, strong) { color: #76552c; }
+}

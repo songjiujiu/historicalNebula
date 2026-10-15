@@ -1,0 +1,58 @@
+.comparison-shell { max-width: 1280px; margin: auto; padding: 64px 5% 70px; color: var(--ex-ink); }
+.comparison-hero { padding-bottom: 36px; border-bottom: 1px solid var(--ex-line); }
+.comparison-kicker { margin: 0 0 24px; color: var(--ex-accent); font-size: 11px; letter-spacing: 3px; }
+.comparison-hero h1 { margin: 0; font-family: 'Noto Serif SC','Songti SC',SimSun,serif; font-size: clamp(32px,4.7vw,60px); line-height: 1.35; font-weight: 500; letter-spacing: 2px; }
+.comparison-intro { max-width: 630px; margin: 24px 0; color: var(--ex-muted); line-height: 1.9; font-size: 15px; }
+.comparison-stats { display: flex; flex-wrap: wrap; gap: 24px; color: var(--ex-muted); font-size: 12px; }
+.comparison-stats b { font-size: 23px; color: var(--ex-accent); margin-right: 5px; font-weight: 400; }
+.comparison-toolbar { display: flex; align-items: end; flex-wrap: wrap; gap: 14px; padding: 28px 0 12px; }
+.comparison-toolbar label { display: flex; flex-direction: column; gap: 9px; color: var(--ex-muted); font-size: 12px; min-width: 0; }
+.comparison-toolbar :is(input,select),.comparison-share-status input { border: 1px solid var(--ex-line); background: var(--ex-panel); color: var(--ex-ink); border-radius: 5px; min-height: 42px; padding: 8px 12px; font: inherit; width: 100%; }
+.comparison-search { flex: 1; min-width: 180px !important; }
+.comparison-toolbar button,.comparison-empty button { border: 1px solid var(--ex-line); border-radius: 5px; min-height: 42px; padding: 8px 14px; color: var(--ex-accent); background: var(--ex-panel); font-size: 12px; }
+.comparison-shell :is(a,button,summary,input,select):focus-visible { outline: 2px solid var(--ex-accent); outline-offset: 4px; }
+.comparison-shell button:hover,.comparison-shell a:hover { color: var(--ex-ink); }
+.comparison-help,.comparison-status { font-size: 12px; line-height: 1.8; color: var(--ex-muted); }
+.comparison-status { padding-bottom: 16px; border-bottom: 1px solid var(--ex-line); }
+.comparison-share-status { display: block; color: var(--ex-accent); font-size: 13px; overflow-wrap: anywhere; }
+.comparison-share-status:not(:empty) { margin: 15px 0; }
+.comparison-share-status input { display: block; margin-top: 8px; }
+.comparison-period { margin: 40px 0 60px; }
+.comparison-period-heading { display: flex; align-items: center; gap: 18px; }
+.comparison-period-index { font: 40px Georgia,serif; color: var(--ex-accent); opacity: .75; }
+.comparison-years { color: var(--ex-muted); font-size: 12px; letter-spacing: 1px; }
+.comparison-period-heading h2 { font: 500 24px/1.5 'Noto Serif SC','Songti SC',SimSun,serif; margin: 4px 0 0; }
+.comparison-period-heading>a { margin-left: auto; flex-shrink: 0; color: var(--ex-accent); font-size: 12px; padding: 12px 0; }
+.comparison-question { padding: 16px 20px; border-left: 2px solid var(--ex-accent); background: var(--ex-wash); color: var(--ex-muted); font-size: 13px; line-height: 1.85; margin: 20px 0; }
+.comparison-question strong { color: var(--ex-accent); margin-right: 12px; font-weight: 500; }
+.comparison-columns { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 28px; align-items: start; }
+.comparison-columns>section { min-width: 0; }
+.comparison-columns h3 { display: flex; align-items: center; gap: 9px; border-bottom: 1px solid var(--ex-line); padding-bottom: 14px; font-size: 14px; font-weight: 500; margin: 0 0 16px; }
+.comparison-columns h3 span { color: var(--ex-accent); font-size: 9px; }
+.comparison-columns>section:last-child h3 span { color: var(--ex-red); }
+.comparison-columns h3 small { margin-left: auto; font-size: 11px; color: var(--ex-muted); font-weight: normal; }
+.comparison-card { padding: 20px; margin-bottom: 14px; background: var(--ex-panel); border: 1px solid var(--ex-line); border-radius: 6px; overflow-wrap: anywhere; }
+.comparison-card-meta { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; font-size: 12px; color: var(--ex-accent); }
+.comparison-world-card .comparison-card-meta { color: var(--ex-red); }
+.comparison-region { display: inline-block; margin-top: 12px; font-size: 10px; color: var(--ex-muted); letter-spacing: 1px; }
+.comparison-card h4 { font-size: 16px; line-height: 1.65; font-weight: 500; margin: 12px 0 8px; }
+.comparison-card p { color: var(--ex-muted); font-size: 13px; line-height: 1.85; margin: 8px 0 14px; }
+.comparison-card a { color: var(--ex-accent); font-size: 12px; line-height: 1.7; display: inline-block; padding: 4px 0; text-underline-offset: 4px; }
+.comparison-card details { margin-bottom: 12px; color: var(--ex-muted); font-size: 12px; }
+.comparison-card summary { cursor: pointer; padding: 6px 0; }
+.comparison-match { color: var(--ex-ink); border: 1px solid var(--ex-accent); font-size: 10px; border-radius: 3px; padding: 2px 5px; }
+.comparison-note { border-top: 1px solid var(--ex-line); padding-top: 22px; color: var(--ex-muted); font-size: 12px; line-height: 1.9; }
+.comparison-note h2 { color: var(--ex-ink); font-size: 15px; font-weight: 500; }
+.comparison-empty { padding: 50px 20px; text-align: center; color: var(--ex-muted); line-height: 1.8; }
+@media(max-width:760px) {
+  .comparison-shell { padding: 34px 5% 40px; }
+  .comparison-toolbar>label { flex: 1 1 40%; }
+  .comparison-toolbar>.comparison-search { flex-basis: 100%; }
+  .comparison-columns { grid-template-columns: 1fr; gap: 24px; }
+  .comparison-period-heading { gap: 10px; flex-wrap: wrap; }
+  .comparison-period-heading h2 { font-size: 20px; }
+  .comparison-period-heading>a { padding: 7px 0; }
+  .comparison-card { padding: 17px; }
+  .comparison-stats { gap: 16px; }
+  .comparison-period { margin-bottom: 40px; }
+}
